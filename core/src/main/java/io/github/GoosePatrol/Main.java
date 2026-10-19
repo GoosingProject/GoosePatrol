@@ -11,16 +11,19 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture image;
+    // viewport manages the size and aspect ratio of contained objects
     private Viewport screenScaler;
+    // worldWidth and hieght maintain specific aspect ratio
     private float worldWidth = 1600f;
     private float worldHieght = 900f;
     @Override
     public void create() {
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
+        // make use of fit viewport in order to maintain aspect ratio
         screenScaler = new FitViewport(worldWidth, worldHieght);
     }
-
+    // override the resize function so it works of screenScaler viewport instead of default
    @Override
     public void resize(int width, int height) {
         screenScaler.update(width, height, true);
