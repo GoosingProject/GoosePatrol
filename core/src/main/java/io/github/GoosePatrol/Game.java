@@ -1,12 +1,14 @@
 package io.github.GoosePatrol;
 
+/**
+ * The Game class used for managing the overall game state.
+ * 
+ */
 public class Game{
     private boolean paused;
     
     public Game(){
         paused = true;
-        System.out.println("Loading game...");
-
         this.loadGame();
     }
 
