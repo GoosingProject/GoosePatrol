@@ -9,17 +9,17 @@ public class Game{
 
         this.loadGame();
     }
+
     /**
-     * Loads the initial screen for the game.
+     * Loads the initial game window on the main menu.
      */
     public void loadGame(){
         Main main = new Main();
-        
         main.create();
     }
     
     /**
-     * Updates the game state.
+     * Updates the game state when game components change.
      * @param deltaTime the time since the last frame.
      * @return true if the game logic was updated, else returns false.
      */
