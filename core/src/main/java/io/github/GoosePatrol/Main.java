@@ -15,9 +15,9 @@ public class Main extends ApplicationAdapter {
     private Texture image;
     // viewport manages the size and aspect ratio of contained objects
     private Viewport screenScaler;
-    // view Width and hieght maintain specific aspect ratio of the camera
+    // view Width and height maintain specific aspect ratio of the camera
     private float viewWidth = 160f;
-    private float viewHieght = 90f;
+    private float viewHeight = 90f;
 
     private OrthographicCamera camera;
     private CameraTarget target;
@@ -28,7 +28,7 @@ public class Main extends ApplicationAdapter {
         // orthographic camera can work in 2d space
         camera = new OrthographicCamera();
         // make use of fit viewport in order to maintain aspect ratio
-        screenScaler = new FitViewport(viewWidth, viewHieght,camera);
+        screenScaler = new FitViewport(viewWidth, viewHeight,camera);
         // placeholder target for the camera to look at 
         target = new CameraTarget(image.getWidth()/2, image.getHeight()/2);
         // position camera to target
@@ -54,10 +54,10 @@ public class Main extends ApplicationAdapter {
     }
 
     private void clampCamera(){
-        // stores the width and hieght to the centre of the camera
+        // stores the width and height to the centre of the camera
         float halfW = camera.viewportWidth *camera.zoom/2f;
         float halfH = camera.viewportHeight *camera.zoom/2f;
-        // stores the width an hieght of the background image
+        // stores the width an height of the background image
         float imgW = image.getWidth();
         float imgH = image.getHeight();
         // camera.positon is the cente of the view
