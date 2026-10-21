@@ -49,11 +49,12 @@ public class Main extends ApplicationAdapter {
         batch.begin();
         batch.draw(image,0f,0f);
         batch.end();
-        // clamp camera to ensure it cannot show outside of the background
-        clampCamera();
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
+        
         if (!paused) {
+            /// clamp camera to ensure it cannot show outside of the background
+            clampCamera();
+            camera.update();
+            batch.setProjectionMatrix(camera.combined);
             // render sprite here
         }
     }
