@@ -33,7 +33,7 @@ public class Main extends ApplicationAdapter {
         camera = new OrthographicCamera();
         // make use of fit viewport in order to maintain aspect ratio
         screenScaler = new FitViewport(viewWidth, viewHeight,camera);
-        // placeholder target for the camera to look at 
+        // placeholder target for the camera to look at
         target = new CameraTarget(image.getWidth()/2, image.getHeight()/2);
         // position camera to target
         camera.position.x = target.getX();
@@ -61,7 +61,7 @@ public class Main extends ApplicationAdapter {
 
         // draw and render sprite
         playerSprite.begin();
-        player.drawSprite(playerSprite);
+        player.updatePlayer(playerSprite);
         playerSprite.end();
     }
 
