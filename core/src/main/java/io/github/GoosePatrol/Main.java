@@ -37,6 +37,7 @@ public class Main extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.camera.combined);
     }
 
+
     @Override
     public void dispose() {
         batch.dispose();
