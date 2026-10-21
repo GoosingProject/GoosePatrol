@@ -18,9 +18,11 @@ public class Main extends ApplicationAdapter {
     // view Width and height maintain specific aspect ratio of the camera
     private float viewWidth = 160f;
     private float viewHeight = 90f;
-    
+
     private OrthographicCamera camera;
     private CameraTarget target;
+
+    private boolean paused = true;
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -51,6 +53,9 @@ public class Main extends ApplicationAdapter {
         clampCamera();
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+        if (!paused) {
+            // render sprite here
+        }
     }
 
     private void clampCamera(){
