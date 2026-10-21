@@ -3,6 +3,7 @@ package io.github.GoosePatrol;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.math.MathUtils;
@@ -19,6 +20,9 @@ public class Main extends ApplicationAdapter {
     private float viewWidth = 160f;
     private float viewHeight = 90f;
 
+    private SpriteBatch playerSprite;
+    private Player player;
+
     private OrthographicCamera camera;
     private CameraTarget target;
     @Override
@@ -34,6 +38,9 @@ public class Main extends ApplicationAdapter {
         // position camera to target
         camera.position.x = target.getX();
         camera.position.y = target.getY();
+
+        playerSprite = new SpriteBatch();
+        player = new Player ();
     }
     // override the resize function so it works of screenScaler viewport instead of default
    @Override
@@ -51,6 +58,11 @@ public class Main extends ApplicationAdapter {
         clampCamera();
         camera.update();
         batch.setProjectionMatrix(camera.combined);
+
+        // draw and render sprite
+        playerSprite.begin();
+        player.drawSprite(playerSprite);
+        playerSprite.end();
     }
 
     private void clampCamera(){
@@ -72,5 +84,7 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         image.dispose();
+
+        playerSprite.dispose();
     }
 }
