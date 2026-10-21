@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
  * @version 1.0
  */
 public class Player {
+    private SpriteBatch playerSprite;
     private Texture playerTexture;
 
     private Vector2 playerPosition = new Vector2(0,0);
@@ -21,7 +22,9 @@ public class Player {
      *
      */
     public Player() {
-        // manually sets texture to character sprite
+        // makes sprite batch
+        playerSprite = new SpriteBatch();
+        // sets texture to character sprite
         playerTexture = new Texture("libgdx.png");
     }
 
@@ -58,12 +61,15 @@ public class Player {
 
     /**
      *
-     * @param playerSprite
      */
-    public void updatePlayer(SpriteBatch playerSprite) {
+    public void updatePlayer() {
         // draws the sprite itself
         playerSprite.draw(playerTexture, playerPosition.x, playerPosition.y);
         // updates movement
         updateMovement();
+    }
+
+    public SpriteBatch getPlayerSprite() {
+        return playerSprite;
     }
 }
