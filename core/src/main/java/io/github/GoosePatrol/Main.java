@@ -19,6 +19,8 @@ public class Main extends ApplicationAdapter {
     private float viewWidth = 160f;
     private float viewHeight = 90f;
 
+    private Player player;
+
     private OrthographicCamera camera;
     private CameraTarget target;
 
@@ -31,11 +33,13 @@ public class Main extends ApplicationAdapter {
         camera = new OrthographicCamera();
         // make use of fit viewport in order to maintain aspect ratio
         screenScaler = new FitViewport(viewWidth, viewHeight,camera);
-        // placeholder target for the camera to look at 
+        // placeholder target for the camera to look at
         target = new CameraTarget(image.getWidth()/2, image.getHeight()/2);
         // position camera to target
         camera.position.x = target.getX();
         camera.position.y = target.getY();
+
+        player = new Player ();
     }
     // override the resize function so it works of screenScaler viewport instead of default
    @Override
@@ -49,13 +53,15 @@ public class Main extends ApplicationAdapter {
         batch.begin();
         batch.draw(image,0f,0f);
         batch.end();
-        
+      
         if (!paused) {
             /// clamp camera to ensure it cannot show outside of the background
             clampCamera();
             camera.update();
             batch.setProjectionMatrix(camera.combined);
-            // render sprite here
+            player.getPlayerSprite().begin();
+            player.updatePlayer();
+            player.getPlayerSprite().end();
         }
     }
 
@@ -78,5 +84,7 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         image.dispose();
+
+        player.getPlayerSprite().dispose();
     }
 }
