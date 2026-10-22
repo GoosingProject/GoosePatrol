@@ -1,9 +1,11 @@
 package io.github.GoosePatrol;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.Input.Keys;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -12,8 +14,10 @@ public class Main extends ApplicationAdapter {
     // viewport manages the size and aspect ratio of contained objects
     private CameraTarget target;
 
-    private boolean paused = true;
->>>>>>> 32c0e8ac123b4fb7e0390c1e31f85ac72cb3d866
+    private Player player;
+    private CameraLogic camera;
+
+    private boolean paused = false;
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -21,7 +25,10 @@ public class Main extends ApplicationAdapter {
         // placeholder target for the camera to look at
         target = new CameraTarget(image.getWidth()/2+103, image.getHeight()/2);
         camera = new CameraLogic(160,90,image);
+
+        player = new Player();
     }
+
     // override the resize function so it works of screenScaler viewport instead of default
    @Override
     public void resize(int width, int height) {
@@ -34,10 +41,21 @@ public class Main extends ApplicationAdapter {
         batch.begin();
         batch.draw(image,0f,0f);
         batch.end();
-<<<<<<< HEAD
-        // clamp camera to ensure it cannot show outside of the background
-        camera.updatePosition(target);
-        batch.setProjectionMatrix(camera.camera.combined);
+        player.getPlayerSprite().begin();
+        player.drawPlayer();
+        player.getPlayerSprite().end();
+
+        if (!paused) {
+            // clamp camera to ensure it cannot show outside of the background
+            camera.updatePosition(target);
+            batch.setProjectionMatrix(camera.camera.combined);
+
+            player.updateMovement();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+            paused = !paused;
+        }
     }
 
 
