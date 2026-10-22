@@ -23,6 +23,8 @@ public class Main extends ApplicationAdapter {
 
     private OrthographicCamera camera;
     private CameraTarget target;
+
+    private boolean paused = true;
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -51,15 +53,16 @@ public class Main extends ApplicationAdapter {
         batch.begin();
         batch.draw(image,0f,0f);
         batch.end();
-        // clamp camera to ensure it cannot show outside of the background
-        clampCamera();
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-
-        // draw and render sprite
-        player.getPlayerSprite().begin();
-        player.updatePlayer();
-        player.getPlayerSprite().end();
+      
+        if (!paused) {
+            /// clamp camera to ensure it cannot show outside of the background
+            clampCamera();
+            camera.update();
+            batch.setProjectionMatrix(camera.combined);
+            player.getPlayerSprite().begin();
+            player.updatePlayer();
+            player.getPlayerSprite().end();
+        }
     }
 
     private void clampCamera(){
