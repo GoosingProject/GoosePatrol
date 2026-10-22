@@ -6,7 +6,7 @@ public class CameraTarget {
     private float x;
     private float y;
     /**
-     * @param x the starting x position 
+     * @param x the starting x position
      * @param y the starting y position
      */
     public CameraTarget(float x, float y){
