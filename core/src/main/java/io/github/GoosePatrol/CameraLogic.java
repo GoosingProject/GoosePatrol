@@ -11,9 +11,9 @@ import com.badlogic.gdx.graphics.Texture;
  */
 
 public class CameraLogic {
-    // view Width and hieght maintain specific aspect ratio of the camera
+    // View width and height maintain specific aspect ratio of the camera
     private float viewWidth = 160f;
-    private float viewHieght = 90f;
+    private float viewHeight = 90f;
     public OrthographicCamera camera;
     private Texture background;
     private Viewport screenScaler;
@@ -24,10 +24,10 @@ public class CameraLogic {
      * @param back = the background image.
      */
     public CameraLogic(float width, float height, Texture back){
-        this.viewHieght = height;
+        this.viewHeight = height;
         this.viewWidth = width;
         this.camera = new OrthographicCamera();
-        this.screenScaler = new FitViewport(viewWidth, viewHieght,camera);
+        this.screenScaler = new FitViewport(viewWidth, viewHeight,camera);
         this.background = back;
     }
 
@@ -43,16 +43,15 @@ public class CameraLogic {
     }
 
     private void clampCamera(){
-        // stores the width and hieght to the centre of the camera
+        // stores the width and height to the centre of the camera
         float halfW = camera.viewportWidth *camera.zoom/2f;
         float halfH = camera.viewportHeight *camera.zoom/2f;
-        // stores the width an hieght of the background image
+        // stores the width and height of the background image
         float imgW = background.getWidth();
         float imgH = background.getHeight();
-        // camera.positon is the cente of the view
-        // clamps the positon half a view away from the image edges
+        // camera.position is the cente of the view
+        // clamps the position half a view away from the image edges
         camera.position.x = MathUtils.clamp(camera.position.x, halfW, imgW-halfW);
         camera.position.y = MathUtils.clamp(camera.position.y, halfH, imgH-halfH);
-
     }
 }
