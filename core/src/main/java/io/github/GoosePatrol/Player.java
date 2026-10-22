@@ -1,7 +1,10 @@
 package io.github.GoosePatrol;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -16,12 +19,16 @@ public class Player {
     private Texture playerTexture;
 
     private Vector2 playerPosition = new Vector2(0,0);
+    private float degreeOffset;
     private float speed = 100f;
+
+    private OrthographicCamera camera;
 
     /**
      * Constructor method to instantiate a player and set its texture to the specified, hardcoded path (currently placeholder)
      */
-    public Player() {
+    public Player(OrthographicCamera orthographicCamera) {
+        camera = orthographicCamera;
         playerSprite = new SpriteBatch();
         playerTexture = new Texture("libgdx.png");
     }
@@ -55,6 +62,10 @@ public class Player {
             // Calculates the position plus the magnitude scaled with speed multiplied by delta time to make the movement frame independent
             playerPosition.mulAdd(playerMovementMagnitude.nor(), speed * Gdx.graphics.getDeltaTime());
         }
+
+        // Skeleton code to work out rotation
+        Vector3 mousePosition = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+        degreeOffset = (float)Math.atan2(mousePosition.y - playerPosition.y, mousePosition.x - playerPosition.x);
     }
 
     /**

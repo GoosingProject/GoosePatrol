@@ -18,6 +18,7 @@ public class Main extends ApplicationAdapter {
     private CameraLogic camera;
 
     private boolean paused = false;
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -26,7 +27,7 @@ public class Main extends ApplicationAdapter {
         target = new CameraTarget(image.getWidth()/2+103, image.getHeight()/2);
         camera = new CameraLogic(160,90,image);
 
-        player = new Player();
+        player = new Player(camera.camera);
     }
 
     // override the resize function so it works of screenScaler viewport instead of default
@@ -57,7 +58,6 @@ public class Main extends ApplicationAdapter {
             paused = !paused;
         }
     }
-
 
     @Override
     public void dispose() {
