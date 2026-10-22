@@ -42,5 +42,7 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         image.dispose();
+
+        player.getPlayerSprite().dispose();
     }
 }
