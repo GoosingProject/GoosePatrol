@@ -29,7 +29,7 @@ public class Player {
     /**
      * Method to update the movement based on key polling with a vector normalised and scaled by delta time to maintain frame independence
      */
-    private void updateMovement() {
+    public void updateMovement() {
         // Initialises a zeroed Vector2 to track movement magnitude vector
         Vector2 playerMovementMagnitude = new Vector2(0,0);
 
@@ -58,16 +58,15 @@ public class Player {
     }
 
     /**
-     * Method to draw the player and update the movement, intended to be called in Main class
+     * Method to draw the player, intended to be called in Main class
      */
-    public void updatePlayer() {
+    public void drawPlayer() {
         playerSprite.draw(playerTexture, playerPosition.x, playerPosition.y);
-        updateMovement();
     }
 
     /**
      * Getter function to return a players sprite batch
-     * 
+     *
      * @return the player sprite
      */
     public SpriteBatch getPlayerSprite() {
