@@ -27,7 +27,7 @@ public class MainMenu extends ApplicationAdapter {
 
     @Override 
     public void create () {
-        skin = new Skin(Gdx.files.internal("assets/metal-ui.json"));
+        skin = new Skin(Gdx.files.internal("metal-ui.json"));
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
