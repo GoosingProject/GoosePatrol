@@ -40,11 +40,17 @@ public class CameraLogic {
         clampCamera();
         camera.update();
     }
-
+    /**
+     * updates the scale of the viewport inteded to be called in the resize method() of main
+     * @param width
+     * @param height
+     */
     public void updateScale(int width, int height){
         screenScaler.update(width, height, false);
     }
-
+    /**
+     * clamps the camera to the background image so it cannot show anything outside of that
+     */
     private void clampCamera(){
         // stores the width and height to the centre of the camera
         float halfW = camera.viewportWidth *camera.zoom/2f;
