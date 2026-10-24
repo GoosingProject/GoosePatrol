@@ -11,8 +11,6 @@ import com.badlogic.gdx.Input.Keys;
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture image;
-    // viewport manages the size and aspect ratio of contained objects
-    private CameraTarget target;
 
     private Player player;
     private CameraLogic camera;
@@ -39,10 +37,8 @@ public class Main extends ApplicationAdapter {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         batch.begin();
         batch.draw(image,0f,0f);
+        player.drawPlayer(batch);
         batch.end();
-        player.getPlayerSprite().begin();
-        player.drawPlayer(camera);
-        player.getPlayerSprite().end();
 
         if (!paused) {
             // clamp camera to ensure it cannot show outside of the background
@@ -64,7 +60,5 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         image.dispose();
-
-        player.getPlayerSprite().dispose();
     }
 }
