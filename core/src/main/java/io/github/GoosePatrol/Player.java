@@ -69,7 +69,10 @@ public class Player {
      * Method to draw the player, intended to be called in Main class
      */
     public void drawPlayer() {
-        playerSprite.draw(playerTexture, playerPosition.x, playerPosition.y);
+        // w and h are the width an hieght of the player in game units
+        float w = 64f;
+        float h = 32f;
+        playerSprite.draw(playerTexture, playerPosition.x, playerPosition.y,w,h);
     }
 
     /**
