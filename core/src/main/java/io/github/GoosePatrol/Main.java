@@ -12,9 +12,6 @@ import com.badlogic.gdx.Input.Keys;
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture image;
-    // viewport manages the size and aspect ratio of contained objects
-    private CameraTarget target;
-
     private boolean showMenu = true;
     //contains the logic value to tell the game to render the main menu
     private MainMenu mainMenu;
@@ -69,6 +66,7 @@ public class Main extends ApplicationAdapter {
         batch.begin();
         batch.draw(image,0f,0f);
         batch.end();
+        // ensure the player an camera move with the same world units
         player.getPlayerSprite().setProjectionMatrix(camera.camera.combined);
         player.getPlayerSprite().begin();
         player.drawPlayer();
