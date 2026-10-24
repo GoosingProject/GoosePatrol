@@ -22,8 +22,6 @@ public class Main extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         image = new Texture("placeholder_background.png");
-        // placeholder target for the camera to look at
-        target = new CameraTarget(image.getWidth()/2+103, image.getHeight()/2);
         camera = new CameraLogic(160,90,image);
 
         player = new Player();
@@ -38,18 +36,18 @@ public class Main extends ApplicationAdapter {
     @Override
     public void render() {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+        camera.updatePosition(player);
+        batch.setProjectionMatrix(camera.camera.combined);
         batch.begin();
         batch.draw(image,0f,0f);
         batch.end();
+        // ensure the player and character move with the same world units
+        player.getPlayerSprite().setProjectionMatrix(camera.camera.combined);
         player.getPlayerSprite().begin();
         player.drawPlayer();
         player.getPlayerSprite().end();
 
         if (!paused) {
-            // clamp camera to ensure it cannot show outside of the background
-            camera.updatePosition(target);
-            batch.setProjectionMatrix(camera.camera.combined);
-
             player.updateMovement();
         }
 
