@@ -69,7 +69,6 @@ public class Main extends ApplicationAdapter {
         batch.begin();
         batch.draw(image,0f,0f);
         batch.end();
-        // ensure the player and character move with the same world units
         player.getPlayerSprite().setProjectionMatrix(camera.camera.combined);
         player.getPlayerSprite().begin();
         player.drawPlayer();
