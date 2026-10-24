@@ -83,6 +83,7 @@ public class Main extends ApplicationAdapter {
 
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             paused = !paused;
+            mainMenu.playGameTriggered = !mainMenu.playGameTriggered;
         }
     }
 
