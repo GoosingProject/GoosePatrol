@@ -3,6 +3,7 @@ buildscript {
   repositories {
     gradlePluginPortal()
   }
+
   dependencies {
     classpath "io.github.fourlastor:construo:2.2.2"
     if(enableGraalNative == 'true') {
@@ -29,6 +30,7 @@ if (JavaVersion.current().isJava9Compatible()) {
 }
 
 dependencies {
+  implementation "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
   implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
   implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
   implementation project(':core')
@@ -208,4 +210,20 @@ tasks.withType(JavaExec.class).configureEach {
 
 if(enableGraalNative == 'true') {
   apply from: file("nativeimage.gradle")
+}
+
+// Texture packer parameters
+project.ext.texturePacker = [ rootProject.file("assets/sprites").absolutePath, rootProject.file("assets").absolutePath, "sprites" ]
+
+// Import texture packer
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
+
+// Pack the sprites
+task texturePacker {
+  doLast {
+    if (project.ext.has('texturePacker')) {
+      logger.info "Calling TexturePacker: "+texturePacker
+      TexturePacker.process(texturePacker[0], texturePacker[1], texturePacker[2])
+    }
+  }
 }
