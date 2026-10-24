@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Controls the logic of the camera
@@ -31,9 +31,8 @@ public class CameraLogic {
         this.background = back;
     }
 
-    public void updatePosition(CameraTarget target){
-        camera.position.x = target.getX();
-        camera.position.y = target.getY();
+    public void updatePosition(Vector2 cameraPosition){
+        camera.position.set(cameraPosition.x, cameraPosition.y, 0);
         clampCamera();
         camera.update();
     }

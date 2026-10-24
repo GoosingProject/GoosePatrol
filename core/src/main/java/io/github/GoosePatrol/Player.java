@@ -30,7 +30,7 @@ public class Player {
     public Player(OrthographicCamera orthographicCamera) {
         camera = orthographicCamera;
         playerSprite = new SpriteBatch();
-        playerTexture = new Texture("libgdx.png");
+        playerTexture = new Texture("SampleSprite.png");
     }
 
     /**
@@ -71,8 +71,13 @@ public class Player {
     /**
      * Method to draw the player, intended to be called in Main class
      */
-    public void drawPlayer() {
-        playerSprite.draw(playerTexture, playerPosition.x, playerPosition.y);
+    public void drawPlayer(CameraLogic camera) {
+        playerSprite.draw(playerTexture, playerPosition.x - 8, playerPosition.y - 16);
+        playerSprite.setProjectionMatrix(camera.camera.combined);
+    }
+
+    public void dispose() {
+        playerTexture.dispose();
     }
 
     /**
@@ -82,5 +87,9 @@ public class Player {
      */
     public SpriteBatch getPlayerSprite() {
         return playerSprite;
+    }
+
+    public Vector2 getPlayerPosition() {
+        return playerPosition;
     }
 }

@@ -23,10 +23,8 @@ public class Main extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         image = new Texture("placeholder_background.png");
-        // placeholder target for the camera to look at
-        target = new CameraTarget(image.getWidth()/2+103, image.getHeight()/2);
-        camera = new CameraLogic(160,90,image);
 
+        camera = new CameraLogic(160,90,image);
         player = new Player(camera.camera);
     }
 
@@ -43,15 +41,18 @@ public class Main extends ApplicationAdapter {
         batch.draw(image,0f,0f);
         batch.end();
         player.getPlayerSprite().begin();
-        player.drawPlayer();
+        player.drawPlayer(camera);
         player.getPlayerSprite().end();
 
         if (!paused) {
             // clamp camera to ensure it cannot show outside of the background
-            camera.updatePosition(target);
             batch.setProjectionMatrix(camera.camera.combined);
+            camera.updatePosition(player.getPlayerPosition());
 
             player.updateMovement();
+
+            //System.out.println("player: " + player.getPlayerPosition());
+            //System.out.println("camera: " + camera.camera.position);
         }
 
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
