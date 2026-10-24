@@ -30,10 +30,13 @@ public class CameraLogic {
         this.screenScaler = new FitViewport(viewWidth, viewHeight,camera);
         this.background = back;
     }
-
-    public void updatePosition(CameraTarget target){
-        camera.position.x = target.getX();
-        camera.position.y = target.getY();
+    /**
+     * update the positon of the camera to follow the target.
+     * @param target
+     */
+    public void updatePosition(Player target){
+        camera.position.x = target.getPlayerPosition().x;
+        camera.position.y = target.getPlayerPosition().y;
         clampCamera();
         camera.update();
     }
