@@ -58,6 +58,14 @@ public class Player {
     }
 
     /**
+     * Method to get playerPosition.
+     * @return the players positon vector.
+     */
+    public Vector2 getPlayerPosition(){
+        return playerPosition;
+    }    
+
+    /**
      * Method to draw the player, intended to be called in Main class
      */
     public void drawPlayer() {
