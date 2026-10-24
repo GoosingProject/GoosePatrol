@@ -2,9 +2,11 @@ package io.github.GoosePatrol;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 /**
  * Controls the logic of the camera
@@ -32,7 +34,7 @@ public class CameraLogic {
     }
 
     public void updatePosition(Vector2 cameraPosition){
-        camera.position.set(cameraPosition.x, cameraPosition.y, 0);
+        camera.position.lerp(new Vector3(cameraPosition.x, cameraPosition.y, 0f), Gdx.graphics.getDeltaTime() * 10);
         clampCamera();
         camera.update();
     }
