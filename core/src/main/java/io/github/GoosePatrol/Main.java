@@ -46,9 +46,6 @@ public class Main extends ApplicationAdapter {
             camera.updatePosition(player.getPlayerPosition());
 
             player.updateMovement();
-
-            //System.out.println("player: " + player.getPlayerPosition());
-            //System.out.println("camera: " + camera.camera.position);
         }
 
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {

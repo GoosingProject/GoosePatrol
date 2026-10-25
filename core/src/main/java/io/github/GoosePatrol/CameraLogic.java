@@ -33,16 +33,28 @@ public class CameraLogic {
         this.background = back;
     }
 
+    /**
+     * update the positon of the camera to follow the target.
+     * @param target
+     */
     public void updatePosition(Vector2 cameraPosition){
         camera.position.lerp(new Vector3(cameraPosition.x, cameraPosition.y, 0f), Gdx.graphics.getDeltaTime() * 10);
         clampCamera();
         camera.update();
     }
 
+    /**
+     * updates the scale of the viewport inteded to be called in the resize method() of main
+     * @param width
+     * @param height
+     */
     public void updateScale(int width, int height){
         screenScaler.update(width, height, false);
     }
 
+    /**
+     * clamps the camera to the background image so it cannot show anything outside of that
+     */
     private void clampCamera(){
         // stores the width and height to the centre of the camera
         float halfW = camera.viewportWidth *camera.zoom/2f;
