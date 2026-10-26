@@ -2,9 +2,11 @@ package io.github.GoosePatrol;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 /**
  * Controls the logic of the camera
@@ -31,17 +33,28 @@ public class CameraLogic {
         this.background = back;
     }
 
-    public void updatePosition(CameraTarget target){
-        camera.position.x = target.getX();
-        camera.position.y = target.getY();
+    /**
+     * update the positon of the camera to follow the target.
+     * @param target
+     */
+    public void updatePosition(Vector2 cameraPosition){
+        camera.position.lerp(new Vector3(cameraPosition.x, cameraPosition.y, 0f), Gdx.graphics.getDeltaTime() * 10);
         clampCamera();
         camera.update();
     }
 
+    /**
+     * updates the scale of the viewport inteded to be called in the resize method() of main
+     * @param width
+     * @param height
+     */
     public void updateScale(int width, int height){
         screenScaler.update(width, height, false);
     }
 
+    /**
+     * clamps the camera to the background image so it cannot show anything outside of that
+     */
     private void clampCamera(){
         // stores the width and height to the centre of the camera
         float halfW = camera.viewportWidth *camera.zoom/2f;

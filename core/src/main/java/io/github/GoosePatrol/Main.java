@@ -12,8 +12,6 @@ import com.badlogic.gdx.Input.Keys;
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture image;
-    // viewport manages the size and aspect ratio of contained objects
-    private CameraTarget target;
 
     private boolean showMenu = true;
     //contains the logic value to tell the game to render the main menu
@@ -24,6 +22,7 @@ public class Main extends ApplicationAdapter {
     private CameraLogic camera;
 
     private boolean paused = false;
+
     @Override
     public void create() {
         mainMenu = new MainMenu();
@@ -31,11 +30,9 @@ public class Main extends ApplicationAdapter {
 
         batch = new SpriteBatch();
         image = new Texture("placeholder_background.png");
-        // placeholder target for the camera to look at
-        target = new CameraTarget(image.getWidth()/2+103, image.getHeight()/2);
-        camera = new CameraLogic(160,90,image);
 
-        player = new Player();
+        camera = new CameraLogic(160,90,image);
+        player = new Player(camera.camera);
     }
 
     // override the resize function so it works of screenScaler viewport instead of default
@@ -68,15 +65,13 @@ public class Main extends ApplicationAdapter {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         batch.begin();
         batch.draw(image,0f,0f);
+        player.drawPlayer(batch);
         batch.end();
-        player.getPlayerSprite().begin();
-        player.drawPlayer();
-        player.getPlayerSprite().end();
 
         if (!paused) {
             // clamp camera to ensure it cannot show outside of the background
-            camera.updatePosition(target);
             batch.setProjectionMatrix(camera.camera.combined);
+            camera.updatePosition(player.getPlayerPosition());
 
             player.updateMovement();
         }
@@ -92,8 +87,5 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         image.dispose();
-
-        player.getPlayerSprite().dispose();
-        mainMenu.dispose();
     }
 }
