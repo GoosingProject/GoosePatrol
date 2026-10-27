@@ -43,12 +43,15 @@ public class Main extends ApplicationAdapter {
 
         camera = new CameraLogic(160,90,image);
         player = new Player(camera.camera);
+        font = new BitmapFont();
+        uiCamera = new OrthographicCamera();
     }
 
     // override the resize function so it works of screenScaler viewport instead of default
       @Override
     public void resize(int width, int height) {
         camera.updateScale(width, height);
+        uiCamera.setToOrtho(false, width, height);
 
         if (showMenu || paused) {
             mainMenu.resize(width, height);
