@@ -96,6 +96,19 @@ public class Main extends ApplicationAdapter {
         if (timeRemaining < 0) {
             timeRemaining = 0;
         }
+        if (timeRemaining <= nextShakeTime && nextShakeTime >= 3) {
+            shakeTimeLeft = 0.5f;
+            nextShakeTime = nextShakeTime / 2;
+        }
+
+        if (shakeTimeLeft > 0) {
+            shakeTimeLeft = shakeTimeLeft - delta;
+            offsetX = (float) (Math.random() * 2 - 1) * shakeAmount;
+            offsetY = (float) (Math.random() * 2 - 1) * shakeAmount;
+        } else {
+            offsetX = 0;
+            offsetY = 0;
+        }
     }
 
     @Override
