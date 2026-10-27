@@ -23,6 +23,7 @@ public class Main extends ApplicationAdapter {
 
     private boolean paused = false;
 
+    private PlayCountdown countdown;
     @Override
     public void create() {
         mainMenu = new MainMenu();
@@ -33,6 +34,7 @@ public class Main extends ApplicationAdapter {
 
         camera = new CameraLogic(160,90,image);
         player = new Player(camera.camera);
+        countdown = new PlayCountdown();
     }
 
     // override the resize function so it works of screenScaler viewport instead of default
@@ -75,7 +77,7 @@ public class Main extends ApplicationAdapter {
 
             player.updateMovement();
         }
-
+        countdown.updateAnimation(Gdx.graphics.getDeltaTime());
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             paused = !paused;
         }
