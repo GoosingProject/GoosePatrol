@@ -111,6 +111,16 @@ public class Main extends ApplicationAdapter {
         }
     }
 
+ private String getTimeString() {
+        int totalSeconds = (int) Math.ceil(timeRemaining);
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        if (seconds < 10) {
+            return minutes + ":0" + seconds;
+        }
+        return minutes + ":" + seconds;
+    }
+    
     @Override
     public void dispose() {
         batch.dispose();
