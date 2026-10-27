@@ -91,7 +91,12 @@ public class Main extends ApplicationAdapter {
         }
     }
 
-    
+    private void updateTimer(float delta) {
+        timeRemaining = timeRemaining - delta;
+        if (timeRemaining < 0) {
+            timeRemaining = 0;
+        }
+    }
 
     @Override
     public void dispose() {
