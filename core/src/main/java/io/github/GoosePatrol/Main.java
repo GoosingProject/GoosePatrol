@@ -59,6 +59,7 @@ public class Main extends ApplicationAdapter {
                 showMenu = false;
                 paused = false;
                 mainMenu.playGameTriggered = false;
+                countdown.startAnimation();
             } else if (paused) {
                 Gdx.input.setInputProcessor(mainMenu.getStage());
             }
