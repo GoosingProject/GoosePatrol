@@ -90,6 +90,12 @@ public class Main extends ApplicationAdapter {
             updateTimer(Gdx.graphics.getDeltaTime());
         }
 
+        batch.setProjectionMatrix(uiCamera.combined);
+        batch.begin();
+        font.draw(batch, getTimeString(), 20f + offsetX, Gdx.graphics.getHeight() - 20f + offsetY);
+        batch.end();
+        batch.setProjectionMatrix(camera.camera.combined);
+
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             paused = !paused;
         }
