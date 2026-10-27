@@ -34,10 +34,12 @@ public class PlayCountdown {
      */
     public void updateAnimation(float deltaTime){
         if (!visible){
+            // return if any attempt to update animation when object is hidden
             return;
         }
         playTime += deltaTime;
         if (countdownAnimation.isAnimationFinished(playTime)){
+            // hide if animation is finished
             visible = false;
         }
     }
