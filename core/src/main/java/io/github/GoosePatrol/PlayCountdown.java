@@ -59,6 +59,6 @@ public class PlayCountdown {
         TextureRegion frame = countdownAnimation.getKeyFrame(playTime);
         float width = frame.getRegionWidth()*scale;
         float height = frame.getRegionHeight()*scale;
-        batch.draw(frame, centerX-width/2f, centerY-height/2f);
+        batch.draw(frame, centerX-width/2f, centerY-height/2f,width,height);
     }
 }
