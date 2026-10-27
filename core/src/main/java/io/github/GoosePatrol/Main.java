@@ -1,5 +1,6 @@
 package io.github.GoosePatrol;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -22,6 +23,15 @@ public class Main extends ApplicationAdapter {
     private CameraLogic camera;
 
     private boolean paused = false;
+
+    private float timeRemaining = 90f;
+    private float nextShakeTime = 60f;
+    private float shakeTimeLeft = 0f;
+    private float shakeAmount = 3f;
+    private float offsetX = 0f;
+    private float offsetY = 0f;
+    private BitmapFont font;
+    private OrthographicCamera uiCamera;
 
     @Override
     public void create() {
