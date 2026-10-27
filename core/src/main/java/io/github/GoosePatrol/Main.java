@@ -79,6 +79,9 @@ public class Main extends ApplicationAdapter {
             player.updateMovement();
         }
         countdown.updateAnimation(Gdx.graphics.getDeltaTime());
+        batch.begin();
+        countdown.draw(batch, camera.camera.position.x, camera.camera.position.y, 0.2f);
+        batch.end();
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             paused = !paused;
         }
