@@ -87,6 +87,7 @@ public class Main extends ApplicationAdapter {
             camera.updatePosition(player.getPlayerPosition());
 
             player.updateMovement();
+            updateTimer(Gdx.graphics.getDeltaTime());
         }
 
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
