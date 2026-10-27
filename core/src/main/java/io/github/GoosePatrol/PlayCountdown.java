@@ -28,5 +28,18 @@ public class PlayCountdown {
         playTime = 0f;
         visible = true;
     }
+    /**
+     * updates the animation to the correct frame
+     * @param deltaTime time since last frame
+     */
+    public void updateAnimation(float deltaTime){
+        if (!visible){
+            return;
+        }
+        playTime += deltaTime;
+        if (countdownAnimation.isAnimationFinished(playTime)){
+            visible = false;
+        }
+    }
 
 }
