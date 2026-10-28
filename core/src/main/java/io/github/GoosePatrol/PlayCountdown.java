@@ -44,6 +44,13 @@ public class PlayCountdown {
             visible = false;
         }
     }
+    public boolean isAnimationFinished(){
+        if (countdownAnimation.isAnimationFinished(playTime)){
+            return true;
+        }
+        return false;
+    }
+
     /**
      * ensure the animation is playing in the centre of the screen
      * @param batch the camera SpriteBatch
