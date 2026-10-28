@@ -51,16 +51,14 @@ public class Main extends ApplicationAdapter {
     public void render() {
 
         //edited render logic to allow the main menu to render on startup or on pause
-        if (showMenu || paused) {
+        if (showMenu) {
             mainMenu.render();
-            
             if (mainMenu.playGameTriggered){
                 Gdx.input.setInputProcessor(null);
                 showMenu = false;
-                paused = false;
                 mainMenu.playGameTriggered = false;
                 countdown.startAnimation();
-            } else if (paused) {
+            } else if (showMenu) {
                 Gdx.input.setInputProcessor(mainMenu.getStage());
             }
             return;
@@ -71,11 +69,17 @@ public class Main extends ApplicationAdapter {
         player.drawPlayer(batch);
         batch.end();
 
+        // clamp camera to ensure it cannot show outside of the background
+        batch.setProjectionMatrix(camera.camera.combined);
+        camera.updatePosition(player.getPlayerPosition());
+        // only unpause once the animation has finished playing
+        if (!countdown.isAnimationFinished()){
+            paused = true;
+        }
+        else{
+            paused = false;
+        }
         if (!paused) {
-            // clamp camera to ensure it cannot show outside of the background
-            batch.setProjectionMatrix(camera.camera.combined);
-            camera.updatePosition(player.getPlayerPosition());
-
             player.updateMovement();
         }
         countdown.updateAnimation(Gdx.graphics.getDeltaTime());
@@ -83,7 +87,7 @@ public class Main extends ApplicationAdapter {
         countdown.draw(batch, camera.camera.position.x, camera.camera.position.y, 0.2f);
         batch.end();
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-            paused = !paused;
+            showMenu = !showMenu;
         }
     }
 
