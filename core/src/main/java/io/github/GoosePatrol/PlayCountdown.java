@@ -18,8 +18,8 @@ public class PlayCountdown {
      * Constructer for the PlayCountdown class
      */
     public PlayCountdown(){
-        this.countdownAtlas =  new TextureAtlas("countdown.atlas");
-        this.countdownAnimation = new Animation<TextureRegion>(1f,countdownAtlas.findRegions("countdown"),PlayMode.NORMAL);
+        this.countdownAtlas =  new TextureAtlas("sprites.atlas");
+        this.countdownAnimation = new Animation<TextureRegion>(1f,countdownAtlas.findRegions("countdown/countdown"),PlayMode.NORMAL);
         this.visible = false;
     }
     /**

@@ -213,7 +213,7 @@ if(enableGraalNative == 'true') {
 }
 
 // Texture packer parameters
-project.ext.texturePacker = [ rootProject.file("assets/countdown").absolutePath, rootProject.file("assets").absolutePath, "countdown" ]
+project.ext.texturePacker = [ rootProject.file("assets/sprites").absolutePath, rootProject.file("assets").absolutePath, "sprites" ]
 
 // Import texture packer
 import com.badlogic.gdx.tools.texturepacker.TexturePacker
