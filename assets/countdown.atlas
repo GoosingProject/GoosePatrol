@@ -10,18 +10,18 @@ countdown
   size: 40, 50
   orig: 40, 50
   offset: 0, 0
-  index: 2
+  index: 1
 countdown
   rotate: false
   xy: 44, 2
   size: 40, 50
   orig: 40, 50
   offset: 0, 0
-  index: 3
+  index: 2
 countdown
   rotate: false
   xy: 86, 2
   size: 39, 50
   orig: 39, 50
   offset: 0, 0
-  index: 1
+  index: 3
