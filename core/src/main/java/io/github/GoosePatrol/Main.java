@@ -51,7 +51,7 @@ public class Main extends ApplicationAdapter {
         //edited render logic to allow the main menu to render on startup or on pause
         if (showMenu || paused) {
             mainMenu.render();
-            
+
             if (mainMenu.playGameTriggered){
                 Gdx.input.setInputProcessor(null);
                 showMenu = false;
@@ -65,7 +65,7 @@ public class Main extends ApplicationAdapter {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         batch.begin();
         batch.draw(image,0f,0f);
-        player.drawPlayer(batch);
+        player.draw(batch);
         batch.end();
 
         if (!paused) {
@@ -81,7 +81,7 @@ public class Main extends ApplicationAdapter {
         }
     }
 
-    
+
 
     @Override
     public void dispose() {
