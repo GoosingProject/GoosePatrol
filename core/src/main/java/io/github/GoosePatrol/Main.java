@@ -23,6 +23,7 @@ public class Main extends ApplicationAdapter {
 
     private boolean paused = false;
 
+    private PlayCountdown countdown;
     @Override
     public void create() {
         mainMenu = new MainMenu();
@@ -33,6 +34,7 @@ public class Main extends ApplicationAdapter {
 
         camera = new CameraLogic(160,90,image);
         player = new Player(camera.camera);
+        countdown = new PlayCountdown();
     }
 
     // override the resize function so it works of screenScaler viewport instead of default
@@ -49,15 +51,14 @@ public class Main extends ApplicationAdapter {
     public void render() {
 
         //edited render logic to allow the main menu to render on startup or on pause
-        if (showMenu || paused) {
+        if (showMenu) {
             mainMenu.render();
-            
             if (mainMenu.playGameTriggered){
                 Gdx.input.setInputProcessor(null);
                 showMenu = false;
-                paused = false;
                 mainMenu.playGameTriggered = false;
-            } else if (paused) {
+                countdown.startAnimation();
+            } else if (showMenu) {
                 Gdx.input.setInputProcessor(mainMenu.getStage());
             }
             return;
@@ -68,16 +69,25 @@ public class Main extends ApplicationAdapter {
         player.drawPlayer(batch);
         batch.end();
 
+        // clamp camera to ensure it cannot show outside of the background
+        batch.setProjectionMatrix(camera.camera.combined);
+        camera.updatePosition(player.getPlayerPosition());
+        // only unpause once the animation has finished playing
+        if (!countdown.isAnimationFinished()){
+            paused = true;
+        }
+        else{
+            paused = false;
+        }
         if (!paused) {
-            // clamp camera to ensure it cannot show outside of the background
-            batch.setProjectionMatrix(camera.camera.combined);
-            camera.updatePosition(player.getPlayerPosition());
-
             player.updateMovement();
         }
-
+        countdown.updateAnimation(Gdx.graphics.getDeltaTime());
+        batch.begin();
+        countdown.draw(batch, camera.camera.position.x, camera.camera.position.y, 0.2f);
+        batch.end();
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-            paused = !paused;
+            showMenu = !showMenu;
         }
     }
 
