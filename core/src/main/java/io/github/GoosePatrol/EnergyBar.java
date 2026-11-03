@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class EnergyBar extends ApplicationAdapter {
         private Skin skin;
         private Stage stage;
+        private ProgressBar energyBar;
         private float maxPlayerEnergy = 100f;
         private float currentPlayerEnergy = 100f;
 
@@ -35,8 +36,8 @@ public class EnergyBar extends ApplicationAdapter {
 
         ProgressBar energyBar = new ProgressBar(0f, maxPlayerEnergy, 25, false, skin);
         energyBar.setSize(150, 20);
-        energyBar.setPosition(20, 20);
-        root.add(energyBar);
+        energyBar.setValue(currentPlayerEnergy);
+        root.add(energyBar).expand().top().left();
         
     }
     @Override
