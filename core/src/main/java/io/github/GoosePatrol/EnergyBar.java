@@ -3,6 +3,7 @@ package io.github.GoosePatrol;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
@@ -55,6 +56,15 @@ public class EnergyBar extends ApplicationAdapter {
     public void dispose () {
         skin.dispose();
         stage.dispose();
+    }
+
+    public float getPlayerEnergy() {
+        return currentPlayerEnergy;
+    }
+
+    public void setEnergyBar(float energy) {
+        this.currentPlayerEnergy = MathUtils.clamp(energy, 0f, maxPlayerEnergy); // keeps energy value clamped from 0 to 100
+        energyBar.setValue(currentPlayerEnergy);
     }
 }
 
