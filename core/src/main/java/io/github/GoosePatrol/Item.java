@@ -41,4 +41,16 @@ public abstract class Item {
         remainingLife = itemDuration;
         active = true;
     }
+
+    public boolean isActive(){
+        return active;
+    }
+
+    public String getName(){
+        return itemName;
+    }
+
+    public float getRemaining(){
+        return remainingLife;
+    }
 }
