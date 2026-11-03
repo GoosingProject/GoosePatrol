@@ -17,6 +17,8 @@ public class Main extends ApplicationAdapter {
     //contains the logic value to tell the game to render the main menu
     private MainMenu mainMenu;
 
+    private EnergyBar energyBar;
+
 
     private Player player;
     private CameraLogic camera;
@@ -28,6 +30,9 @@ public class Main extends ApplicationAdapter {
     public void create() {
         mainMenu = new MainMenu();
         mainMenu.create();
+
+        energyBar = new EnergyBar();
+        energyBar.create();
 
         batch = new SpriteBatch();
         image = new Texture("placeholder_background.png");
@@ -58,6 +63,7 @@ public class Main extends ApplicationAdapter {
                 showMenu = false;
                 mainMenu.playGameTriggered = false;
                 countdown.startAnimation();
+                energyBar.render();
             } else if (showMenu) {
                 Gdx.input.setInputProcessor(mainMenu.getStage());
             }
@@ -78,6 +84,7 @@ public class Main extends ApplicationAdapter {
         }
         else{
             paused = false;
+            energyBar.render();
         }
         if (!paused) {
             player.updateMovement();
