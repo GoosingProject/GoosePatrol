@@ -7,10 +7,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * Item
  */
 public abstract class Item {
+    public enum State {inactive, active, consumed, expired}
+    private State state;
     private String itemName;
     private float itemDuration;
     private float remainingLife;
-    private boolean active;
     protected Vector2 position = new Vector2();
     protected TextureRegion Texture;
 
@@ -22,7 +23,7 @@ public abstract class Item {
     protected Item(String name, float duration){
         this.itemName=name;
         this.itemDuration=duration;
-        this.active = false;
+        this.state = State.inactive;
     }
 
     /**
@@ -30,10 +31,10 @@ public abstract class Item {
      * @param deltaTime time since last update
      */
     public void changeDuration(float deltaTime){
-        if(active){
+        if(state == State.active){
             remainingLife -= deltaTime;
             if(remainingLife <= 0f){
-                active = false;
+                state = State.inactive;
             }
         }
     }
@@ -45,11 +46,17 @@ public abstract class Item {
     public void spawn(Vector2 location){
         position.set(location);
         remainingLife = itemDuration;
-        active = true;
+        state = State.active;
+    }
+    /**
+     * marks item as used
+     */
+    protected void markConsumed(){
+        state = State.consumed;
     }
 
     public boolean isActive(){
-        return active;
+        return state == State.active;
     }
 
     public String getName(){
