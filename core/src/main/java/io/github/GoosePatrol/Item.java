@@ -9,10 +9,12 @@ public abstract class Item {
     private String itemName;
     private float itemDuration;
     private float remainingLife;
+    private boolean active;
     protected Vector2 position = new Vector2();
     protected Item(String name, float duration){
         this.itemName=name;
         this.itemDuration=duration;
+        this.active = false;
     }
 
     public void triggerAbility(){
@@ -20,7 +22,9 @@ public abstract class Item {
     }
 
     public void changeDuration(float deltaTime){
-        remainingLife -= deltaTime;
+        if(active){
+            remainingLife -= deltaTime;
+        }
     }
 
     public boolean pickUpItem(){
@@ -30,5 +34,6 @@ public abstract class Item {
     public void spawn(Vector2 location){
         position.set(location);
         remainingLife = itemDuration;
+        active = true;
     }
 }
