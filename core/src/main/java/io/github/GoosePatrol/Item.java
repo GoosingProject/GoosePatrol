@@ -5,7 +5,12 @@ package io.github.GoosePatrol;
  */
 public abstract class Item {
     private String itemName;
-    private Float itemDuration;
+    private float itemDuration;
+    protected Item(String name, float duration){
+        this.itemName=name;
+        this.itemDuration=duration;
+    }
+
     public void triggerAbility(){
         
     }
