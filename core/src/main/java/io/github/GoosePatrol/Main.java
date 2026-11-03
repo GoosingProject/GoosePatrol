@@ -63,7 +63,6 @@ public class Main extends ApplicationAdapter {
                 showMenu = false;
                 mainMenu.playGameTriggered = false;
                 countdown.startAnimation();
-                energyBar.render();
             } else if (showMenu) {
                 Gdx.input.setInputProcessor(mainMenu.getStage());
             }
@@ -84,19 +83,12 @@ public class Main extends ApplicationAdapter {
         }
         else{
             paused = false;
-            energyBar.render();
+            energyBar.render(); // only renders energy bar after play countdown ends
         }
         if (!paused) {
             player.updateMovement();
 
-            if (Gdx.input.isKeyJustPressed(Keys.H)) {
-                float healEnergy = energyBar.getPlayerEnergy() + 10f;
-                energyBar.setEnergyBar(healEnergy);
-            }
-            if (Gdx.input.isKeyJustPressed(Keys.J)) {
-                float damageEnergy = energyBar.getPlayerEnergy() - 10f;
-                energyBar.setEnergyBar(damageEnergy);
-            }
+            // Sends player back to main menu when energy reaches zero
             if (energyBar.getPlayerEnergy() == 0) {
                 showMenu = true;
                 mainMenu.playGameTriggered = false;
@@ -113,11 +105,10 @@ public class Main extends ApplicationAdapter {
         }
     }
 
-    
-
     @Override
     public void dispose() {
         batch.dispose();
         image.dispose();
     }
-}
+ }
+

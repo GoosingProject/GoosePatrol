@@ -12,7 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 
-
+/**
+ * Manages the Scene2D layout for the ingame energy bar HUD for the player.
+ */
 public class EnergyBar extends ApplicationAdapter {
         private Skin skin;
         private Stage stage;
@@ -27,7 +29,7 @@ public class EnergyBar extends ApplicationAdapter {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        //creates a table root to allow button placement to be more gridlike, easier centering etc.
+        
 
         Table root = new Table();
         root.setFillParent(true);
@@ -59,10 +61,20 @@ public class EnergyBar extends ApplicationAdapter {
         stage.dispose();
     }
 
+    /**
+     * Getter that returns the player's current energy level
+     * @return The player's energy level as a float between 0 - 100
+     */
     public float getPlayerEnergy() {
         return currentPlayerEnergy;
     }
 
+
+    /**
+     * Updates player's energy and updates the energy bar accordingly
+     * Caps the value between 0-100
+     * @param energy The new energy value
+     */
     public void setEnergyBar(float energy) {
         this.currentPlayerEnergy = MathUtils.clamp(energy, 0f, maxPlayerEnergy); // keeps energy value clamped from 0 to 100
         energyBar.setValue(currentPlayerEnergy);
