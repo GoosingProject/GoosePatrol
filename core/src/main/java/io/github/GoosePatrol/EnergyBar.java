@@ -35,15 +35,16 @@ public class EnergyBar extends ApplicationAdapter {
 
         //Start of layout
 
-        ProgressBar energyBar = new ProgressBar(0f, maxPlayerEnergy, 25, false, skin);
-        energyBar.setSize(150, 20);
+        energyBar = new ProgressBar(0f, maxPlayerEnergy, 25, false, skin);
         energyBar.setValue(currentPlayerEnergy);
-        root.add(energyBar).expand().top().left();
+        energyBar.setAnimateDuration(0.25f);
+        root.add(energyBar).expand().top().left().width(150).height(20);
+
         
     }
     @Override
     public void render () {
-        stage.act();
+        stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
     

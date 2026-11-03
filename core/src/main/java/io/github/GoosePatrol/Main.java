@@ -88,6 +88,21 @@ public class Main extends ApplicationAdapter {
         }
         if (!paused) {
             player.updateMovement();
+
+            if (Gdx.input.isKeyJustPressed(Keys.H)) {
+                float healEnergy = energyBar.getPlayerEnergy() + 10f;
+                energyBar.setEnergyBar(healEnergy);
+            }
+            if (Gdx.input.isKeyJustPressed(Keys.J)) {
+                float damageEnergy = energyBar.getPlayerEnergy() - 10f;
+                energyBar.setEnergyBar(damageEnergy);
+            }
+            if (energyBar.getPlayerEnergy() == 0) {
+                showMenu = true;
+                mainMenu.playGameTriggered = false;
+                Gdx.input.setInputProcessor(mainMenu.getStage());
+                energyBar.setEnergyBar(100f);       
+            }
         }
         countdown.updateAnimation(Gdx.graphics.getDeltaTime());
         batch.begin();
