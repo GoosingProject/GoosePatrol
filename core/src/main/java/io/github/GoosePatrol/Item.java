@@ -1,6 +1,7 @@
 package io.github.GoosePatrol;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 /**
  * abstact class describing a general item.
@@ -13,7 +14,9 @@ public abstract class Item {
     private float itemDuration;
     private float remainingLife;
     protected Vector2 position = new Vector2();
-    protected TextureRegion Texture;
+    protected TextureRegion texture;
+    protected float width = 32f;
+    protected float height = 32f;
 
     /**
      * constructer for the item abstract class class
@@ -53,6 +56,18 @@ public abstract class Item {
      */
     protected void markConsumed(){
         state = State.consumed;
+    }
+    /**
+     * draws the item in the world
+     * @param batch the batch in which to draw the item
+     */
+    public void render(SpriteBatch batch) {
+        if (texture != null) {
+            batch.draw(texture,
+                position.x - width / 2f,
+                position.y - height / 2f,
+                width, height);
+        }
     }
 
     public boolean isActive(){
