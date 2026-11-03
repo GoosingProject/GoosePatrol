@@ -61,7 +61,7 @@ public class Player extends MovementEntity {
         Animation<TextureRegion> animation =
             new Animation<TextureRegion>(
                 0.25f,
-                textureAtlas.findRegions(action.label + "/" + direction.label + "-" + action.label),
+                textureAtlas.findRegions("player/" + action.label + "/" + direction.label),
                 PlayMode.LOOP);
 
         directionMap.put(direction, animation);

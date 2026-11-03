@@ -5,9 +5,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.MapProperties;
 
 /** Class to control the logic of the camera. */
 public class CameraLogic {
@@ -15,7 +16,7 @@ public class CameraLogic {
   private float viewWidth = 160f;
   private float viewHeight = 90f;
   private OrthographicCamera camera;
-  private Texture background;
+  private TiledMap map;
   private Viewport screenScaler;
 
   /**
@@ -23,14 +24,14 @@ public class CameraLogic {
    *
    * @param width The width of the viewport
    * @param height The height of the viewport
-   * @param back The background image
+   * @param map The map
    */
-  public CameraLogic(float width, float height, Texture back) {
-    this.viewHeight = height;
+  public CameraLogic(float width, float height, TiledMap map) {
     this.viewWidth = width;
+    this.viewHeight = height;
     this.camera = new OrthographicCamera();
     this.screenScaler = new FitViewport(viewWidth, viewHeight, camera);
-    this.background = back;
+    this.map = map;
   }
 
   /**
@@ -40,7 +41,7 @@ public class CameraLogic {
    */
   public void updatePosition(Vector2 cameraPosition) {
     camera.position.lerp(
-        new Vector3(cameraPosition.x, cameraPosition.y, 0f), Gdx.graphics.getDeltaTime() * 10);
+    new Vector3(cameraPosition.x, cameraPosition.y, 0f), Gdx.graphics.getDeltaTime() * 10);
     clampCamera();
     camera.update();
   }
@@ -58,15 +59,18 @@ public class CameraLogic {
   /** Clamps the camera to the background image so it cannot show anything outside. */
   private void clampCamera() {
     // stores the width and height to the centre of the camera
-    float halfW = camera.viewportWidth * camera.zoom / 2f;
-    float halfH = camera.viewportHeight * camera.zoom / 2f;
-    // stores the width and height of the background image
-    float imgW = background.getWidth();
-    float imgH = background.getHeight();
+    float halfWidth = camera.viewportWidth * camera.zoom / 2f;
+    float halfHeight = camera.viewportHeight * camera.zoom / 2f;
+
+    // stores the width and height of the map
+    MapProperties prop = map.getProperties();
+    int mapWidth = prop.get("width", Integer.class) * prop.get("tilewidth", Integer.class);
+    int mapHeight = prop.get("height", Integer.class) * prop.get("tileheight", Integer.class);
+
     // camera.position is the centre of the view
-    // clamps the position half a view away from the image edges
-    camera.position.x = MathUtils.clamp(camera.position.x, halfW, imgW - halfW);
-    camera.position.y = MathUtils.clamp(camera.position.y, halfH, imgH - halfH);
+    // clamps the position half a view away from the maps edges
+    camera.position.x = MathUtils.clamp(camera.position.x, halfWidth, mapWidth - halfWidth);
+    camera.position.y = MathUtils.clamp(camera.position.y, halfHeight, mapHeight - halfHeight);
   }
 
   /**

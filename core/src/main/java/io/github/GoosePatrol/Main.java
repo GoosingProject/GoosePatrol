@@ -2,15 +2,16 @@ package io.github.GoosePatrol;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
   private SpriteBatch batch;
-  private Texture image;
 
   private boolean showMenu = true;
   // contains the logic value to tell the game to render the main menu
@@ -18,6 +19,8 @@ public class Main extends ApplicationAdapter {
 
   private Player player;
   private CameraLogic camera;
+  private TiledMap map;
+  private OrthogonalTiledMapRenderer renderer;
 
   private boolean paused = false;
 
@@ -27,10 +30,12 @@ public class Main extends ApplicationAdapter {
     mainMenu.create();
 
     batch = new SpriteBatch();
-    image = new Texture("placeholder_background.png");
 
-    camera = new CameraLogic(160, 90, image);
+    map = new TmxMapLoader().load("map/map.tmx");
+    camera = new CameraLogic(160, 90, map);
     player = new Player(camera.getCamera());
+
+    renderer = new OrthogonalTiledMapRenderer(map);
   }
 
   // override the resize function so it works of screenScaler viewport instead of default
@@ -59,19 +64,22 @@ public class Main extends ApplicationAdapter {
       }
       return;
     }
+
     ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-    batch.begin();
-    batch.draw(image, 0f, 0f);
-    player.draw(batch);
-    batch.end();
 
     if (!paused) {
       // clamp camera to ensure it cannot show outside of the background
       batch.setProjectionMatrix(camera.getCamera().combined);
       camera.updatePosition(player.getPlayerPosition());
+      renderer.setView(camera.getCamera());
+      renderer.render();
 
       player.updateMovement();
     }
+
+    batch.begin();
+    player.draw(batch);
+    batch.end();
 
     if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
       paused = !paused;
@@ -81,6 +89,7 @@ public class Main extends ApplicationAdapter {
   @Override
   public void dispose() {
     batch.dispose();
-    image.dispose();
+    map.dispose();
+    renderer.dispose();
   }
 }
