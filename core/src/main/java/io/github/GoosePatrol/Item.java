@@ -24,6 +24,9 @@ public abstract class Item {
     public void changeDuration(float deltaTime){
         if(active){
             remainingLife -= deltaTime;
+            if(remainingLife <= 0f){
+                active = false;
+            }
         }
     }
 
