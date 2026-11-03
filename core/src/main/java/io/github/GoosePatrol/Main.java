@@ -45,7 +45,6 @@ public class Main extends ApplicationAdapter {
 
   @Override
   public void render() {
-
     // edited render logic to allow the main menu to render on startup or on pause
     if (showMenu || paused) {
       mainMenu.render();
