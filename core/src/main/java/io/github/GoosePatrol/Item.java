@@ -1,6 +1,7 @@
 package io.github.GoosePatrol;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 /**
  * abstact class describing a general item.
  * Item
@@ -11,6 +12,7 @@ public abstract class Item {
     private float remainingLife;
     private boolean active;
     protected Vector2 position = new Vector2();
+    protected TextureRegion Texture;
     protected Item(String name, float duration){
         this.itemName=name;
         this.itemDuration=duration;
