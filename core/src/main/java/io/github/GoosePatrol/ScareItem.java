@@ -1,5 +1,6 @@
 package io.github.GoosePatrol;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class ScareItem extends Item{
@@ -9,8 +10,8 @@ public class ScareItem extends Item{
 
     private float pulseTimer = 0f;
 
-    public ScareItem(){
-        super("Scarecrow", LIFETIME);
+    public ScareItem(TextureRegion sprite){
+        super("Scarecrow", LIFETIME, sprite);
         this.width = texture.getRegionWidth();
         this.height = texture.getRegionHeight();
     }

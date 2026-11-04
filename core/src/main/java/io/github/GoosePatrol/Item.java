@@ -23,10 +23,11 @@ public abstract class Item {
      * @param name
      * @param duration
      */
-    protected Item(String name, float duration){
+    protected Item(String name, float duration, TextureRegion sprite){
         this.itemName=name;
         this.itemDuration=duration;
         this.state = State.inactive;
+        this.texture = sprite;
     }
 
     /**
