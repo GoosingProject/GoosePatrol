@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * Item
  */
 public abstract class Item {
-    public enum State {inactive, active, consumed, expired}
+    public enum State {inactive, active, expired}
     private State state;
     private String itemName;
     private float itemDuration;
@@ -41,7 +41,7 @@ public abstract class Item {
                 onExpire(world);
             }
             else{
-                updateActive(world);
+                updateActive(world, deltaTime);
             }
         }
     }
@@ -54,12 +54,6 @@ public abstract class Item {
         position.set(location);
         remainingLife = itemDuration;
         state = State.active;
-    }
-    /**
-     * marks item as used
-     */
-    protected void markConsumed(){
-        state = State.consumed;
     }
     /**
      * draws the item in the world
@@ -86,7 +80,7 @@ public abstract class Item {
     /** cleanup when item lifetime runs out */
     protected void onExpire(WorldContext world){}
     /** per frame hook for deployed items */
-    protected void updateActive(WorldContext world){}
+    protected void updateActive(WorldContext world, float deltaTime){}
 
     public float getRemaining(){
         return remainingLife;
