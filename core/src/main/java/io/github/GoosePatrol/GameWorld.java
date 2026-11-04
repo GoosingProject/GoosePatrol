@@ -28,4 +28,19 @@ public class GameWorld implements WorldContext {
             toRemove.add(item);
         }
     }
+
+    public void update(float deltaTime) {
+        for (Item item : activeItems){
+             item.update(deltaTime, this);
+        }
+        for (Item item : activeItems) {
+            if (!item.isActive()){
+                toRemove.add(item);
+            } 
+        }
+        if (!toRemove.isEmpty()) {
+            activeItems.removeAll(toRemove);
+            toRemove.clear();
+        }
+    }
 }
