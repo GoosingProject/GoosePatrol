@@ -11,6 +11,8 @@ public class ScareItem extends Item{
 
     public ScareItem(){
         super("Scarecrow", LIFETIME);
+        this.width = texture.getRegionWidth();
+        this.height = texture.getRegionHeight();
     }
     @Override 
     public void use(Player player, Vector2 itemPostion, WorldContext world){
