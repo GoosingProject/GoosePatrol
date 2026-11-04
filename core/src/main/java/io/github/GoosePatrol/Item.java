@@ -69,6 +69,8 @@ public abstract class Item {
                 width, height);
         }
     }
+    /**to be called by the inventory class when an item is selected */
+    public abstract void use(Player player, Vector2 itemPosition, WorldContext world);
 
     public boolean isActive(){
         return state == State.active;
