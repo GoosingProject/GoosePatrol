@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Input.Keys;
 
+
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -42,10 +43,8 @@ public class Main extends ApplicationAdapter {
         countdown = new PlayCountdown();
 
         world = new GameWorld();
+        // pass to scarecrow objects on creation
         scareTexture = new Texture("ScareCrow.png");
-        // automaticlly spawn a scarecrow item for testing, deleate before merging
-        ScareItem test = new ScareItem(new TextureRegion(scareTexture));
-        test.use(player, player.getPlayerPosition(), world);
     }
 
     // override the resize function so it works of screenScaler viewport instead of default
