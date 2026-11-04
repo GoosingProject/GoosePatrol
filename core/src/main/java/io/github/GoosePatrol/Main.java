@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Input.Keys;
 
@@ -24,6 +25,10 @@ public class Main extends ApplicationAdapter {
     private boolean paused = false;
 
     private PlayCountdown countdown;
+
+    private GameWorld world;
+
+    private Texture scareTexture;
     @Override
     public void create() {
         mainMenu = new MainMenu();
@@ -35,6 +40,12 @@ public class Main extends ApplicationAdapter {
         camera = new CameraLogic(160,90,image);
         player = new Player(camera.camera);
         countdown = new PlayCountdown();
+
+        world = new GameWorld();
+        scareTexture = new Texture("ScareCrow.png");
+        // automaticlly spawn a scarecrow item for testing, deleate before merging
+        ScareItem test = new ScareItem(new TextureRegion(scareTexture));
+        test.use(player, player.getPlayerPosition(), world);
     }
 
     // override the resize function so it works of screenScaler viewport instead of default
@@ -67,6 +78,7 @@ public class Main extends ApplicationAdapter {
         batch.begin();
         batch.draw(image,0f,0f);
         player.drawPlayer(batch);
+        world.render(batch);
         batch.end();
 
         // clamp camera to ensure it cannot show outside of the background
@@ -97,5 +109,6 @@ public class Main extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         image.dispose();
+        scareTexture.dispose();
     }
 }
