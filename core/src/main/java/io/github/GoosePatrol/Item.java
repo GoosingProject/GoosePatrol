@@ -33,11 +33,15 @@ public abstract class Item {
      * updates the remaining time of the item
      * @param deltaTime time since last update
      */
-    public void changeDuration(float deltaTime){
+    public void update(float deltaTime, WorldContext world){
         if(state == State.active){
             remainingLife -= deltaTime;
             if(remainingLife <= 0f){
-                state = State.inactive;
+                state = State.expired;
+                onExpire(world);
+            }
+            else{
+                updateActive(world);
             }
         }
     }
@@ -79,6 +83,10 @@ public abstract class Item {
     public String getName(){
         return itemName;
     }
+    /** cleanup when item lifetime runs out */
+    protected void onExpire(WorldContext world){}
+    /** per frame hook for deployed items */
+    protected void updateActive(WorldContext world){}
 
     public float getRemaining(){
         return remainingLife;
