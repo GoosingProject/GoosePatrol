@@ -93,6 +93,7 @@ public class Main extends ApplicationAdapter {
         }
         if (!paused) {
             player.updateMovement();
+            world.update(Gdx.graphics.getDeltaTime());
         }
         countdown.updateAnimation(Gdx.graphics.getDeltaTime());
         batch.begin();
