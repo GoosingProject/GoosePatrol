@@ -7,8 +7,6 @@ public class FoodItem extends Item{
     private static float LIFETIME = 5f;
     private static float RADIUS = 150f;
 
-    private float pulseTimer = 0f;
-
     public FoodItem(TextureRegion sprite){
         super("Bread", LIFETIME, sprite);
         this.width = texture.getRegionWidth();
