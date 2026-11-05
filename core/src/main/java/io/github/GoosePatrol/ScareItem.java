@@ -19,6 +19,7 @@ public class ScareItem extends Item{
     public void use(Player player, Vector2 itemPostion, WorldContext world){
         spawn(itemPostion);
         world.addActiveItem(this);
+        world.scareGeese(itemPostion, RADIUS);
     }
     @Override 
     protected void updateActive(WorldContext world, float deltaTime){
