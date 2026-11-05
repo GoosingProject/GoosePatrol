@@ -46,12 +46,14 @@ public class Main extends ApplicationAdapter {
 
     renderer = new OrthogonalTiledMapRenderer(map);
 
-        world = new GameWorld();
-        // pass to scarecrow objects on creation
-        //  item spawning will be moved to a inventory class in futre updates
-        scareTexture = new Texture("ScareCrow.png");
-        // pass to food objects on creation
-        breadTexture = new Texture("Bread.png");
+    world = new GameWorld();
+
+    countdown = new PlayCountdown();
+    // pass to scarecrow objects on creation
+    //  item spawning will be moved to a inventory class in futre updates
+    scareTexture = new Texture("ScareCrow.png");
+    // pass to food objects on creation
+    breadTexture = new Texture("Bread.png");
   }
 
   // override the resize function so it works of screenScaler viewport instead of default
@@ -75,39 +77,38 @@ public class Main extends ApplicationAdapter {
                 showMenu = false;
                 mainMenu.playGameTriggered = false;
                 countdown.startAnimation();
+                paused = true;
             } else if (showMenu) {
                 Gdx.input.setInputProcessor(mainMenu.getStage());
             }
             return;
         }
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-
-
-    if (!paused) {
-      // clamp camera to ensure it cannot show outside of the background
-      batch.setProjectionMatrix(camera.getCamera().combined);
-      camera.updatePosition(player.getPlayerPosition());
-      renderer.setView(camera.getCamera());
-      renderer.render();
-        if (!countdown.isAnimationFinished()){
-            paused = true;
-        }
-        else{
+        countdown.updateAnimation(Gdx.graphics.getDeltaTime());
+        if (paused && countdown.isAnimationFinished()) {
             paused = false;
         }
 
-        player.updateMovement();
-        world.update(Gdx.graphics.getDeltaTime());
-    }
-    countdown.updateAnimation(Gdx.graphics.getDeltaTime());
-    batch.begin();
-    player.draw(batch);
-    batch.end();
+        // clamp camera to ensure it cannot show outside of the background
+        batch.setProjectionMatrix(camera.getCamera().combined);
+        camera.updatePosition(player.getPlayerPosition());
+        renderer.setView(camera.getCamera());
+        renderer.render();
 
-    if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-      showMenu = !showMenu;
+        if (!paused) {
+            player.updateMovement();
+            world.update(Gdx.graphics.getDeltaTime());
+        }
+        batch.setProjectionMatrix(camera.getCamera().combined);
+        batch.begin();
+        player.draw(batch);
+        countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f);
+        batch.end();
+
+        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+            showMenu = !showMenu;
+        }
     }
-  }
 
   @Override
   public void dispose() {
