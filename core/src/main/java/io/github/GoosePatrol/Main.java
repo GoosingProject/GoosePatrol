@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Input.Keys;
-
+import com.badlogic.gdx.math.Vector2;;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -30,6 +30,7 @@ public class Main extends ApplicationAdapter {
     private GameWorld world;
 
     private Texture scareTexture;
+    private Texture breadTexture;
     @Override
     public void create() {
         mainMenu = new MainMenu();
@@ -44,7 +45,13 @@ public class Main extends ApplicationAdapter {
 
         world = new GameWorld();
         // pass to scarecrow objects on creation
+        //  item spawning will be moved to a inventory class in futre updates
         scareTexture = new Texture("ScareCrow.png");
+        // pass to food objects on creation
+        breadTexture = new Texture("Bread.png");
+        
+        FoodItem bread = new FoodItem(new TextureRegion(breadTexture));
+        bread.use(player,new Vector2(40,40),world);
     }
 
     // override the resize function so it works of screenScaler viewport instead of default
