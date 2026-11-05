@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -26,13 +27,35 @@ public class Goose extends MovementEntity {
 
     /** Load animations and populate animation map */
     private void loadAnimations() {
+        for (GooseAction action : GooseAction.values()) {
+            Map<SpriteDirection, Animation<TextureRegion>> directionMap = new HashMap<>();
+
+            for (SpriteDirection direction : SpriteDirection.values()) {
+                Animation<TextureRegion> animation =
+            new Animation<TextureRegion>(
+                0.25f,
+                textureAtlas.findRegions("goose/" + action.label + "/" + direction.label),
+                PlayMode.LOOP);
+
+                directionMap.put(direction, animation);
+            }
+
+            animations.put(action, directionMap);
+        }
+    }
+
+    /**
+     * Calculate the direction the goose is facing
+     * @return SpriteDirection of which direction the goose is facing
+     */
+    private SpriteDirection directionFacing() {
         // TODO
+        throw new UnsupportedOperationException("Unimplemented method 'directionFacing'");
     }
 
     @Override
     protected Animation<TextureRegion> getCurrentAnimation() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCurrentAnimation'");
+        return animations.get(action).get(directionFacing());
     }
 
     @Override
