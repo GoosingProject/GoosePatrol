@@ -17,7 +17,7 @@ public abstract class Item {
     protected TextureRegion texture;
     protected float width = 32f;
     protected float height = 32f;
-
+    protected float scale = 1f;
     /**
      * constructer for the item abstract class class
      * @param name
@@ -62,10 +62,12 @@ public abstract class Item {
      */
     public void render(SpriteBatch batch) {
         if (texture != null) {
+            float w = width * scale;
+            float h = height * scale;
             batch.draw(texture,
-                position.x - width / 2f,
-                position.y - height / 2f,
-                width, height);
+                position.x - w / 2f,
+                position.y - h / 2f,
+                w, h);
         }
     }
     /**to be called by the inventory class when an item is selected */
