@@ -30,17 +30,19 @@ public class Main extends ApplicationAdapter {
     private PlayCountdown countdown;
     @Override
     public void create() {
-        mainMenu = new MainMenu();
-        mainMenu.create();
+    mainMenu = new MainMenu();
+    mainMenu.create();
 
-        energyBar = new EnergyBar();
-        energyBar.create();
+    energyBar = new EnergyBar();
+    energyBar.create();
 
     batch = new SpriteBatch();
 
     map = new TmxMapLoader().load("map/map.tmx");
     camera = new CameraLogic(160, 90, map);
     player = new Player(camera.getCamera());
+
+    countdown = new PlayCountdown();
 
     renderer = new OrthogonalTiledMapRenderer(map);
   }
@@ -53,20 +55,22 @@ public class Main extends ApplicationAdapter {
     if (showMenu || paused) {
       mainMenu.resize(width, height);
     }
+    energyBar.resize(width, height);
   }
 
   @Override
   public void render() {
     // edited render logic to allow the main menu to render on startup or on pause
-    if (showMenu || paused) {
+    if (showMenu) {
       mainMenu.render();
 
       if (mainMenu.playGameTriggered) {
         Gdx.input.setInputProcessor(null);
         showMenu = false;
-        paused = false;
+        paused = true;
         mainMenu.playGameTriggered = false;
-      } else if (paused) {
+        countdown.startAnimation();
+      } else {
         Gdx.input.setInputProcessor(mainMenu.getStage());
       }
       return;
@@ -99,11 +103,13 @@ public class Main extends ApplicationAdapter {
         }
         countdown.updateAnimation(Gdx.graphics.getDeltaTime());
         batch.begin();
+        player.draw(batch);
         countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y, 0.2f);
         batch.end();
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             showMenu = !showMenu;
         }
+        energyBar.render();
     }
 
     

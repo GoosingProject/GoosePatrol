@@ -27,7 +27,6 @@ public class EnergyBar extends ApplicationAdapter {
         skin = new Skin(Gdx.files.internal("metal-ui.json"));
 
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
 
         
 
