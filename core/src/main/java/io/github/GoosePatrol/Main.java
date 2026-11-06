@@ -33,6 +33,12 @@ public class Main extends ApplicationAdapter {
 
     private Texture scareTexture;
     private Texture breadTexture;
+
+    private Inventory inventory;
+    private InventoryHud inventoryHud;
+    private ItemRoller itemRoller;
+    private ItemBoxSpawner boxSpawner;
+    private Texture itemBoxTexture;
   @Override
   public void create() {
     mainMenu = new MainMenu();
@@ -54,6 +60,13 @@ public class Main extends ApplicationAdapter {
     scareTexture = new Texture("ScareCrow.png");
     // pass to food objects on creation
     breadTexture = new Texture("Bread.png");
+
+    inventory = new Inventory();
+    inventoryHud = new InventoryHud(inventory);
+    inventoryHud.create();
+    itemRoller = new ItemRoller(scareTexture,breadTexture);
+    itemBoxTexture = new Texture("ItemBox.png");
+    boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture), 0, 0);
   }
 
   // override the resize function so it works of screenScaler viewport instead of default
