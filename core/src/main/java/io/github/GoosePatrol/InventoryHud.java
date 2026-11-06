@@ -52,4 +52,9 @@ public class InventoryHud extends ApplicationAdapter{
             }
         }
     }
+    @Override 
+    public void render(){
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
+    }
 }
