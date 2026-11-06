@@ -57,4 +57,8 @@ public class InventoryHud extends ApplicationAdapter{
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+    }
 }
