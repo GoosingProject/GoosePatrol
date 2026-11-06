@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 
 public class InventoryHud extends ApplicationAdapter{
     private Inventory inventory;
+    private Label[] slotLabels = new Label[Inventory.SLOT_COUNT];
     private Skin skin;
     private Stage stage;
     public InventoryHud(Inventory inventory){
@@ -31,5 +32,13 @@ public class InventoryHud extends ApplicationAdapter{
         Table root = new Table();
         root.setFillParent(true);
         stage.addActor(root);
+
+        Table slotTable = new Table();
+        for ( int i = 0; i< inventory.SLOT_COUNT; i++){
+            Label label = new Label("", skin);
+            slotLabels[i] = label;
+            slotTable.add(label).width(80).height(50).pad(2);
+        }
+        root.bottom().add(slotTable).padBottom(10);
     }
 }
