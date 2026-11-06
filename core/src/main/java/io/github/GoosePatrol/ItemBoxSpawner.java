@@ -51,4 +51,10 @@ public class ItemBoxSpawner {
 
         return changed;
     }
+
+    public void render(SpriteBatch batch) {
+        for (ItemBox box : boxes){
+            box.render(batch);
+        }
+    }
 }
