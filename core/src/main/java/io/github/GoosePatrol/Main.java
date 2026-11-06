@@ -4,25 +4,28 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
-    private SpriteBatch batch;
-    private Texture image;
+  private SpriteBatch batch;
 
     private boolean showMenu = true;
     //contains the logic value to tell the game to render the main menu
     private MainMenu mainMenu;
 
+    private EnergyBar energyBar;
 
-    private Player player;
-    private CameraLogic camera;
 
-    private boolean paused = false;
+  private Player player;
+  private CameraLogic camera;
+  private TiledMap map;
+  private OrthogonalTiledMapRenderer renderer;
 
     private float timeRemaining = 90f;
     private float nextShakeTime = 60f;
@@ -33,59 +36,72 @@ public class Main extends ApplicationAdapter {
     private BitmapFont font;
     private OrthographicCamera uiCamera;
 
+  private boolean paused = false;
+
+    private PlayCountdown countdown;
     @Override
     public void create() {
-        mainMenu = new MainMenu();
-        mainMenu.create();
+    mainMenu = new MainMenu();
+    mainMenu.create();
 
-        batch = new SpriteBatch();
-        image = new Texture("placeholder_background.png");
+    energyBar = new EnergyBar();
+    energyBar.create();
 
-        camera = new CameraLogic(160,90,image);
-        player = new Player(camera.camera);
-        font = new BitmapFont();
-        uiCamera = new OrthographicCamera();
+    batch = new SpriteBatch();
+
+    map = new TmxMapLoader().load("map/map.tmx");
+    camera = new CameraLogic(160, 90, map);
+    player = new Player(camera.getCamera());
+    font = new BitmapFont();
+    countdown = new PlayCountdown();
+
+    renderer = new OrthogonalTiledMapRenderer(map);
+  }
+
+  // override the resize function so it works of screenScaler viewport instead of default
+  @Override
+  public void resize(int width, int height) {
+    camera.updateScale(width, height);
+
+    if (showMenu || paused) {
+      mainMenu.resize(width, height);
+    }
+    energyBar.resize(width, height);
+  }
+
+  @Override
+  public void render() {
+    // edited render logic to allow the main menu to render on startup or on pause
+    if (showMenu) {
+      mainMenu.render();
+
+      if (mainMenu.playGameTriggered) {
+        Gdx.input.setInputProcessor(null);
+        showMenu = false;
+        paused = true;
+        mainMenu.playGameTriggered = false;
+        countdown.startAnimation();
+      } else {
+        Gdx.input.setInputProcessor(mainMenu.getStage());
+      }
+      return;
     }
 
-    // override the resize function so it works of screenScaler viewport instead of default
-      @Override
-    public void resize(int width, int height) {
-        camera.updateScale(width, height);
-        uiCamera.setToOrtho(false, width, height);
+    ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
-        if (showMenu || paused) {
-            mainMenu.resize(width, height);
+        // clamp camera to ensure it cannot show outside of the background
+        batch.setProjectionMatrix(camera.getCamera().combined);
+        camera.updatePosition(player.getPlayerPosition());
+        renderer.setView(camera.getCamera());
+        renderer.render();
+        // only unpause once the animation has finished playing
+        if (!countdown.isAnimationFinished()){
+            paused = true;
         }
-    }
-
-    @Override
-    public void render() {
-
-        //edited render logic to allow the main menu to render on startup or on pause
-        if (showMenu || paused) {
-            mainMenu.render();
-            
-            if (mainMenu.playGameTriggered){
-                Gdx.input.setInputProcessor(null);
-                showMenu = false;
-                paused = false;
-                mainMenu.playGameTriggered = false;
-            } else if (paused) {
-                Gdx.input.setInputProcessor(mainMenu.getStage());
-            }
-            return;
+        else{
+            paused = false;
         }
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        batch.begin();
-        batch.draw(image,0f,0f);
-        player.drawPlayer(batch);
-        batch.end();
-
         if (!paused) {
-            // clamp camera to ensure it cannot show outside of the background
-            batch.setProjectionMatrix(camera.camera.combined);
-            camera.updatePosition(player.getPlayerPosition());
-
             player.updateMovement();
             updateTimer(Gdx.graphics.getDeltaTime());
         }
@@ -94,11 +110,26 @@ public class Main extends ApplicationAdapter {
         batch.begin();
         font.draw(batch, getTimeString(), 20f + offsetX, Gdx.graphics.getHeight() - 20f + offsetY);
         batch.end();
-        batch.setProjectionMatrix(camera.camera.combined);
+        batch.setProjectionMatrix(camera.getCamera().combined);
 
-        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-            paused = !paused;
+            
+        // Sends player back to main menu when energy reaches zero
+        if (energyBar.getPlayerEnergy() == 0) {
+            showMenu = true;
+            mainMenu.playGameTriggered = false;
+            Gdx.input.setInputProcessor(mainMenu.getStage());
+            energyBar.setEnergyBar(100f);       
         }
+        countdown.updateAnimation(Gdx.graphics.getDeltaTime());
+        
+        batch.begin();
+        player.draw(batch);
+        countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y, 0.2f);
+        batch.end();
+        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+            showMenu = !showMenu;
+        }
+        energyBar.render();
     }
 
     private void updateTimer(float delta) {
@@ -131,9 +162,10 @@ public class Main extends ApplicationAdapter {
         return minutes + ":" + seconds;
     }
     
-    @Override
-    public void dispose() {
-        batch.dispose();
-        image.dispose();
-    }
+  @Override
+  public void dispose() {
+    batch.dispose();
+    map.dispose();
+    renderer.dispose();
+  }
 }
