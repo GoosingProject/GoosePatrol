@@ -14,6 +14,8 @@ public class ItemBox {
     private boolean collected = false;
     private float lifeRemaining = LIFETIME;
     private boolean expired = false;
+
+    private static float PICKUP_RADIUS = 20f;
     public ItemBox(Vector2 position, TextureRegion texture){
         this.positon.set(positon);
         this.texture = texture;
@@ -25,5 +27,11 @@ public class ItemBox {
                 expired = true;
             }
         }
+    }
+    public boolean canCollect(Vector2 playerPos){
+        return !collected && positon.dst(playerPos) <= PICKUP_RADIUS;
+    }
+    public void collect(){
+        collected = true;
     }
 }
