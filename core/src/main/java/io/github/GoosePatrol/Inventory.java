@@ -24,4 +24,7 @@ public class Inventory {
         slots[index] = null;
         return item;
     }
+    public Item get(int index){
+        return slots[index];
+    }
 }
