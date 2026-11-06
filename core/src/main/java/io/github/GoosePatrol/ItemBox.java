@@ -34,4 +34,10 @@ public class ItemBox {
     public void collect(){
         collected = true;
     }
+    public boolean isExpired(){
+        return expired;
+    }
+    public Vector2 getPositon(){
+        return positon;
+    }
 }
