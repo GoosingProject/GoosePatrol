@@ -1,6 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.10" tiledversion="1.12.2" name="Tileset" tilewidth="16" tileheight="16" tilecount="2548" columns="52">
  <image source="Tileset.png" width="832" height="784"/>
+ <tile id="982">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1035">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1036">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1037">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1086">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1087">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1088">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1089">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1090">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1138">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1139">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1140">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1141">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1142">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1190">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1191">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1192">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1193">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1194">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1243">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1244">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
+ <tile id="1245">
+  <properties>
+   <property name="walkable" value=""/>
+  </properties>
+ </tile>
  <tile id="2368">
   <animation>
    <frame tileid="2368" duration="200"/>
