@@ -101,7 +101,7 @@ public class Player extends MovementEntity {
       // Calculates the position plus the magnitude scaled with speed multiplied by delta time to
       // make the movement frame independent
       playerPosition.mulAdd(playerMovementMagnitude.nor(), speed * Gdx.graphics.getDeltaTime());
-      getSprite().setPosition(playerPosition.x - 16, playerPosition.y - 16);
+      getSprite().setPosition(playerPosition.x, playerPosition.y);
       action = PlayerAction.WALK;
     } else {
       action = PlayerAction.IDLE;
