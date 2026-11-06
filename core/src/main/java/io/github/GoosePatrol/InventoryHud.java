@@ -34,11 +34,22 @@ public class InventoryHud extends ApplicationAdapter{
         stage.addActor(root);
 
         Table slotTable = new Table();
-        for ( int i = 0; i< inventory.SLOT_COUNT; i++){
+        for ( int i = 0; i< Inventory.SLOT_COUNT; i++){
             Label label = new Label("", skin);
             slotLabels[i] = label;
             slotTable.add(label).width(80).height(50).pad(2);
         }
         root.bottom().add(slotTable).padBottom(10);
+    }
+    public void refresh(){
+        for(int i = 0; i < Inventory.SLOT_COUNT;i++){
+            Item item = inventory.get(i);
+            int keyNum = (i + 1);
+            if (item == null){
+                slotLabels[i].setText(keyNum);
+            } else {
+                slotLabels[i].setText(keyNum+": "+item.getName());
+            }
+        }
     }
 }
