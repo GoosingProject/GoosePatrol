@@ -11,60 +11,62 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+/**
+ * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
+ */
 public class Main extends ApplicationAdapter {
-  private SpriteBatch batch;
+    private SpriteBatch batch;
 
-  private boolean showMenu = true;
-  // contains the logic value to tell the game to render the main menu
-  private MainMenu mainMenu;
+    private boolean showMenu = true;
+    // contains the logic value to tell the game to render the main menu
+    private MainMenu mainMenu;
 
-  private Player player;
-  private CameraLogic camera;
-  private TiledMap map;
-  private OrthogonalTiledMapRenderer renderer;
+    private Player player;
+    private CameraLogic camera;
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer renderer;
 
-  private boolean paused = false;
-  private PlayCountdown countdown;
-
+    private boolean paused = false;
+    private PlayCountdown countdown;
 
 
     private GameWorld world;
 
     private Texture scareTexture;
     private Texture breadTexture;
-  @Override
-  public void create() {
-    mainMenu = new MainMenu();
-    mainMenu.create();
 
-    batch = new SpriteBatch();
+    @Override
+    public void create() {
+        mainMenu = new MainMenu();
+        mainMenu.create();
 
-    map = new TmxMapLoader().load("map/map.tmx");
-    camera = new CameraLogic(160, 90, map);
-    player = new Player(camera.getCamera());
+        batch = new SpriteBatch();
 
-    renderer = new OrthogonalTiledMapRenderer(map);
+        map = new TmxMapLoader().load("map/map.tmx");
+        camera = new CameraLogic(160, 90, map);
+        player = new Player(camera.getCamera());
 
-    world = new GameWorld();
+        renderer = new OrthogonalTiledMapRenderer(map);
 
-    countdown = new PlayCountdown();
-    // pass to scarecrow objects on creation
-    //  item spawning will be moved to a inventory class in futre updates
-    scareTexture = new Texture("ScareCrow.png");
-    // pass to food objects on creation
-    breadTexture = new Texture("Bread.png");
-  }
+        world = new GameWorld();
 
-  // override the resize function so it works of screenScaler viewport instead of default
-  @Override
-  public void resize(int width, int height) {
-    camera.updateScale(width, height);
-
-    if (showMenu || paused) {
-      mainMenu.resize(width, height);
+        countdown = new PlayCountdown();
+        // pass to scarecrow objects on creation
+        //  item spawning will be moved to a inventory class in futre updates
+        scareTexture = new Texture("ScareCrow.png");
+        // pass to food objects on creation
+        breadTexture = new Texture("Bread.png");
     }
-  }
+
+    // override the resize function so it works of screenScaler viewport instead of default
+    @Override
+    public void resize(int width, int height) {
+        camera.updateScale(width, height);
+
+        if (showMenu || paused) {
+            mainMenu.resize(width, height);
+        }
+    }
 
     @Override
     public void render() {
@@ -72,7 +74,7 @@ public class Main extends ApplicationAdapter {
         //edited render logic to allow the main menu to render on startup or on pause
         if (showMenu) {
             mainMenu.render();
-            if (mainMenu.playGameTriggered){
+            if (mainMenu.playGameTriggered) {
                 Gdx.input.setInputProcessor(null);
                 showMenu = false;
                 mainMenu.playGameTriggered = false;
@@ -102,7 +104,7 @@ public class Main extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.getCamera().combined);
         batch.begin();
         player.draw(batch);
-        countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f);
+        countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y, 0.3f);
         batch.end();
 
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
@@ -110,11 +112,11 @@ public class Main extends ApplicationAdapter {
         }
     }
 
-  @Override
-  public void dispose() {
-    batch.dispose();
-    map.dispose();
-    renderer.dispose();
-    scareTexture.dispose();
-  }
+    @Override
+    public void dispose() {
+        batch.dispose();
+        map.dispose();
+        renderer.dispose();
+        scareTexture.dispose();
+    }
 }
