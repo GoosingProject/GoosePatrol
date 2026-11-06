@@ -57,4 +57,8 @@ public class ItemBoxSpawner {
             box.render(batch);
         }
     }
+
+    public void clear(){
+        boxes.clear();
+    }
 }
