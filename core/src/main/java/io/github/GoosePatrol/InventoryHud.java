@@ -19,7 +19,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 
 public class InventoryHud extends ApplicationAdapter{
     private Inventory inventory;
+    private Skin skin;
+    private Stage stage;
     public InventoryHud(Inventory inventory){
         this.inventory = inventory;
+    }
+    @Override 
+    public void create(){
+        skin = new Skin(Gdx.files.internal("metal-ui.json"));
+        stage = new Stage(new ScreenViewport());
+        Table root = new Table();
+        root.setFillParent(true);
+        stage.addActor(root);
     }
 }
