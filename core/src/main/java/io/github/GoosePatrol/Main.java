@@ -46,6 +46,10 @@ public class Main extends ApplicationAdapter {
 
     energyBar = new EnergyBar();
     energyBar.create();
+    
+    uiCamera = new OrthographicCamera();
+    uiCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    uiCamera.update();
 
     batch = new SpriteBatch();
 
@@ -62,7 +66,8 @@ public class Main extends ApplicationAdapter {
   @Override
   public void resize(int width, int height) {
     camera.updateScale(width, height);
-
+    uiCamera.setToOrtho(false, width, height);
+    uiCamera.update();
     if (showMenu || paused) {
       mainMenu.resize(width, height);
     }
@@ -108,7 +113,7 @@ public class Main extends ApplicationAdapter {
 
         batch.setProjectionMatrix(uiCamera.combined);
         batch.begin();
-        font.draw(batch, getTimeString(), 20f + offsetX, Gdx.graphics.getHeight() - 20f + offsetY);
+        font.draw(batch, getTimeString(), Gdx.graphics.getWidth() - 50f + offsetX, Gdx.graphics.getHeight() - 20f + offsetY);
         batch.end();
         batch.setProjectionMatrix(camera.getCamera().combined);
 
