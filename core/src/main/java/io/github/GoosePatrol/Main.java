@@ -1,7 +1,9 @@
 package io.github.GoosePatrol;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Input.Keys;
@@ -25,6 +27,15 @@ public class Main extends ApplicationAdapter {
   private TiledMap map;
   private OrthogonalTiledMapRenderer renderer;
 
+    private float timeRemaining = 90f;
+    private float nextShakeTime = 60f;
+    private float shakeTimeLeft = 0f;
+    private float shakeAmount = 3f;
+    private float offsetX = 0f;
+    private float offsetY = 0f;
+    private BitmapFont font;
+    private OrthographicCamera uiCamera;
+
   private boolean paused = false;
 
     private PlayCountdown countdown;
@@ -35,13 +46,17 @@ public class Main extends ApplicationAdapter {
 
     energyBar = new EnergyBar();
     energyBar.create();
+    
+    uiCamera = new OrthographicCamera();
+    uiCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    uiCamera.update();
 
     batch = new SpriteBatch();
 
     map = new TmxMapLoader().load("map/map.tmx");
     camera = new CameraLogic(160, 90, map);
     player = new Player(camera.getCamera());
-
+    font = new BitmapFont();
     countdown = new PlayCountdown();
 
     renderer = new OrthogonalTiledMapRenderer(map);
@@ -51,7 +66,8 @@ public class Main extends ApplicationAdapter {
   @Override
   public void resize(int width, int height) {
     camera.updateScale(width, height);
-
+    uiCamera.setToOrtho(false, width, height);
+    uiCamera.update();
     if (showMenu || paused) {
       mainMenu.resize(width, height);
     }
@@ -92,16 +108,25 @@ public class Main extends ApplicationAdapter {
         }
         if (!paused) {
             player.updateMovement();
+            updateTimer(Gdx.graphics.getDeltaTime());
+        }
+
+        batch.setProjectionMatrix(uiCamera.combined);
+        batch.begin();
+        font.draw(batch, getTimeString(), Gdx.graphics.getWidth() - 50f + offsetX, Gdx.graphics.getHeight() - 20f + offsetY);
+        batch.end();
+        batch.setProjectionMatrix(camera.getCamera().combined);
+
             
-            // Sends player back to main menu when energy reaches zero
-            if (energyBar.getPlayerEnergy() == 0) {
-                showMenu = true;
-                mainMenu.playGameTriggered = false;
-                Gdx.input.setInputProcessor(mainMenu.getStage());
-                energyBar.setEnergyBar(100f);       
-            }
+        // Sends player back to main menu when energy reaches zero
+        if (energyBar.getPlayerEnergy() == 0) {
+            showMenu = true;
+            mainMenu.playGameTriggered = false;
+            Gdx.input.setInputProcessor(mainMenu.getStage());
+            energyBar.setEnergyBar(100f);       
         }
         countdown.updateAnimation(Gdx.graphics.getDeltaTime());
+        
         batch.begin();
         player.draw(batch);
         countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y, 0.2f);
@@ -112,8 +137,36 @@ public class Main extends ApplicationAdapter {
         energyBar.render();
     }
 
-    
+    private void updateTimer(float delta) {
+        timeRemaining = timeRemaining - delta;
+        if (timeRemaining < 0) {
+            timeRemaining = 0;
+        }
+        if (timeRemaining <= nextShakeTime && nextShakeTime >= 3) {
+            shakeTimeLeft = 0.5f;
+            nextShakeTime = nextShakeTime / 2;
+        }
 
+        if (shakeTimeLeft > 0) {
+            shakeTimeLeft = shakeTimeLeft - delta;
+            offsetX = (float) (Math.random() * 2 - 1) * shakeAmount;
+            offsetY = (float) (Math.random() * 2 - 1) * shakeAmount;
+        } else {
+            offsetX = 0;
+            offsetY = 0;
+        }
+    }
+
+ private String getTimeString() {
+        int totalSeconds = (int) Math.ceil(timeRemaining);
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        if (seconds < 10) {
+            return minutes + ":0" + seconds;
+        }
+        return minutes + ":" + seconds;
+    }
+    
   @Override
   public void dispose() {
     batch.dispose();
