@@ -43,7 +43,11 @@ public class ItemBoxSpawner {
                 box.collect();
                 changed = true;
             }
+            if (box.isExpired()){
+                boxes.remove(box);
+            }
         }
+        
 
         return changed;
     }
