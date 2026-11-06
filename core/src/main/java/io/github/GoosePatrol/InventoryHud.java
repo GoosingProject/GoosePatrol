@@ -61,4 +61,9 @@ public class InventoryHud extends ApplicationAdapter{
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
+    @Override
+    public void dispose() {
+        skin.dispose();
+        stage.dispose();
+    }
 }
