@@ -14,6 +14,7 @@ public class ItemBox {
     private boolean collected = false;
     private float lifeRemaining = LIFETIME;
     private boolean expired = false;
+    private static float WORLD_SCALE = 16f;
 
     private static float PICKUP_RADIUS = 20f;
     public ItemBox(Vector2 position, TextureRegion texture){
@@ -39,5 +40,8 @@ public class ItemBox {
     }
     public Vector2 getPositon(){
         return positon;
+    }
+    public void render(SpriteBatch batch){
+        batch.draw(texture, positon.x - WORLD_SCALE/2f, positon.y - WORLD_SCALE/2f,WORLD_SCALE,WORLD_SCALE);
     }
 }
