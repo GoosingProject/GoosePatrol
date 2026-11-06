@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 
 public class InventoryHud extends ApplicationAdapter{
     private Inventory inventory;
-    PublicKey InventoryHud(Inventory inventory){
+    public InventoryHud(Inventory inventory){
         this.inventory = inventory;
     }
 }
