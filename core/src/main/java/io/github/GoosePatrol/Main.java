@@ -36,10 +36,12 @@ public class Main extends ApplicationAdapter {
     private Texture scareTexture;
     private Texture breadTexture;
 
+    private Audio audio;
+
     @Override
     public void create() {
-        mainMenu = new MainMenu();
-        mainMenu.create();
+        audio = new Audio();
+        mainMenu = new MainMenu(audio);
 
         batch = new SpriteBatch();
 
@@ -57,6 +59,8 @@ public class Main extends ApplicationAdapter {
         scareTexture = new Texture("ScareCrow.png");
         // pass to food objects on creation
         breadTexture = new Texture("Bread.png");
+
+        audio.playMusic();
     }
 
     // override the resize function so it works of screenScaler viewport instead of default
@@ -74,7 +78,7 @@ public class Main extends ApplicationAdapter {
 
         //edited render logic to allow the main menu to render on startup or on pause
         if (showMenu) {
-            mainMenu.render();
+            mainMenu.render(Gdx.graphics.getDeltaTime());
             if (mainMenu.playGameTriggered) {
                 Gdx.input.setInputProcessor(null);
                 showMenu = false;
