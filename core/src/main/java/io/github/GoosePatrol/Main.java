@@ -47,7 +47,7 @@ public class Main extends ApplicationAdapter {
         camera = new CameraLogic(160, 90, map);
         player = new Player(camera.getCamera());
 
-        renderer = new OrthogonalTiledMapRenderer(map);
+        renderer = new OrthogonalTiledMapRenderer(map, 1f);
 
         world = new GameWorld();
 
