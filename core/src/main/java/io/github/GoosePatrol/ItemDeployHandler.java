@@ -9,9 +9,6 @@ import com.badlogic.gdx.math.Vector3;
  * reads numberKey presses and deploys item to mouse position
  * ItemDeployHandler
  */
-
-import com.badlogic.gdx.graphics.OrthographicCamera;
-
 public class ItemDeployHandler {
     private OrthographicCamera camera;
     private Inventory inventory;
@@ -19,6 +16,14 @@ public class ItemDeployHandler {
     private InventoryHud hud;
     private Player player;
     private Vector3 usePos = new Vector3();
+    /**
+     * constructer for the ItemDeployHandler class
+     * @param camera
+     * @param inventory
+     * @param world
+     * @param hud
+     * @param player
+     */
     public ItemDeployHandler(OrthographicCamera camera, Inventory inventory, GameWorld world, InventoryHud hud, Player player){
         this.camera = camera;
         this.inventory = inventory;
@@ -26,6 +31,7 @@ public class ItemDeployHandler {
         this.hud = hud;
         this.player = player;
     }
+    /** to be called every frame */
     public void update(){
         int slot = slotFromInput(); 
         if (slot < 0){
@@ -40,6 +46,10 @@ public class ItemDeployHandler {
         item.use(player, new Vector2(usePos.x, usePos.y), world);
         hud.refresh();
     }
+    /**
+     * gets the item slot from the number key pressed
+     * @return the item slot selected
+     */
     private  int slotFromInput(){
         if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) return 0;
         if (Gdx.input.isKeyJustPressed(Keys.NUM_2)) return 1;
