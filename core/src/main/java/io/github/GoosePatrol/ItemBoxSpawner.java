@@ -43,12 +43,10 @@ public class ItemBoxSpawner {
                 box.collect();
                 changed = true;
             }
-            if (box.isExpired()){
-                boxes.remove(box);
-            }
-        }
         
-
+        }
+        boxes.removeIf(ItemBox::isExpired);
+        
         return changed;
     }
 
