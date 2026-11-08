@@ -18,6 +18,7 @@ public class ItemDeployHandler {
     private GameWorld world;
     private InventoryHud hud;
     private Player player;
+    private Vector3 usePos;
     public ItemDeployHandler(OrthographicCamera camera, Inventory inventory, GameWorld world, InventoryHud hud, Player player){
         this.camera = camera;
         this.inventory = inventory;
@@ -30,6 +31,14 @@ public class ItemDeployHandler {
         if (slot < 0){
             return;
         }
+        Item item = inventory.remove(slot);
+        if (item == null){
+            return;
+        }
+        usePos.set(Gdx.input.getX(),Gdx.input.getY(),0);
+        camera.unproject(usePos);
+        item.use(player, new Vector2(usePos.x, usePos.y), world);
+        hud.refresh();
     }
     private  int slotFromInput(){
         if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) return 0;
