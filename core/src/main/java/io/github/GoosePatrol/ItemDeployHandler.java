@@ -25,4 +25,23 @@ public class ItemDeployHandler {
         this.hud = hud;
         this.player = player;
     }
+    public void update(){
+        int slot = slotFromInput(); 
+        if (slot < 0){
+            return;
+        }
+    }
+    private  int slotFromInput(){
+        if (Gdx.input.isKeyJustPressed(Keys.NUM_1)) return 0;
+        if (Gdx.input.isKeyJustPressed(Keys.NUM_2)) return 1;
+        if (Gdx.input.isKeyJustPressed(Keys.NUM_3)) return 2;
+        if (Gdx.input.isKeyJustPressed(Keys.NUM_4)) return 3;
+        if (Gdx.input.isKeyJustPressed(Keys.NUM_5)) return 4;
+        if (Gdx.input.isKeyJustPressed(Keys.NUM_6)) return 5;
+        if (Gdx.input.isKeyJustPressed(Keys.NUM_7)) return 6;
+        if (Gdx.input.isKeyJustPressed(Keys.NUM_8)) return 7;
+        if (Gdx.input.isKeyJustPressed(Keys.NUM_9)) return 8;
+        if (Gdx.input.isKeyJustPressed(Keys.NUM_0)) return 9;
+        return -1;
+    }
 }
