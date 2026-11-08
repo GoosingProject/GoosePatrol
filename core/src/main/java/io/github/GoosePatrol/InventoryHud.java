@@ -13,6 +13,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+/**
+ * shows a HUD at the bottom of the screen that shows what items you have
+ * InventoryHud
+ */
 public class InventoryHud extends ApplicationAdapter{
     private static float WIDTH = 1200f;
     private static float HEIGHT = 700f;
@@ -21,6 +25,10 @@ public class InventoryHud extends ApplicationAdapter{
     private Skin skin;
     private Stage stage;
     private Texture backgroundTexture;
+    /**
+     * constructer for the inventory hud class
+     * @param inventory
+     */
     public InventoryHud(Inventory inventory){
         this.inventory = inventory;
     }
@@ -49,6 +57,7 @@ public class InventoryHud extends ApplicationAdapter{
         root.bottom().add(slotTable).padBottom(10);
         refresh();
     }
+    /** to be called upon inventory change */
     public void refresh(){
         for(int i = 0; i < Inventory.SLOT_COUNT;i++){
             Item item = inventory.get(i);
@@ -61,6 +70,7 @@ public class InventoryHud extends ApplicationAdapter{
         }
     }
     @Override 
+    /** to be called every frame */
     public void render(){
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
