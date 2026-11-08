@@ -1,8 +1,10 @@
 package io.github.GoosePatrol;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -19,23 +21,23 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+/**
+ * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
+ */
 public class Main extends ApplicationAdapter {
-  private SpriteBatch batch;
+    private SpriteBatch batch;
 
-  private boolean showMenu = true;
-  // contains the logic value to tell the game to render the main menu
-  private MainMenu mainMenu;
+    private boolean showMenu = true;
+    // contains the logic value to tell the game to render the main menu
+    private MainMenu mainMenu;
 
-  private Player player;
-  private CameraLogic camera;
-  private TiledMap map;
-  private OrthogonalTiledMapRenderer renderer;
+    private Player player;
+    private CameraLogic camera;
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer renderer;
 
-  private boolean paused = false;
-  private PlayCountdown countdown;
-
-
+    private boolean paused = false;
+    private PlayCountdown countdown;
 
     private GameWorld world;
 
@@ -54,15 +56,15 @@ public class Main extends ApplicationAdapter {
     mainMenu = new MainMenu();
     mainMenu.create();
 
-    batch = new SpriteBatch();
+        batch = new SpriteBatch();
 
-    map = new TmxMapLoader().load("map/map.tmx");
-    camera = new CameraLogic(160, 90, map);
-    player = new Player(camera.getCamera());
+        map = new TmxMapLoader().load("map/map.tmx");
+        camera = new CameraLogic(160, 90, map);
+        player = new Player(camera.getCamera());
 
-    renderer = new OrthogonalTiledMapRenderer(map);
+        renderer = new OrthogonalTiledMapRenderer(map, 1f);
 
-    world = new GameWorld();
+        world = new GameWorld();
 
     countdown = new PlayCountdown();
     // pass to scarecrow objects on creation
@@ -85,10 +87,10 @@ public class Main extends ApplicationAdapter {
   }
 
 
-  // override the resize function so it works of screenScaler viewport instead of default
-  @Override
-  public void resize(int width, int height) {
-    camera.updateScale(width, height);
+    // override the resize function so it works of screenScaler viewport instead of default
+    @Override
+    public void resize(int width, int height) {
+        camera.updateScale(width, height);
 
     if (showMenu || paused) {
       mainMenu.resize(width, height);
@@ -102,7 +104,7 @@ public class Main extends ApplicationAdapter {
         //edited render logic to allow the main menu to render on startup or on pause
         if (showMenu) {
             mainMenu.render();
-            if (mainMenu.playGameTriggered){
+            if (mainMenu.playGameTriggered) {
                 Gdx.input.setInputProcessor(null);
                 showMenu = false;
                 mainMenu.playGameTriggered = false;
@@ -147,11 +149,11 @@ public class Main extends ApplicationAdapter {
         }
     }
 
-  @Override
-  public void dispose() {
-    batch.dispose();
-    map.dispose();
-    renderer.dispose();
-    scareTexture.dispose();
-  }
+    @Override
+    public void dispose() {
+        batch.dispose();
+        map.dispose();
+        renderer.dispose();
+        scareTexture.dispose();
+    }
 }
