@@ -11,6 +11,7 @@ public class Inventory {
         for (int i = 0; i< SLOT_COUNT; i++){
             if (slots[i] == null){
                 slots[i] = item;
+                return;
             }
         }
     }
