@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -67,7 +68,13 @@ public class Main extends ApplicationAdapter {
     itemRoller = new ItemRoller(scareTexture,breadTexture);
     itemBoxTexture = new Texture("ItemBox.png");
     boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture), 0, 0);
+
+    MapProperties prop = map.getProperties();
+    float mapW = prop.get("width",Integer.class)*prop.get("tilewidth",Integer.class);
+    float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
+    boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture), mapW, mapH);
   }
+
 
   // override the resize function so it works of screenScaler viewport instead of default
   @Override
