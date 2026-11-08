@@ -67,7 +67,6 @@ public class Main extends ApplicationAdapter {
     inventoryHud.create();
     itemRoller = new ItemRoller(scareTexture,breadTexture);
     itemBoxTexture = new Texture("ItemBox.png");
-    boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture), 0, 0);
 
     MapProperties prop = map.getProperties();
     float mapW = prop.get("width",Integer.class)*prop.get("tilewidth",Integer.class);
