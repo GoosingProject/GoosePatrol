@@ -6,25 +6,41 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class InventoryHud extends ApplicationAdapter{
+    private static float WIDTH = 1200f;
+    private static float HEIGHT = 700f;
     private Inventory inventory;
     private Label[] slotLabels = new Label[Inventory.SLOT_COUNT];
     private Skin skin;
     private Stage stage;
+    private Texture backgroundTexture;
     public InventoryHud(Inventory inventory){
         this.inventory = inventory;
     }
     @Override 
     public void create(){
         skin = new Skin(Gdx.files.internal("metal-ui.json"));
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new FitViewport(WIDTH,HEIGHT));
+        Pixmap pm = new Pixmap(1,1,Pixmap.Format.RGBA8888);
+        pm.setColor(new Color(0.15f,0.15f,0.15f,0.65f));
+        pm.fill();
+        backgroundTexture = new Texture(pm);
+        pm.dispose();
+        TextureRegionDrawable bg = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
         Table root = new Table();
         root.setFillParent(true);
         stage.addActor(root);
 
         Table slotTable = new Table();
+        slotTable.setBackground(bg);
+        slotTable.pad(10);
         for ( int i = 0; i< Inventory.SLOT_COUNT; i++){
             Label label = new Label("", skin);
             slotLabels[i] = label;
