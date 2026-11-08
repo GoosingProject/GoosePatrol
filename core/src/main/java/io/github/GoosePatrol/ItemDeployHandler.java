@@ -18,7 +18,7 @@ public class ItemDeployHandler {
     private GameWorld world;
     private InventoryHud hud;
     private Player player;
-    private Vector3 usePos;
+    private Vector3 usePos = new Vector3();
     public ItemDeployHandler(OrthographicCamera camera, Inventory inventory, GameWorld world, InventoryHud hud, Player player){
         this.camera = camera;
         this.inventory = inventory;
