@@ -131,7 +131,7 @@ public class Main extends ApplicationAdapter {
         world.render(batch);
         countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f);
         batch.end();
-
+        inventoryHud.render();
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             showMenu = !showMenu;
         }

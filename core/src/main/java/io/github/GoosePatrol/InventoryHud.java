@@ -31,6 +31,7 @@ public class InventoryHud extends ApplicationAdapter{
             slotTable.add(label).width(80).height(50).pad(2);
         }
         root.bottom().add(slotTable).padBottom(10);
+        refresh();
     }
     public void refresh(){
         for(int i = 0; i < Inventory.SLOT_COUNT;i++){
