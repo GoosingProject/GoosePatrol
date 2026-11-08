@@ -9,7 +9,7 @@ public class ItemBox {
     private static float LIFETIME = 60f;
 
 
-    private Vector2 positon = new Vector2();
+    private Vector2 position = new Vector2();
     private TextureRegion texture;
     private boolean collected = false;
     private float lifeRemaining = LIFETIME;
@@ -18,7 +18,7 @@ public class ItemBox {
 
     private static float PICKUP_RADIUS = 20f;
     public ItemBox(Vector2 position, TextureRegion texture){
-        this.positon.set(positon);
+        this.position.set(position);
         this.texture = texture;
     }
     public void update(float deltaTime){
