@@ -83,7 +83,7 @@ public class Main extends ApplicationAdapter {
             audio.playMusic("menu");
             mainMenu.render(Gdx.graphics.getDeltaTime());
             if (mainMenu.playGameTriggered) {
-                audio.stopMusic();
+                audio.pauseMusic();
                 Gdx.input.setInputProcessor(null);
                 showMenu = false;
                 mainMenu.playGameTriggered = false;
@@ -129,5 +129,6 @@ public class Main extends ApplicationAdapter {
         map.dispose();
         renderer.dispose();
         scareTexture.dispose();
+        audio.dispose();
     }
 }
