@@ -40,6 +40,8 @@ public class Main extends ApplicationAdapter {
     private ItemRoller itemRoller;
     private ItemBoxSpawner boxSpawner;
     private Texture itemBoxTexture;
+
+    private ItemDeployHandler deployHandler;
   @Override
   public void create() {
     mainMenu = new MainMenu();
@@ -72,6 +74,7 @@ public class Main extends ApplicationAdapter {
     float mapW = prop.get("width",Integer.class)*prop.get("tilewidth",Integer.class);
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
     boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture), mapW, mapH);
+    deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player);
   }
 
 
@@ -119,6 +122,7 @@ public class Main extends ApplicationAdapter {
             player.updateMovement();
             world.update(Gdx.graphics.getDeltaTime());
             boolean invChanged = boxSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition(), inventory, itemRoller);
+            deployHandler.update();
             if (invChanged){
               inventoryHud.refresh();
             }
