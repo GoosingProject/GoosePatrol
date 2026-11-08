@@ -13,6 +13,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
+import java.util.Objects;
+
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
  */
@@ -60,7 +62,7 @@ public class Main extends ApplicationAdapter {
         // pass to food objects on creation
         breadTexture = new Texture("Bread.png");
 
-        audio.playMusic();
+        audio.playMusic("menu");
     }
 
     // override the resize function so it works of screenScaler viewport instead of default
@@ -78,8 +80,10 @@ public class Main extends ApplicationAdapter {
 
         //edited render logic to allow the main menu to render on startup or on pause
         if (showMenu) {
+            audio.playMusic("menu");
             mainMenu.render(Gdx.graphics.getDeltaTime());
             if (mainMenu.playGameTriggered) {
+                audio.stopMusic();
                 Gdx.input.setInputProcessor(null);
                 showMenu = false;
                 mainMenu.playGameTriggered = false;
@@ -90,6 +94,7 @@ public class Main extends ApplicationAdapter {
             }
             return;
         }
+
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         countdown.updateAnimation(Gdx.graphics.getDeltaTime());
         if (paused && countdown.isAnimationFinished()) {
@@ -105,8 +110,9 @@ public class Main extends ApplicationAdapter {
         if (!paused) {
             player.updateMovement();
             world.update(Gdx.graphics.getDeltaTime());
+            audio.playMusic("ambient");
         }
-        batch.setProjectionMatrix(camera.getCamera().combined);
+
         batch.begin();
         player.draw(batch);
         countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y, 0.3f);
