@@ -127,6 +127,8 @@ public class Main extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.getCamera().combined);
         batch.begin();
         player.draw(batch);
+        boxSpawner.render(batch);
+        world.render(batch);
         countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f);
         batch.end();
 
