@@ -17,10 +17,12 @@ public class ItemBox {
     private static float WORLD_SCALE = 16f;
 
     private static float PICKUP_RADIUS = 20f;
+    /** constructor for the ItemBox class */
     public ItemBox(Vector2 position, TextureRegion texture){
         this.position.set(position);
         this.texture = texture;
     }
+    /** to be called every frame */
     public void update(float deltaTime){
         if (!expired){
             lifeRemaining -= deltaTime;
@@ -29,18 +31,28 @@ public class ItemBox {
             }
         }
     }
+    /**
+     * 
+     * @param playerPos the player position
+     * @return  whether or not the player can collect the item
+     */
     public boolean canCollect(Vector2 playerPos){
         return !collected && position.dst(playerPos) <= PICKUP_RADIUS;
     }
     public void collect(){
         collected = true;
     }
+    /**
+     * 
+     * @return if the item box should still exist in the world 
+     */
     public boolean isExpired(){
         return expired||collected;
     }
     public Vector2 getPositon(){
         return position;
     }
+    /** used to draw the item box in the world */
     public void render(SpriteBatch batch){
         batch.draw(texture, position.x - WORLD_SCALE/2f, position.y - WORLD_SCALE/2f,WORLD_SCALE,WORLD_SCALE);
     }
