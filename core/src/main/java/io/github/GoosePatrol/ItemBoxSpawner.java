@@ -7,6 +7,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import java.util.List;
 import java.util.ArrayList;
+/**
+ * class for spawning item boxes and handling updates to them
+ * ItemBoxSpawner
+ */
 public class ItemBoxSpawner {
     private TextureRegion texture;
     private float mapWidth;
@@ -14,7 +18,12 @@ public class ItemBoxSpawner {
     private float spawnTimer = 1f;
     private static float SPAWN_INTERVAL = 5f;
     private List<ItemBox> boxes = new ArrayList<>();
-
+    /**
+     * constructer for the ItemBoxSpawner class
+     * @param texture ItemBoxTexture
+     * @param width map width
+     * @param height map height
+     */
     public ItemBoxSpawner(TextureRegion texture, float width, float height){
         this.texture = texture;
         this.mapWidth = width;
@@ -49,13 +58,13 @@ public class ItemBoxSpawner {
         
         return changed;
     }
-
+    /**pass render calls to all boxes in world */
     public void render(SpriteBatch batch) {
         for (ItemBox box : boxes){
             box.render(batch);
         }
     }
-
+    /**clear all boxes from world */
     public void clear(){
         boxes.clear();
     }
