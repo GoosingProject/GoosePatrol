@@ -1,4 +1,4 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.ItemCode;
 import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.ApplicationAdapter;

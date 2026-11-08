@@ -1,4 +1,5 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.ItemCode;
+
 /** 10-slot inventory for holding inactive items */
 public class Inventory {
     public static int SLOT_COUNT = 10;

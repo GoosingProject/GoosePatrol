@@ -1,10 +1,13 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.ItemCode;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+
+import io.github.GoosePatrol.GameWorld;
+import io.github.GoosePatrol.Player;
 /**
  * reads numberKey presses and deploys item to mouse position
  * ItemDeployHandler

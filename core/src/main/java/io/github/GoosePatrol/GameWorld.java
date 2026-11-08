@@ -2,6 +2,9 @@ package io.github.GoosePatrol;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+
+import io.github.GoosePatrol.ItemCode.Item;
+
 import java.util.ArrayList;
 import java.util.List;
 

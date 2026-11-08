@@ -1,7 +1,8 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.ItemCode;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import java.util.Random;
 
 /** rolls random items on pickup */
