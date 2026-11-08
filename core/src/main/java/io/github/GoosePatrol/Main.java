@@ -115,7 +115,7 @@ public class Main extends ApplicationAdapter {
 
         batch.begin();
         player.draw(batch);
-        countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y, 0.3f);
+        countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y, 0.3f, audio);
         batch.end();
 
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {

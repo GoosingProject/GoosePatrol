@@ -16,6 +16,8 @@ public class PlayCountdown {
     private float playTime = 0f;
     private boolean visible;
 
+    private int lastFrame = -1;
+
     /**
      * Constructer for the PlayCountdown class
      */
@@ -65,7 +67,7 @@ public class PlayCountdown {
      * @param centerY the y co-ordinate of the centre of the screen
      * @param scale   scale the animation by this factor
      */
-    public void draw(SpriteBatch batch, float centerX, float centerY, float scale) {
+    public void draw(SpriteBatch batch, float centerX, float centerY, float scale, Audio audio) {
         if (!visible) {
             // return if any attempt to update animation when object is hidden
             return;
@@ -74,5 +76,11 @@ public class PlayCountdown {
         float width = frame.getRegionWidth() * scale;
         float height = frame.getRegionHeight() * scale;
         batch.draw(frame, centerX - width / 2f, centerY - height / 2f, width, height);
+
+        int currentFrame = countdownAnimation.getKeyFrameIndex(playTime);
+        if (currentFrame != lastFrame) {
+            audio.playSound("beep");
+            lastFrame = currentFrame;
+        }
     }
 }
