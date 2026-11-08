@@ -84,6 +84,7 @@ public class Main extends ApplicationAdapter {
     if (showMenu || paused) {
       mainMenu.resize(width, height);
     }
+    inventoryHud.resize(width, height);
   }
 
     @Override
@@ -118,6 +119,10 @@ public class Main extends ApplicationAdapter {
         if (!paused) {
             player.updateMovement();
             world.update(Gdx.graphics.getDeltaTime());
+            boolean invChanged = boxSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition(), inventory, itemRoller);
+            if (invChanged){
+              inventoryHud.refresh();
+            }
         }
         batch.setProjectionMatrix(camera.getCamera().combined);
         batch.begin();
