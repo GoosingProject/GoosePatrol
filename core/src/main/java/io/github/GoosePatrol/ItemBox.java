@@ -30,7 +30,7 @@ public class ItemBox {
         }
     }
     public boolean canCollect(Vector2 playerPos){
-        return !collected && positon.dst(playerPos) <= PICKUP_RADIUS;
+        return !collected && position.dst(playerPos) <= PICKUP_RADIUS;
     }
     public void collect(){
         collected = true;
@@ -39,9 +39,9 @@ public class ItemBox {
         return expired;
     }
     public Vector2 getPositon(){
-        return positon;
+        return position;
     }
     public void render(SpriteBatch batch){
-        batch.draw(texture, positon.x - WORLD_SCALE/2f, positon.y - WORLD_SCALE/2f,WORLD_SCALE,WORLD_SCALE);
+        batch.draw(texture, position.x - WORLD_SCALE/2f, position.y - WORLD_SCALE/2f,WORLD_SCALE,WORLD_SCALE);
     }
 }
