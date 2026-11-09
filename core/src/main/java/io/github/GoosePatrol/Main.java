@@ -52,7 +52,7 @@ public class Main extends ApplicationAdapter {
 
     private ItemDeployHandler deployHandler;
     private EnergyBar energyBar;
-
+    private PlayTimer playTimer;
   @Override
   public void create() {
     mainMenu = new MainMenu();
@@ -84,6 +84,9 @@ public class Main extends ApplicationAdapter {
     energyBar = new EnergyBar();
     energyBar.create();
 
+    playTimer = new PlayTimer();
+    playTimer.create();
+
     MapProperties prop = map.getProperties();
     float mapW = prop.get("width",Integer.class)*prop.get("tilewidth",Integer.class);
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
@@ -102,6 +105,7 @@ public class Main extends ApplicationAdapter {
     }
     inventoryHud.resize(width, height);
     energyBar.resize(width, height);
+    playTimer.resize(width, height);
   }
 
     @Override
@@ -143,6 +147,7 @@ public class Main extends ApplicationAdapter {
             }
             // temp code to test energy changes
             energyBar.setEnergyBar(energyBar.getPlayerEnergy() - 5f * Gdx.graphics.getDeltaTime());
+            playTimer.update(Gdx.graphics.getDeltaTime());
         }
         batch.setProjectionMatrix(camera.getCamera().combined);
         batch.begin();
@@ -151,8 +156,10 @@ public class Main extends ApplicationAdapter {
         world.render(batch);
         countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f);
         batch.end();
+
         inventoryHud.render();
         energyBar.render();
+        playTimer.render();
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             showMenu = !showMenu;
         }
@@ -166,5 +173,6 @@ public class Main extends ApplicationAdapter {
         scareTexture.dispose();
         breadTexture.dispose();
         energyBar.dispose();
+        playTimer.dispose();
     }
 }
