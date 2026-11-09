@@ -21,6 +21,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Goose extends MovementEntity {
     private static final float SPEED = 50;
+    private static final float PLAYER_DETECT_RADIUS = 50;
 
     private TextureAtlas textureAtlas = new TextureAtlas("sprites.atlas");
     private GooseAction action = GooseAction.PATROL;
@@ -68,14 +69,21 @@ public class Goose extends MovementEntity {
         }
     }
 
-
     /**
      * Update goose's state and position every frame
      * @param playerPosition Vector2 of player's position
      */
     public void update(Vector2 playerPosition, float deltaTime) {
+        if (action == GooseAction.PATROL &&
+            playerPosition.cpy().sub(position).len() <= PLAYER_DETECT_RADIUS)
+        {
+            action = GooseAction.CHASE;
+        }
+
         if (action == GooseAction.PATROL) {
             targetPosition = calculatePatrolTargetPosition();
+        } else if (action == GooseAction.CHASE) {
+            targetPosition = calculateChaseTargetPosition(playerPosition);
         }
 
         Vector2 direction = targetPosition.cpy().sub(position);
@@ -85,6 +93,26 @@ public class Goose extends MovementEntity {
             position.add(velocity);
             getSprite().setPosition(position.x, position.y);
         }
+    }
+
+    /**
+     * Calculate next target position for goose when in chase state
+     * @return Next target position
+     */
+    private Vector2 calculateChaseTargetPosition(Vector2 playerPosition) {
+        Vector2 currentTile = coordinateToTile(position);
+        Vector2 playerTile = coordinateToTile(playerPosition);
+        List<GridCell> path = finder.findPath(
+            (int) currentTile.x,
+            (int) currentTile.y,
+            (int) playerTile.x,
+            (int) playerTile.y, navLayer);
+
+        if (path == null || path.size() == 0) {
+            return targetPosition.cpy();
+        }
+
+        return new Vector2(path.get(0).x * 16, path.get(0).y * 16);
     }
 
     /**
