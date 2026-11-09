@@ -69,4 +69,10 @@ public class ItemBoxSpawner {
     public void clear(){
         boxes.clear();
     }
+    /** remove all boxes and restart spawn timer */
+    public void reset(){
+        boxes.clear();
+        spawnTimer = SPAWN_INTERVAL;
+    }
+
 }
