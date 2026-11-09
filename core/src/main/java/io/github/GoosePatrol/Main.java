@@ -157,7 +157,7 @@ public class Main extends ApplicationAdapter {
             if (invChanged){
               inventoryHud.refresh();
             }
-
+            energyBar.setEnergyBar(energyBar.getPlayerEnergy()-1f*Gdx.graphics.getDeltaTime());
             playTimer.update(Gdx.graphics.getDeltaTime());
         }
 
