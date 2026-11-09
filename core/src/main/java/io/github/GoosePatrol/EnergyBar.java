@@ -36,7 +36,7 @@ public class EnergyBar extends ApplicationAdapter {
 
         //Start of layout
 
-        energyBar = new ProgressBar(0f, maxPlayerEnergy, 25, false, skin);
+        energyBar = new ProgressBar(0f, maxPlayerEnergy, 10, false, skin);
         energyBar.setValue(currentPlayerEnergy);
         energyBar.setAnimateDuration(0.25f);
         root.add(energyBar).expand().top().left().width(150).height(20);
