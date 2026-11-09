@@ -160,7 +160,11 @@ public class Main extends ApplicationAdapter {
         inventoryHud.render();
         energyBar.render();
         playTimer.render();
-        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+        // check for game loss
+        if(!paused && (playTimer.isGameEnd() || energyBar.getPlayerEnergy() <= 0)){
+            enterLossState();
+        }
+        else if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             showMenu = !showMenu;
         }
     }
@@ -175,4 +179,25 @@ public class Main extends ApplicationAdapter {
         energyBar.dispose();
         playTimer.dispose();
     }
+    /**
+     * call when timer runs out or player runs out of energy
+     */
+    private void enterLossState(){
+        resetGameState();
+        showMenu = true;
+    }
+    /**
+     * call all reset helpers to re-start game
+     */
+    private void resetGameState(){
+        player.resetPos();
+        camera.snapToPositon(player.getPlayerPosition());
+        world.clear();
+        boxSpawner.reset();
+        inventory.clear();
+        inventoryHud.refresh();
+        energyBar.setEnergyBar(100f);
+        playTimer.reset();
+    }
 }
+
