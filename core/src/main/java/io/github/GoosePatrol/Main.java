@@ -141,6 +141,8 @@ public class Main extends ApplicationAdapter {
             if (invChanged){
               inventoryHud.refresh();
             }
+            // temp code to test energy changes
+            energyBar.setEnergyBar(energyBar.getPlayerEnergy() - 5f * Gdx.graphics.getDeltaTime());
         }
         batch.setProjectionMatrix(camera.getCamera().combined);
         batch.begin();
