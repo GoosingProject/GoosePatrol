@@ -90,6 +90,7 @@ public class Main extends ApplicationAdapter {
 
     energyBar = new EnergyBar();
     energyBar.create();
+    world.setEnergyBar(energyBar);
 
     playTimer = new PlayTimer();
     playTimer.create();
