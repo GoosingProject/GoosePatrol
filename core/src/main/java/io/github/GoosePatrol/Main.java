@@ -58,7 +58,7 @@ public class Main extends ApplicationAdapter {
 
         batch = new SpriteBatch();
 
-        map = new TmxMapLoader().load("map/map.tmx");
+        map = new TmxMapLoader().load("map/Map.tmx");
         camera = new CameraLogic(160, 90, map);
         player = new Player(camera.getCamera());
 

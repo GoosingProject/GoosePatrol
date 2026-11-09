@@ -1,6 +1,6 @@
 package io.github.GoosePatrol.ItemCode;
-import com.badlogic.gdx.Gdx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -13,11 +13,12 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
 /**
  * shows a HUD at the bottom of the screen that shows what items you have
  * InventoryHud
  */
-public class InventoryHud extends ApplicationAdapter{
+public class InventoryHud extends ApplicationAdapter {
     private static float WIDTH = 1200f;
     private static float HEIGHT = 700f;
     private Inventory inventory;
@@ -25,19 +26,22 @@ public class InventoryHud extends ApplicationAdapter{
     private Skin skin;
     private Stage stage;
     private Texture backgroundTexture;
+
     /**
      * constructer for the inventory hud class
+     *
      * @param inventory
      */
-    public InventoryHud(Inventory inventory){
+    public InventoryHud(Inventory inventory) {
         this.inventory = inventory;
     }
-    @Override 
-    public void create(){
+
+    @Override
+    public void create() {
         skin = new Skin(Gdx.files.internal("metal-ui.json"));
-        stage = new Stage(new FitViewport(WIDTH,HEIGHT));
-        Pixmap pm = new Pixmap(1,1,Pixmap.Format.RGBA8888);
-        pm.setColor(new Color(0.15f,0.15f,0.15f,0.65f));
+        stage = new Stage(new FitViewport(WIDTH, HEIGHT));
+        Pixmap pm = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pm.setColor(new Color(0.15f, 0.15f, 0.15f, 0.65f));
         pm.fill();
         backgroundTexture = new Texture(pm);
         pm.dispose();
@@ -49,7 +53,7 @@ public class InventoryHud extends ApplicationAdapter{
         Table slotTable = new Table();
         slotTable.setBackground(bg);
         slotTable.pad(10);
-        for ( int i = 0; i< Inventory.SLOT_COUNT; i++){
+        for (int i = 0; i < Inventory.SLOT_COUNT; i++) {
             Label label = new Label("", skin);
             slotLabels[i] = label;
             slotTable.add(label).width(80).height(50).pad(2);
@@ -57,28 +61,34 @@ public class InventoryHud extends ApplicationAdapter{
         root.bottom().add(slotTable).padBottom(10);
         refresh();
     }
-    /** to be called upon inventory change */
-    public void refresh(){
-        for(int i = 0; i < Inventory.SLOT_COUNT;i++){
+
+    /**
+     * to be called upon inventory change
+     */
+    public void refresh() {
+        for (int i = 0; i < Inventory.SLOT_COUNT; i++) {
             Item item = inventory.get(i);
             int keyNum = (i + 1);
-            if (item == null){
+            if (item == null) {
                 slotLabels[i].setText(keyNum);
             } else {
-                slotLabels[i].setText(keyNum+": "+item.getName());
+                slotLabels[i].setText(keyNum + ": " + item.getName());
             }
         }
     }
-    @Override 
+
+    @Override
     /** to be called every frame */
-    public void render(){
+    public void render() {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
     }
+
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
+
     @Override
     public void dispose() {
         skin.dispose();
