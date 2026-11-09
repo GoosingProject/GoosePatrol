@@ -5,21 +5,23 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.Random;
 
-/** rolls random items on pickup */
+/**
+ * rolls random items on pickup
+ */
 public class ItemRoller {
     private Texture scareTexture;
     private Texture breadTexture;
     private Random random = new Random();
 
-    public ItemRoller(Texture scareTexture, Texture breadTexture){
+    public ItemRoller(Texture scareTexture, Texture breadTexture) {
         this.scareTexture = scareTexture;
         this.breadTexture = breadTexture;
     }
 
-    public Item rollItem(){
-        if (random.nextBoolean()){
+    public Item rollItem() {
+        if (random.nextBoolean()) {
             return new ScareItem(new TextureRegion(scareTexture));
-        }else{
+        } else {
             return new FoodItem(new TextureRegion(breadTexture));
         }
     }

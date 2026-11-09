@@ -14,37 +14,35 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.Screen;
 
 /**
  * Main menu class to create, render and control the menu.
  */
-public class MainMenu extends ApplicationAdapter {
+public class MainMenu implements Screen {
     private Skin skin;
     private Stage stage;
     private Window settingsWindow;
     private Label masterVolumeSliderLabel;
     private Slider masterVolumeSlider;
+    private Audio audio;
 
     /**
      * Initialises the play state to false.
      */
     public boolean playGameTriggered = false;
 
-    @Override
-    public void create() {
+    public MainMenu(Audio aud) {
+        this.audio = aud;
         skin = new Skin(Gdx.files.internal("metal-ui.json"));
-
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
 
         // creates a table root to allow button placement to be more gridlike, easier centering etc.
-
         Table root = new Table();
         root.setFillParent(true);
         stage.addActor(root);
 
         // Start of layout
-
         TextButton settingsButton = new TextButton("Settings", skin);
         root.add(settingsButton).space(10);
 
@@ -103,23 +101,57 @@ public class MainMenu extends ApplicationAdapter {
 
         // create volume sliders
         Label masterVolumeSliderLabel = new Label("Master Volume", skin);
-        Slider masterVolumeSlider = new Slider(0, 100, 0.05f, false, skin);
+        Slider masterVolumeSlider = new Slider(0, 1, 0.05f, false, skin);
+        masterVolumeSlider.setValue(1f);
+
+        Label musicSliderLabel = new Label("Music Volume", skin);
+        Slider musicVolumeSlider = new Slider(0, 1, 0.05f, false, skin);
+        musicVolumeSlider.setValue(1f);
+
+        Label sfxSliderLabel = new Label("SFX Volume", skin);
+        Slider sfxVolumeSlider = new Slider(0, 1, 0.05f, false, skin);
+        sfxVolumeSlider.setValue(1f);
 
         settingsWindow.add(masterVolumeSliderLabel).padBottom(15);
         settingsWindow.row();
         settingsWindow.add(masterVolumeSlider).width(150);
+
         settingsWindow.row();
 
-        Label musicSliderLabel = new Label("Music Volume", skin);
-        Slider musicVolumeSlider = new Slider(0, 100, 0.05f, false, skin);
+        settingsWindow.add(sfxSliderLabel).padBottom(5);
+        settingsWindow.row();
+        settingsWindow.add(sfxVolumeSlider).width(150);
+
+        settingsWindow.row();
 
         settingsWindow.add(musicSliderLabel).padBottom(5);
         settingsWindow.row();
         settingsWindow.add(musicVolumeSlider).width(150);
+
+        masterVolumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                audio.setMasterVolume(masterVolumeSlider.getValue());
+            }
+        });
+
+        musicVolumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                audio.setMusicVolume(musicVolumeSlider.getValue());
+            }
+        });
+
+        sfxVolumeSlider.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                audio.setSfxVolume(sfxVolumeSlider.getValue());
+            }
+        });
     }
 
     @Override
-    public void render() {
+    public void render(float delta) {
         Gdx.gl.glClearColor(.9f, .9f, .9f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
@@ -127,8 +159,28 @@ public class MainMenu extends ApplicationAdapter {
     }
 
     @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+    }
+
+    @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
     }
 
     @Override

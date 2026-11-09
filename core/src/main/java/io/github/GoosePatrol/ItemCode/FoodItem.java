@@ -2,11 +2,10 @@ package io.github.GoosePatrol.ItemCode;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
 import io.github.GoosePatrol.Player;
 import io.github.GoosePatrol.WorldContext;
 
-public class FoodItem extends Item{
+public class FoodItem extends Item {
     private static float LIFETIME = 5f;
     private static float RADIUS = 150f;
 
