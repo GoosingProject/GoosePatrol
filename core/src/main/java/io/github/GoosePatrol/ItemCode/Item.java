@@ -1,6 +1,8 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.ItemCode;
 
 import com.badlogic.gdx.math.Vector2;
+import io.github.GoosePatrol.Player;
+import io.github.GoosePatrol.WorldContext;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
