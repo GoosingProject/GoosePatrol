@@ -7,8 +7,8 @@ import io.github.GoosePatrol.WorldContext;
 
 public class FoodItem extends Item {
     private static float LIFETIME = 5f;
-    private static float RADIUS = 150f;
-
+    private static float RADIUS = 100f;
+    private static float ENERGY_RESTORE = 20f;
     public FoodItem(TextureRegion sprite) {
         super("Bread", LIFETIME, sprite);
         this.width = texture.getRegionWidth();
@@ -21,6 +21,7 @@ public class FoodItem extends Item {
         spawn(itemPostion);
         world.addActiveItem(this);
         world.attractGeese(position, RADIUS);
+        world.addPlayerEnergy(ENERGY_RESTORE);
     }
 
     @Override
