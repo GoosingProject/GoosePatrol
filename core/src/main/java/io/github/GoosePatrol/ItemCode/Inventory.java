@@ -29,4 +29,10 @@ public class Inventory {
     public Item get(int index){
         return slots[index];
     }
+    /** Remove every item from every slot. */
+    public void clear() {
+        for (int i = 0; i < SLOT_COUNT; i++) {
+            slots[i] = null;
+        }
+    }
 }
