@@ -21,6 +21,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
+import java.util.Objects;
+
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
  */
@@ -44,6 +46,12 @@ public class Main extends ApplicationAdapter {
     private Texture scareTexture;
     private Texture breadTexture;
 
+    private Audio audio;
+
+    @Override
+    public void create() {
+        audio = new Audio();
+        mainMenu = new MainMenu(audio);
     private Inventory inventory;
     private InventoryHud inventoryHud;
     private ItemRoller itemRoller;
@@ -66,6 +74,9 @@ public class Main extends ApplicationAdapter {
 
         world = new GameWorld();
 
+
+        audio.playMusic("menu");
+   
     countdown = new PlayCountdown();
     // pass to scarecrow objects on creation
     //  item spawning will be moved to a inventory class in futre updates
@@ -103,8 +114,10 @@ public class Main extends ApplicationAdapter {
 
         //edited render logic to allow the main menu to render on startup or on pause
         if (showMenu) {
-            mainMenu.render();
+            audio.playMusic("menu");
+            mainMenu.render(Gdx.graphics.getDeltaTime());
             if (mainMenu.playGameTriggered) {
+                audio.pauseMusic();
                 Gdx.input.setInputProcessor(null);
                 showMenu = false;
                 mainMenu.playGameTriggered = false;
@@ -115,6 +128,7 @@ public class Main extends ApplicationAdapter {
             }
             return;
         }
+
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         countdown.updateAnimation(Gdx.graphics.getDeltaTime());
         if (paused && countdown.isAnimationFinished()) {
@@ -130,13 +144,14 @@ public class Main extends ApplicationAdapter {
         if (!paused) {
             player.updateMovement();
             world.update(Gdx.graphics.getDeltaTime());
+            audio.playMusic("ambient");
             boolean invChanged = boxSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition(), inventory, itemRoller);
             deployHandler.update();
             if (invChanged){
               inventoryHud.refresh();
             }
         }
-        batch.setProjectionMatrix(camera.getCamera().combined);
+
         batch.begin();
         player.draw(batch);
         boxSpawner.render(batch);
@@ -155,5 +170,6 @@ public class Main extends ApplicationAdapter {
         map.dispose();
         renderer.dispose();
         scareTexture.dispose();
+        audio.dispose();
     }
 }
