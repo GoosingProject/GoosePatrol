@@ -24,6 +24,7 @@ public class ItemBoxSpawner {
     private TiledMap map;
     private List<Vector2> spawnPositions = new ArrayList<>();
     private Random random = new Random();
+    private WalkableTiles walkable;
 
     /**
      * constructer for the ItemBoxSpawner class
@@ -38,7 +39,7 @@ public class ItemBoxSpawner {
         this.map = map;
         this.mapWidth = width;
         this.mapHeight = height;
-        findSpawnPositions();
+        this.spawnPositions = walkable.findWalkableTiles(map);
     }
 
     /**
@@ -72,24 +73,6 @@ public class ItemBoxSpawner {
         return changed;
     }
 
-    public void findSpawnPositions() {
-        TiledMapTileLayer collision = (TiledMapTileLayer) map.getLayers().get("Collision");
-        int tileW = collision.getTileWidth();
-        int tileH = collision.getTileHeight();
-        int cols = collision.getWidth();
-        int rows = collision.getHeight();
-        for(int col = 0; col < cols; col++){
-            for(int row = 0; row<rows;row++){
-                TiledMapTileLayer.Cell cell = collision.getCell(col,row);
-                boolean blocked = (cell !=null )&&(cell.getTile() !=null);
-                if(!blocked){
-                    float worldX = col*tileW+tileW /2f;
-                    float worldY = (rows - 1 - row) * tileH + tileH / 2f;
-                    spawnPositions.add(new Vector2(worldX,worldY));
-                }
-            }
-        }
-    }
     /**
      * chose random viable position from list of valid positions
      * @return the vector position
