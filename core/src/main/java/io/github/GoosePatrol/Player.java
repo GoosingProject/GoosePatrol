@@ -186,4 +186,36 @@ public class Player extends MovementEntity {
         getSprite().setPosition(playerPosition.x-16f,playerPosition.y - 16f);
         action = PlayerAction.IDLE;
     }
+    /**
+     * checks if a proposed movement is allowed
+     * @param x the x position of the possible move.
+     * @param y the y position of the possible move.
+     * @return true if the move is valid
+     */
+    private boolean canMoveTo(float x, float y){
+        int tileW = collisionLayer.getTileWidth();
+        int tileH = collisionLayer.getTileHeight();
+        int cols = collisionLayer.getWidth();
+        int rows = collisionLayer.getHeight();
+        float[] xBorders = {x-HITBOX_W/2,x+HITBOX_H/2};
+        float[] yBorders = {y-HITBOX_H/2,y+HITBOX_H/2};
+
+        for (float xCandidate:xBorders){
+            for (float yCandidate:yBorders){
+                int col = (int) Math.floor(xCandidate/tileW);
+                int row = rows -1 - (int) Math.floor(yCandidate/tileH);
+                // out of border check
+                if(col<0||col>=cols||row<0||row>=rows){
+                    return false;
+                }
+
+                TiledMapTileLayer.Cell cell = collisionLayer.getCell(col,row);
+                // collision test
+                if(cell != null && cell.getTile() != null){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
