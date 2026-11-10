@@ -18,6 +18,7 @@ public class ItemDeployHandler {
     private GameWorld world;
     private InventoryHud hud;
     private Player player;
+    private BinSpawner bins;
     private Vector3 usePos = new Vector3();
 
     /**
@@ -29,12 +30,13 @@ public class ItemDeployHandler {
      * @param hud
      * @param player
      */
-    public ItemDeployHandler(OrthographicCamera camera, Inventory inventory, GameWorld world, InventoryHud hud, Player player) {
+    public ItemDeployHandler(OrthographicCamera camera, Inventory inventory, GameWorld world, InventoryHud hud, Player player, BinSpawner bins) {
         this.camera = camera;
         this.inventory = inventory;
         this.world = world;
         this.hud = hud;
         this.player = player;
+        this.bins = bins;
     }
 
     /**
@@ -47,6 +49,11 @@ public class ItemDeployHandler {
         }
         Item item = inventory.remove(slot);
         if (item == null) {
+            return;
+        }
+        // if player is in bin range, return without using item
+        if (bins.isInAnyBin(player.getPlayerPosition())){
+            hud.refresh();
             return;
         }
         usePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
