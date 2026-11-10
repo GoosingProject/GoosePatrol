@@ -40,12 +40,12 @@ public class Goose extends MovementEntity {
     private int worldTileHeight;
 
     private boolean fleeing = false;
-    private Vector2 fleeSouce;
+    private Vector2 fleeSource;
     private  float fleeRadius;
 
     private boolean attracted = false;
     private Vector2 attractTarget;
-    
+
 
     public Goose(float x, float y, NavigationTiledMapLayer navLayer, int worldTileWidth, int worldTileHeight) {
         super();
@@ -218,5 +218,15 @@ public class Goose extends MovementEntity {
      */
     private Vector2 coordinateToTile(Vector2 coordinate) {
         return new Vector2(Math.round(coordinate.x / 16), Math.round(coordinate.y / 16));
+    }
+
+    public void startFleeing(Vector2 source, float radius){
+        if (position.dst2(source)>radius*radius){
+            return;
+        }
+        fleeSource = source.cpy();
+        fleeRadius = radius;
+        fleeing = true;
+        attracted = false; // scare state overrides flee
     }
 }
