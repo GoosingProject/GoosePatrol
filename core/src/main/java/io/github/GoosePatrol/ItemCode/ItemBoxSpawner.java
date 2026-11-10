@@ -4,9 +4,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * class for spawning item boxes and handling updates to them
@@ -19,16 +21,21 @@ public class ItemBoxSpawner {
     private float spawnTimer = 1f;
     private static float SPAWN_INTERVAL = 5f;
     private List<ItemBox> boxes = new ArrayList<>();
+    private TiledMap map;
+    private List<Vector2> spawnPositions = newArrayList<>();
+    private Random random = new Random();
 
     /**
      * constructer for the ItemBoxSpawner class
      *
      * @param texture ItemBoxTexture
+     * @param map     the Tiled map object
      * @param width   map width
      * @param height  map height
      */
-    public ItemBoxSpawner(TextureRegion texture, float width, float height) {
+    public ItemBoxSpawner(TextureRegion texture, TiledMap map, float width, float height) {
         this.texture = texture;
+        this.map = map;
         this.mapWidth = width;
         this.mapHeight = height;
     }
