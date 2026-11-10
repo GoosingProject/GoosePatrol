@@ -13,9 +13,11 @@ public class Bin {
     private static float SIZE = 32f;
     private Vector2 position = new Vector2();
     private TextureRegion sprite;
-    public Bin(Vector2 position, TextureRegion sprite){
+    private TextureRegion ring;
+    public Bin(Vector2 position, TextureRegion sprite, TextureRegion ring){
         this.position = position;
         this.sprite = sprite;
+        this.ring = ring;
     }
     public Vector2 getPosition(){
         return position;
