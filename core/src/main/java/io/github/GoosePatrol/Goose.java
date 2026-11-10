@@ -39,6 +39,14 @@ public class Goose extends MovementEntity {
     // Height of world in tiles
     private int worldTileHeight;
 
+    private boolean fleeing = false;
+    private Vector2 fleeSouce;
+    private  float fleeRadius;
+
+    private boolean attracted = false;
+    private Vector2 attractTarget;
+    
+
     public Goose(float x, float y, NavigationTiledMapLayer navLayer, int worldTileWidth, int worldTileHeight) {
         super();
         position = new Vector2(x, y);
