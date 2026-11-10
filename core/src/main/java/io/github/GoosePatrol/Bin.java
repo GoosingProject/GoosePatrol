@@ -17,4 +17,7 @@ public class Bin {
         this.position = position;
         this.sprite = sprite;
     }
+    public Vector2 getPosition(){
+        return position;
+    }
 }
