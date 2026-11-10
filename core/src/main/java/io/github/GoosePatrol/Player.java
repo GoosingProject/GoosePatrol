@@ -58,6 +58,7 @@ public class Player extends MovementEntity {
     public Player(OrthographicCamera orthographicCamera, TiledMap map) {
         super();
         camera = orthographicCamera;
+        collisionLayer = (TiledMapTileLayer) map.getLayers().get("Collision");
         loadAnimations();
         initialiseSprite();
     }
