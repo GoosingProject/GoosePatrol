@@ -1,4 +1,4 @@
-package io.github.GoosePatrol.ItemCode;
+package io.github.GoosePatrol;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
