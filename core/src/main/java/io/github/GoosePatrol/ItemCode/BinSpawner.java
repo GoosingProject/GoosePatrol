@@ -26,9 +26,10 @@ public class BinSpawner {
     private Random random = new Random();
     private Texture binTexture;
     private Texture aoeTexture;
-    public BinSpawner(Texture binTexture){
+    public BinSpawner(List<Vector2> walkableTiles,Texture binTexture){
         this.binTexture = binTexture;
         this.aoeTexture = createAoeTexture();
+        pickSpots(walkableTiles, binTexture, binTexture);
     }
     private static Texture createAoeTexture() {
         Pixmap pm = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
