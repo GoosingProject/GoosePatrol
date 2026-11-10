@@ -1,0 +1,39 @@
+package io.github.GoosePatrol;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+
+/**
+ * a bin placed in the world that allows the player to discard items
+ * Bin
+ */
+public class Bin {
+    private static float RADIUS = 100f;
+    private static float SIZE = 32f;
+    private Vector2 position = new Vector2();
+    private TextureRegion sprite;
+    private TextureRegion ring;
+    public Bin(Vector2 position, TextureRegion sprite, TextureRegion ring){
+        this.position = position;
+        this.sprite = sprite;
+        this.ring = ring;
+    }
+    public Vector2 getPosition(){
+        return position;
+    }
+    /**
+     * method to check if player is within effective range of bin
+     * @param pos   the player positio
+     * @return  true if the player is within range
+     */
+    public boolean contains(Vector2 pos) {
+        return position.dst2(pos) <= RADIUS * RADIUS;
+    }
+
+    public void render(SpriteBatch batch){
+        float diameter = RADIUS * 2f;
+        batch.draw(ring, position.x - RADIUS, position.y - RADIUS, diameter, diameter);
+        batch.draw(sprite, position.x - SIZE / 2f, position.y - SIZE / 2f, SIZE, SIZE);
+    }
+}

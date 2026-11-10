@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import io.github.GoosePatrol.ItemCode.BinSpawner;
 import io.github.GoosePatrol.ItemCode.Inventory;
 import io.github.GoosePatrol.ItemCode.InventoryHud;
 import io.github.GoosePatrol.ItemCode.ItemBoxSpawner;
@@ -57,6 +58,9 @@ public class Main extends ApplicationAdapter {
     private ItemDeployHandler deployHandler;
     private EnergyBar energyBar;
     private PlayTimer playTimer;
+
+    private BinSpawner binSpawner;
+    private Texture binTexture;
   @Override
   public void create() {
     audio = new Audio();
@@ -94,12 +98,13 @@ public class Main extends ApplicationAdapter {
 
     playTimer = new PlayTimer();
     playTimer.create();
-
+    binTexture = new Texture("trash.png");
+    binSpawner = new BinSpawner(WalkableTiles.findWalkableTiles(map), binTexture);
     MapProperties prop = map.getProperties();
     float mapW = prop.get("width",Integer.class)*prop.get("tilewidth",Integer.class);
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
-    boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture), mapW, mapH);
-    deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player);
+    boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture),map, mapW, mapH);
+    deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player,binSpawner);
   }
 
 
@@ -161,6 +166,7 @@ public class Main extends ApplicationAdapter {
         }
 
         batch.begin();
+        binSpawner.render(batch);
         player.draw(batch);
         boxSpawner.render(batch);
         world.render(batch);
@@ -181,6 +187,7 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void dispose() {
+        binSpawner.dispose();
         batch.dispose();
         map.dispose();
         renderer.dispose();
