@@ -104,8 +104,12 @@ public class Goose extends MovementEntity {
                 action = GooseAction.CHASE;
             }
         }
+        if(action == GooseAction.FLEE){
 
-        if (action == GooseAction.PATROL) {
+        }else if(action == GooseAction.ATTRACRED){
+            
+        }
+        else if (action == GooseAction.PATROL) {
             targetPosition = calculatePatrolTargetPosition();
         } else if (action == GooseAction.CHASE) {
             targetPosition = calculateChaseTargetPosition(playerPosition);
