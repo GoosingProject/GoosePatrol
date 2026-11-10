@@ -1,4 +1,5 @@
 package io.github.GoosePatrol;
+
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -14,38 +15,45 @@ public class PlayCountdown {
     private Animation<TextureRegion> countdownAnimation;
     private float playTime = 0f;
     private boolean visible;
+
+    private int lastFrame = -1;
+
     /**
      * Constructer for the PlayCountdown class
      */
-    public PlayCountdown(){
-        this.countdownAtlas =  new TextureAtlas("sprites.atlas");
-        this.countdownAnimation = new Animation<TextureRegion>(1f,countdownAtlas.findRegions("countdown/countdown"),PlayMode.NORMAL);
+    public PlayCountdown() {
+        this.countdownAtlas = new TextureAtlas("sprites.atlas");
+        this.countdownAnimation = new Animation<TextureRegion>(1f, countdownAtlas.findRegions("countdown/countdown"), PlayMode.NORMAL);
         this.visible = false;
     }
+
     /**
      * re sets the animation to the beggining
      */
-    public void startAnimation(){
+    public void startAnimation() {
         playTime = 0f;
         visible = true;
     }
+
     /**
      * updates the animation to the correct frame
+     *
      * @param deltaTime time since last frame
      */
-    public void updateAnimation(float deltaTime){
-        if (!visible){
+    public void updateAnimation(float deltaTime) {
+        if (!visible) {
             // return if any attempt to update animation when object is hidden
             return;
         }
         playTime += deltaTime;
-        if (countdownAnimation.isAnimationFinished(playTime)){
+        if (countdownAnimation.isAnimationFinished(playTime)) {
             // hide if animation is finished
             visible = false;
         }
     }
-    public boolean isAnimationFinished(){
-        if (countdownAnimation.isAnimationFinished(playTime)){
+
+    public boolean isAnimationFinished() {
+        if (countdownAnimation.isAnimationFinished(playTime)) {
             return true;
         }
         return false;
@@ -53,19 +61,30 @@ public class PlayCountdown {
 
     /**
      * ensure the animation is playing in the centre of the screen
-     * @param batch the camera SpriteBatch
+     *
+     * @param batch   the camera SpriteBatch
      * @param centerX the x co-ordinate of the centre of the screen
      * @param centerY the y co-ordinate of the centre of the screen
-     * @param scale scale the animation by this factor
+     * @param scale   scale the animation by this factor
+     * @param audio   needed to play a beep when the animation changes frames
      */
-    public void draw(SpriteBatch batch, float centerX, float centerY, float scale){
-        if (!visible){
+    public void draw(SpriteBatch batch, float centerX, float centerY, float scale, Audio audio) {
+        if (!visible) {
             // return if any attempt to update animation when object is hidden
             return;
         }
         TextureRegion frame = countdownAnimation.getKeyFrame(playTime);
-        float width = frame.getRegionWidth()*scale;
-        float height = frame.getRegionHeight()*scale;
-        batch.draw(frame, centerX-width/2f, centerY-height/2f,width,height);
+        float width = frame.getRegionWidth() * scale;
+        float height = frame.getRegionHeight() * scale;
+        batch.draw(frame, centerX - width / 2f, centerY - height / 2f, width, height);
+
+        // Gets the current key frame index
+        int currentFrame = countdownAnimation.getKeyFrameIndex(playTime);
+        // Checks it against when frame last changed
+        if (currentFrame != lastFrame) {
+            audio.playSound("beep");
+            // Makes this the last frame it changed
+            lastFrame = currentFrame;
+        }
     }
 }
