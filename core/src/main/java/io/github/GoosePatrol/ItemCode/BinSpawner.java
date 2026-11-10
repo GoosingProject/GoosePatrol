@@ -42,4 +42,21 @@ public class BinSpawner {
         pm.dispose();
         return t;
     }
+    private void pickSpots(List<Vector2> walkable, Texture binTexture, Texture ringTexture){
+        List<Vector2> chosen = new ArrayList<>();
+        while (bins.size()<=BIN_COUNT){
+            Vector2 candidate = walkable.get(random.nextInt(walkable.size()));
+            boolean valid = true;
+
+            for (Vector2 c:chosen){
+                if (c.dst2(candidate)<MIN_SPACING*MIN_SPACING){
+                    valid =false;
+                    break;
+                }
+                if (valid){
+                    bins.add(new Bin(candidate,new TextureRegion(binTexture),new TextureRegion(ringTexture)));
+                }
+            }
+        }
+    }
 }
