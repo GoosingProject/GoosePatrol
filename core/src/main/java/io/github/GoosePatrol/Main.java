@@ -98,14 +98,13 @@ public class Main extends ApplicationAdapter {
 
     playTimer = new PlayTimer();
     playTimer.create();
-
+    binTexture = new Texture("trash.png");
+    binSpawner = new BinSpawner(WalkableTiles.findWalkableTiles(map), binTexture);
     MapProperties prop = map.getProperties();
     float mapW = prop.get("width",Integer.class)*prop.get("tilewidth",Integer.class);
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
     boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture),map, mapW, mapH);
-    deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player);
-    binTexture = new Texture("trash.png");
-    binSpawner = new BinSpawner(WalkableTiles.findWalkableTiles(map), binTexture);
+    deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player,binSpawner);
   }
 
 
