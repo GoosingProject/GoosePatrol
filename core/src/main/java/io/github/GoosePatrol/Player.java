@@ -9,6 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Animation;
 
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,14 +42,20 @@ public class Player extends MovementEntity {
 
     private OrthographicCamera camera;
 
+    private TiledMapTileLayer collisionLayer;
+
+    private static float HITBOX_W = 14f;
+    private static float HITBOX_H = 14f;
+
     /**
      * Constructor method to instantiate a player which takes the orthographic camera object and sets
      * the camera parameter to the camera attribute to later calculate degree offset (can be moved to
      * another input class soon if necessary).
      *
      * @param orthographicCamera Passes through the main camera object
+     * @param map passes the map objectto the player
      */
-    public Player(OrthographicCamera orthographicCamera) {
+    public Player(OrthographicCamera orthographicCamera, TiledMap map) {
         super();
         camera = orthographicCamera;
         loadAnimations();
