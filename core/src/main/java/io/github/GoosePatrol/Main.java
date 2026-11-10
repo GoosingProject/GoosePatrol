@@ -98,7 +98,7 @@ public class Main extends ApplicationAdapter {
     MapProperties prop = map.getProperties();
     float mapW = prop.get("width",Integer.class)*prop.get("tilewidth",Integer.class);
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
-    boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture), mapW, mapH);
+    boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture),map, mapW, mapH);
     deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player);
   }
 
