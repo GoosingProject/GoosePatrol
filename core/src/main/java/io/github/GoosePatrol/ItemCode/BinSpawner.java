@@ -22,6 +22,7 @@ import java.util.Random;
 public class BinSpawner {
     private static int BIN_COUNT = 4;
     private static float MIN_SPACING = 200f;
+    private static int MAX_PICK_ATTEMPTS = 200;
     private List<Bin> bins = new ArrayList<>();
     private Random random = new Random();
     private Texture binTexture;
@@ -29,23 +30,29 @@ public class BinSpawner {
     public BinSpawner(List<Vector2> walkableTiles,Texture binTexture){
         this.binTexture = binTexture;
         this.aoeTexture = createAoeTexture();
-        pickSpots(walkableTiles, binTexture, binTexture);
+        pickSpots(walkableTiles, binTexture, aoeTexture);
     }
     private static Texture createAoeTexture() {
-        Pixmap pm = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
+        int size = 128;
+        int thickness = 4;
+        Pixmap pm = new Pixmap(size, size, Pixmap.Format.RGBA8888);
         pm.setColor(0f, 0f, 0f, 0f);
         pm.fill();
-        pm.setColor(new Color(0.30f, 0.40f, 0.32f, 1f));
-        pm.fillRectangle(6, 8, 20, 22);
-        pm.setColor(new Color(0.20f, 0.28f, 0.22f, 1f));
-        pm.fillRectangle(3, 3, 26, 7);
+        pm.setColor(new Color(0.95f, 0.90f, 0.35f, 0.45f));
+        pm.fillCircle(size / 2, size / 2, size / 2 - 1);
+        pm.setBlending(Pixmap.Blending.None);
+        pm.setColor(0f, 0f, 0f, 0f);
+        pm.fillCircle(size / 2, size / 2, size / 2 - 1 - thickness);
+        pm.setBlending(Pixmap.Blending.SourceOver);
         Texture t = new Texture(pm);
+        t.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         pm.dispose();
         return t;
     }
     private void pickSpots(List<Vector2> walkable, Texture binTexture, Texture ringTexture){
         List<Vector2> chosen = new ArrayList<>();
-        while (bins.size()<=BIN_COUNT){
+        int attempts = 0;
+        while (bins.size()<=BIN_COUNT && attempts < MAX_PICK_ATTEMPTS){
             Vector2 candidate = walkable.get(random.nextInt(walkable.size()));
             boolean valid = true;
 
@@ -54,10 +61,12 @@ public class BinSpawner {
                     valid =false;
                     break;
                 }
-                if (valid){
-                    bins.add(new Bin(candidate,new TextureRegion(binTexture),new TextureRegion(ringTexture)));
-                }
             }
+            if (valid){
+                chosen.add(candidate);
+                bins.add(new Bin(candidate,new TextureRegion(binTexture),new TextureRegion(ringTexture)));
+            }
+            attempts++;
         }
     }
         /** @return true if the position is inside any bin's discard circle. */
