@@ -194,7 +194,7 @@ public class Player extends MovementEntity {
     }
 
     public void resetPos(){
-        playerPosition.set(0f,0f);
+        playerPosition.set(1080,1300);
         getSprite().setPosition(playerPosition.x-16f,playerPosition.y - 16f);
         action = PlayerAction.IDLE;
     }
