@@ -167,6 +167,7 @@ public class Main extends ApplicationAdapter {
         }
 
         batch.begin();
+        binSpawner.render(batch);
         player.draw(batch);
         boxSpawner.render(batch);
         world.render(batch);
@@ -187,6 +188,7 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void dispose() {
+        binSpawner.dispose();
         batch.dispose();
         map.dispose();
         renderer.dispose();
