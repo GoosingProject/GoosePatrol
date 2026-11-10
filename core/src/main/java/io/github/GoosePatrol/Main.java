@@ -48,10 +48,6 @@ public class Main extends ApplicationAdapter {
 
     private Audio audio;
 
-    @Override
-    public void create() {
-        audio = new Audio();
-        mainMenu = new MainMenu(audio);
     private Inventory inventory;
     private InventoryHud inventoryHud;
     private ItemRoller itemRoller;
@@ -61,8 +57,8 @@ public class Main extends ApplicationAdapter {
     private ItemDeployHandler deployHandler;
   @Override
   public void create() {
-    mainMenu = new MainMenu();
-    mainMenu.create();
+    audio = new Audio();
+    mainMenu = new MainMenu(audio);
 
         batch = new SpriteBatch();
 
@@ -156,7 +152,7 @@ public class Main extends ApplicationAdapter {
         player.draw(batch);
         boxSpawner.render(batch);
         world.render(batch);
-        countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f);
+        countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f,audio);
         batch.end();
         inventoryHud.render();
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
