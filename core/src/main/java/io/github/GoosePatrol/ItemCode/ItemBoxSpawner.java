@@ -24,7 +24,6 @@ public class ItemBoxSpawner {
     private float spawnTimer = 1f;
     private static float SPAWN_INTERVAL = 5f;
     private List<ItemBox> boxes = new ArrayList<>();
-    private TiledMap map;
     private List<Vector2> spawnPositions = new ArrayList<>();
     private Random random = new Random();
     private WalkableTiles walkable;
