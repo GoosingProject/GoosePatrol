@@ -111,9 +111,20 @@ public class Player extends MovementEntity {
         }
 
         if (!playerMovementMagnitude.isZero()) {
-            // Calculates the position plus the magnitude scaled with speed multiplied by delta time to
-            // make the movement frame independent
-            playerPosition.mulAdd(playerMovementMagnitude.nor(), speed * Gdx.graphics.getDeltaTime());
+            // creates the movement vector for the frame without applying it so it can be tested first.
+            Vector2 delta = playerMovementMagnitude.nor().scl(speed*Gdx.graphics.getDeltaTime());
+            if(canMoveTo(playerPosition.x+delta.x, playerPosition.y+delta.y)){
+                playerPosition.add(delta);
+            }
+            else{
+                // against a wall try single axis movement.
+                if (canMoveTo(playerPosition.x + delta.x, playerPosition.y)){
+                    playerPosition.x+=delta.x;
+                } 
+                else if (canMoveTo(playerPosition.x,playerPosition.y+delta.y)){
+                    playerPosition.y+= delta.y;
+                }
+            }
             getSprite().setPosition(playerPosition.x, playerPosition.y);
             action = PlayerAction.WALK;
         } else {
