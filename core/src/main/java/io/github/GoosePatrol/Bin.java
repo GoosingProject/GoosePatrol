@@ -20,4 +20,12 @@ public class Bin {
     public Vector2 getPosition(){
         return position;
     }
+    /**
+     * method to check if player is within effective range of bin
+     * @param pos   the player positio
+     * @return  true if the player is within range
+     */
+    public boolean contains(Vector2 pos) {
+        return position.dst2(pos) <= RADIUS * RADIUS;
+    }
 }
