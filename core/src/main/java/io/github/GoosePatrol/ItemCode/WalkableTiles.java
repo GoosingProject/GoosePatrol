@@ -11,7 +11,7 @@ public class WalkableTiles {
     private WalkableTiles(){
 
     }
-    public List<Vector2> findSpawnPositions(TiledMap map) {
+    public List<Vector2> findWalkableTiles(TiledMap map) {
         List<Vector2> walkable = new ArrayList<>();
         TiledMapTileLayer collision = (TiledMapTileLayer) map.getLayers().get("Collision");
         int tileW = collision.getTileWidth();
