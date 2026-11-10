@@ -34,7 +34,7 @@ public class Player extends MovementEntity {
         new HashMap<>();
 
     // Stores the player position in a Vector2 to make manipulating it with maths easier
-    private Vector2 playerPosition = new Vector2(0, 0);
+    private Vector2 playerPosition = new Vector2(1080, 1300);
     // Initialises a degree offset to be used to determine which way the player is facing
     private float degreeOffset = 0f;
     // Controls how fast the player can move around the canvas (might be good for later debuffs)
@@ -215,7 +215,7 @@ public class Player extends MovementEntity {
         for (float xCandidate:xBorders){
             for (float yCandidate:yBorders){
                 int col = (int) Math.floor(xCandidate/tileW);
-                int row = rows -1 - (int) Math.floor(yCandidate/tileH);
+                int row = (int) Math.floor(yCandidate/tileH);
                 // out of border check
                 if(col<0||col>=cols||row<0||row>=rows){
                     return false;
