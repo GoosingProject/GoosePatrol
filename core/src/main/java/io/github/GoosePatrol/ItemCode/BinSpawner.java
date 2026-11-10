@@ -28,5 +28,18 @@ public class BinSpawner {
     private Texture aoeTexture;
     public BinSpawner(Texture binTexture){
         this.binTexture = binTexture;
+        this.aoeTexture = createAoeTexture();
+    }
+    private static Texture createAoeTexture() {
+        Pixmap pm = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
+        pm.setColor(0f, 0f, 0f, 0f);
+        pm.fill();
+        pm.setColor(new Color(0.30f, 0.40f, 0.32f, 1f));
+        pm.fillRectangle(6, 8, 20, 22);
+        pm.setColor(new Color(0.20f, 0.28f, 0.22f, 1f));
+        pm.fillRectangle(3, 3, 26, 7);
+        Texture t = new Texture(pm);
+        pm.dispose();
+        return t;
     }
 }
