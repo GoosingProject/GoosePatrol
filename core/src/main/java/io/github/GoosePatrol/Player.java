@@ -125,7 +125,7 @@ public class Player extends MovementEntity {
                     playerPosition.y+= delta.y;
                 }
             }
-            getSprite().setPosition(playerPosition.x, playerPosition.y);
+            getSprite().setPosition(playerPosition.x - getSprite().getWidth() / 2f, playerPosition.y - getSprite().getHeight() / 2f);
             action = PlayerAction.WALK;
         } else {
             action = PlayerAction.IDLE;
@@ -210,7 +210,7 @@ public class Player extends MovementEntity {
         int cols = collisionLayer.getWidth();
         int rows = collisionLayer.getHeight();
         float[] xBorders = {x-HITBOX_W/2,x+HITBOX_W/2};
-        float[] yBorders = {y-HITBOX_H/2,y+HITBOX_H/2};
+        float[] yBorders = {y-10-HITBOX_H/2,y-10+HITBOX_H/2};
 
         for (float xCandidate:xBorders){
             for (float yCandidate:yBorders){
