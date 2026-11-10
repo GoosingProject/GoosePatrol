@@ -24,14 +24,24 @@ public class GameWorld implements WorldContext {
     }
     @Override
     public void scareGeese(Vector2 centre, float radius) {
-        // TODO - have geese run away from item
+        for(Goose goose:geese){
+            goose.startFleeing(centre, radius);
+        }
     }
 
     @Override
     public void attractGeese(Vector2 centre, float radius) {
-        // TODO - have geese pathfind towards deployed postion
+        for (Goose goose : geese) {
+            goose.startAttracting(centre, radius);
+        }
     }
-
+    
+    @Override
+    public void releaseAttract(Vector2 centre, float radius) {
+        for (Goose goose : geese) {
+            goose.stopAttracting(centre);
+        }
+    }
     @Override
     public void addActiveItem(Item item) {
         activeItems.add(item);
