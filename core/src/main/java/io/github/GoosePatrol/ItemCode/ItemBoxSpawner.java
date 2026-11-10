@@ -22,7 +22,7 @@ public class ItemBoxSpawner {
     private static float SPAWN_INTERVAL = 5f;
     private List<ItemBox> boxes = new ArrayList<>();
     private TiledMap map;
-    private List<Vector2> spawnPositions = newArrayList<>();
+    private List<Vector2> spawnPositions = new ArrayList<>();
     private Random random = new Random();
 
     /**
@@ -38,6 +38,7 @@ public class ItemBoxSpawner {
         this.map = map;
         this.mapWidth = width;
         this.mapHeight = height;
+        findSpawnPositions();
     }
 
     /**
@@ -54,7 +55,7 @@ public class ItemBoxSpawner {
             // rolls random x and y co-ordinates
             float x = MathUtils.random(40f, mapWidth - 40f);
             float y = MathUtils.random(40f, mapHeight - 40f);
-            boxes.add(new ItemBox(new Vector2(x, y), texture));
+            boxes.add(new ItemBox(pickSpawnPositon(), texture));
         }
         for (ItemBox box : boxes) {
             box.update(deltaTime);
@@ -69,6 +70,32 @@ public class ItemBoxSpawner {
         boxes.removeIf(ItemBox::isExpired);
 
         return changed;
+    }
+
+    public void findSpawnPositions() {
+        TiledMapTileLayer collision = (TiledMapTileLayer) map.getLayers().get("Collision");
+        int tileW = collision.getTileWidth();
+        int tileH = collision.getTileHeight();
+        int cols = collision.getWidth();
+        int rows = collision.getHeight();
+        for(int col = 0; col < cols; col++){
+            for(int row = 0; row<rows;row++){
+                TiledMapTileLayer.Cell cell = collision.getCell(col,row);
+                boolean blocked = (cell !=null )&&(cell.getTile() !=null);
+                if(!blocked){
+                    float worldX = col*tileW+tileW /2f;
+                    float worldY = (rows - 1 - row) * tileH + tileH / 2f;
+                    spawnPositions.add(new Vector2(worldX,worldY));
+                }
+            }
+        }
+    }
+    /**
+     * chose random viable position from list of valid positions
+     * @return the vector position
+     */
+    private Vector2 pickSpawnPositon(){
+        return new Vector2(spawnPositions.get(random.nextInt(spawnPositions.size())));
     }
 
     /**
