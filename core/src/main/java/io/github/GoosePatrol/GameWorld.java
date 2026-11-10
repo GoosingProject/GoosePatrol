@@ -11,6 +11,12 @@ import java.util.List;
 public class GameWorld implements WorldContext {
     private List<Item> activeItems = new ArrayList<>();
     private final List<Item> toRemove = new ArrayList<>();
+    private final List<Goose> geese = new ArrayList<>();
+    // adds a goose to the list
+    public void addGeese(Goose goose){
+        geese.add(goose);
+    }
+
     /* call after energy bar is created in main */
     private EnergyBar energyBar;
         public void setEnergyBar(EnergyBar energyBar) {
