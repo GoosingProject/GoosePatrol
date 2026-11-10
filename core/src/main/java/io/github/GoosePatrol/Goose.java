@@ -146,6 +146,24 @@ public class Goose extends MovementEntity {
     }
 
     /**
+     * pathfind towards food position
+     * @return the target vector
+     */
+    private Vector2 calculateAttractTargetPosition() {
+    if (attractTarget == null) return position.cpy();
+
+    Vector2 currentTile = coordinateToTile(position);
+    Vector2 targetTile  = coordinateToTile(attractTarget);
+
+    List<GridCell> path = finder.findPath(
+        (int) currentTile.x, (int) currentTile.y,
+        (int) targetTile.x,  (int) targetTile.y, navLayer);
+
+    if (path == null || path.isEmpty()) return attractTarget.cpy();
+    return new Vector2(path.get(0).x * 16, path.get(0).y * 16);
+}
+
+    /**
      * Calculate next target position for goose when in chase state
      * @return Next target position
      */
