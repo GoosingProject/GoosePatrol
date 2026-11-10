@@ -2,7 +2,9 @@ package io.github.GoosePatrol;
 
 public enum GooseAction {
     PATROL("walk"),
-    CHASE("walk");
+    CHASE("walk"),
+    ATTRACRED("walk"),
+    FLEE("walk");
 
     public final String label;
 
