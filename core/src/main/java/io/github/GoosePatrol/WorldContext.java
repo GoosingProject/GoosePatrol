@@ -11,6 +11,8 @@ public interface WorldContext {
     /*attract geese in radius, food item */
     void attractGeese(Vector2 Centre, float radius);
 
+    void releaseAttract(Vector2 Centre,float radius);
+
     void addActiveItem(Item item);
 
     void removeActiveitem(Item item);
