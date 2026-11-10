@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import io.github.GoosePatrol.ItemCode.BinSpawner;
 import io.github.GoosePatrol.ItemCode.Inventory;
 import io.github.GoosePatrol.ItemCode.InventoryHud;
 import io.github.GoosePatrol.ItemCode.ItemBoxSpawner;
@@ -57,6 +58,9 @@ public class Main extends ApplicationAdapter {
     private ItemDeployHandler deployHandler;
     private EnergyBar energyBar;
     private PlayTimer playTimer;
+
+    private BinSpawner binSpawner;
+    private Texture binTexture;
   @Override
   public void create() {
     audio = new Audio();
@@ -100,6 +104,8 @@ public class Main extends ApplicationAdapter {
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
     boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture),map, mapW, mapH);
     deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player);
+    binTexture = new Texture("trash.png");
+    binSpawner = new BinSpawner(WalkableTiles.findWalkableTiles(map), binTexture);
   }
 
 
