@@ -57,7 +57,7 @@ public class GameWorld implements WorldContext {
     public void addPlayerEnergy(float amount){
         energyBar.setEnergyBar(energyBar.getPlayerEnergy()+amount);
     }
-    public void update(float deltaTime) {
+    public void update(Vector2 playerPosition,float deltaTime) {
         for (Item item : activeItems) {
             item.update(deltaTime, this);
         }
@@ -69,6 +69,9 @@ public class GameWorld implements WorldContext {
         if (!toRemove.isEmpty()) {
             activeItems.removeAll(toRemove);
             toRemove.clear();
+        }
+        for(Goose goose:geese){
+            goose.update(playerPosition, deltaTime);
         }
     }
 

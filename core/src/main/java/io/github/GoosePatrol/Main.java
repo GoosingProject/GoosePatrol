@@ -156,7 +156,7 @@ public class Main extends ApplicationAdapter {
 
         if (!paused) {
             player.updateMovement();
-            world.update(Gdx.graphics.getDeltaTime());
+            world.update(player.getPlayerPosition(),Gdx.graphics.getDeltaTime());
             audio.playMusic("ambient");
             boolean invChanged = boxSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition(), inventory, itemRoller);
             deployHandler.update();
