@@ -107,7 +107,7 @@ public class Goose extends MovementEntity {
         if(action == GooseAction.FLEE){
 
         }else if(action == GooseAction.ATTRACRED){
-            
+
         }
         else if (action == GooseAction.PATROL) {
             targetPosition = calculatePatrolTargetPosition();
@@ -122,6 +122,27 @@ public class Goose extends MovementEntity {
             position.add(velocity);
             getSprite().setPosition(position.x, position.y);
         }
+    }
+    /**
+     * runs 5 tiles away from the scare source
+     * @return the target vector
+     */
+    private Vector2 calculateFleeTargetPosition(){
+        Vector2 currentTile = coordinateToTile(position);
+        Vector2 fleeTile = coordinateToTile(fleeSource);
+        Vector2 away = currentTile.cpy().sub(fleeTile);
+        if(away.isZero()){
+            away.set(1,0);
+        }
+        away.nor();
+        Vector2 targetTile = currentTile.cpy().add(away.scl(5));
+        targetTile.x = MathUtils.clamp(targetTile.x, 0, worldTileWidth  - 1);
+        targetTile.y = MathUtils.clamp(targetTile.y, 0, worldTileHeight - 1);
+        List<GridCell> path = finder.findPath((int) currentTile.x, (int) currentTile.y, (int) targetTile.x,(int)targetTile.y, navLayer);
+        if(path == null || path.isEmpty()){
+            return position.cpy();
+        }
+        return new Vector2(path.get(0).x*16,path.get(0).y*16);
     }
 
     /**
