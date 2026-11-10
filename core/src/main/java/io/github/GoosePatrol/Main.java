@@ -55,6 +55,8 @@ public class Main extends ApplicationAdapter {
     private Texture itemBoxTexture;
 
     private ItemDeployHandler deployHandler;
+    private EnergyBar energyBar;
+    private PlayTimer playTimer;
   @Override
   public void create() {
     audio = new Audio();
@@ -86,6 +88,12 @@ public class Main extends ApplicationAdapter {
     itemRoller = new ItemRoller(scareTexture,breadTexture);
     itemBoxTexture = new Texture("ItemBox.png");
 
+    energyBar = new EnergyBar();
+    energyBar.create();
+
+    playTimer = new PlayTimer();
+    playTimer.create();
+
     MapProperties prop = map.getProperties();
     float mapW = prop.get("width",Integer.class)*prop.get("tilewidth",Integer.class);
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
@@ -103,6 +111,8 @@ public class Main extends ApplicationAdapter {
       mainMenu.resize(width, height);
     }
     inventoryHud.resize(width, height);
+    energyBar.resize(width, height);
+    playTimer.resize(width, height);
   }
 
     @Override
@@ -146,6 +156,8 @@ public class Main extends ApplicationAdapter {
             if (invChanged){
               inventoryHud.refresh();
             }
+
+            playTimer.update(Gdx.graphics.getDeltaTime());
         }
 
         batch.begin();
@@ -154,8 +166,15 @@ public class Main extends ApplicationAdapter {
         world.render(batch);
         countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f,audio);
         batch.end();
+
         inventoryHud.render();
-        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+        energyBar.render();
+        playTimer.render();
+        // check for game loss
+        if(!paused && (playTimer.isGameEnd() || energyBar.getPlayerEnergy() <= 0)){
+            enterLossState();
+        }
+        else if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             showMenu = !showMenu;
         }
     }
@@ -167,5 +186,29 @@ public class Main extends ApplicationAdapter {
         renderer.dispose();
         scareTexture.dispose();
         audio.dispose();
+        breadTexture.dispose();
+        energyBar.dispose();
+        playTimer.dispose();
+    }
+    /**
+     * call when timer runs out or player runs out of energy
+     */
+    private void enterLossState(){
+        resetGameState();
+        showMenu = true;
+    }
+    /**
+     * call all reset helpers to re-start game
+     */
+    private void resetGameState(){
+        player.resetPos();
+        camera.snapToPositon(player.getPlayerPosition());
+        world.clear();
+        boxSpawner.reset();
+        inventory.clear();
+        inventoryHud.refresh();
+        energyBar.setEnergyBar(100f);
+        playTimer.reset();
     }
 }
+

@@ -54,4 +54,9 @@ public class GameWorld implements WorldContext {
             item.render(batch);
         }
     }
+    /** remove all deployed items. */
+    public void clear(){
+        activeItems.clear();
+        toRemove.clear();
+    }
 }
