@@ -209,7 +209,7 @@ public class Player extends MovementEntity {
         int tileH = collisionLayer.getTileHeight();
         int cols = collisionLayer.getWidth();
         int rows = collisionLayer.getHeight();
-        float[] xBorders = {x-HITBOX_W/2,x+HITBOX_H/2};
+        float[] xBorders = {x-HITBOX_W/2,x+HITBOX_W/2};
         float[] yBorders = {y-HITBOX_H/2,y+HITBOX_H/2};
 
         for (float xCandidate:xBorders){
