@@ -61,6 +61,7 @@ public class Player extends MovementEntity {
         collisionLayer = (TiledMapTileLayer) map.getLayers().get("Collision");
         loadAnimations();
         initialiseSprite();
+        getSprite().setPosition(playerPosition.x - getSprite().getWidth() / 2f, playerPosition.y - getSprite().getHeight() / 2f);
     }
 
     /**
