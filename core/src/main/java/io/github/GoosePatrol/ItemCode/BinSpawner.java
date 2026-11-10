@@ -60,4 +60,23 @@ public class BinSpawner {
             }
         }
     }
+        /** @return true if the position is inside any bin's discard circle. */
+    public boolean isInAnyBin(Vector2 position) {
+        for (Bin bin : bins) {
+            if (bin.contains(position)) {
+                return true;
+            }
+        }
+        return false;
+    }
+        public void render(SpriteBatch batch) {
+        for (Bin bin : bins) {
+            bin.render(batch);
+        }
+    }
+
+    public void dispose() {
+        aoeTexture.dispose();
+        binTexture.dispose();
+    }
 }
