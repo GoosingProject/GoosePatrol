@@ -82,10 +82,27 @@ public class Goose extends MovementEntity {
      * @param playerPosition Vector2 of player's position
      */
     public void update(Vector2 playerPosition, float deltaTime) {
-        if (action == GooseAction.PATROL &&
-            playerPosition.cpy().sub(position).len() <= PLAYER_DETECT_RADIUS)
-        {
-            action = GooseAction.CHASE;
+        // stop fleeing once scarecrow is gone or escaped scarecrow radius
+        if(fleeing&&(fleeSource==null||position.dst2(fleeSource)>fleeRadius*fleeRadius)){
+            fleeing = false;
+            fleeSource =null;
+        }
+
+        if(fleeing){
+            action = GooseAction.FLEE;
+        }
+        else if (attracted){
+            action = GooseAction.ATTRACRED;
+        }
+        else{
+            if (action == GooseAction.FLEE || action == GooseAction.ATTRACRED)
+            {
+                // leave flee state > return to patrol state
+                action = GooseAction.PATROL;
+            }
+            if (action == GooseAction.PATROL && playerPosition.cpy().sub(position).len() <= PLAYER_DETECT_RADIUS) {
+                action = GooseAction.CHASE;
+            }
         }
 
         if (action == GooseAction.PATROL) {
