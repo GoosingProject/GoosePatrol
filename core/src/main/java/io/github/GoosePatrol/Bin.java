@@ -30,4 +30,10 @@ public class Bin {
     public boolean contains(Vector2 pos) {
         return position.dst2(pos) <= RADIUS * RADIUS;
     }
+
+    public void render(SpriteBatch batch){
+        float diameter = RADIUS * 2f;
+        batch.draw(ring, position.x - RADIUS, position.y - RADIUS, diameter, diameter);
+        batch.draw(sprite, position.x - SIZE / 2f, position.y - SIZE / 2f, SIZE, SIZE);
+    }
 }
