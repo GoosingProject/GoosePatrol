@@ -318,4 +318,10 @@ public class Goose extends MovementEntity {
             attractTarget = null;
         }
     }
+    /**
+     * @return the world position of this goose
+     */
+    public Vector2 getPosition(){
+        return position;
+    }
 }
