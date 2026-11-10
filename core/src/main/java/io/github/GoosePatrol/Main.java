@@ -70,7 +70,7 @@ public class Main extends ApplicationAdapter {
 
         map = new TmxMapLoader().load("map/Map.tmx");
         camera = new CameraLogic(160, 90, map);
-        player = new Player(camera.getCamera());
+        player = new Player(camera.getCamera(),map);
 
         renderer = new OrthogonalTiledMapRenderer(map, 1f);
 
