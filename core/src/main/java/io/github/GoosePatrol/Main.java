@@ -90,6 +90,7 @@ public class Main extends ApplicationAdapter {
 
     energyBar = new EnergyBar();
     energyBar.create();
+    world.setEnergyBar(energyBar);
 
     playTimer = new PlayTimer();
     playTimer.create();
@@ -156,7 +157,6 @@ public class Main extends ApplicationAdapter {
             if (invChanged){
               inventoryHud.refresh();
             }
-
             playTimer.update(Gdx.graphics.getDeltaTime());
         }
 

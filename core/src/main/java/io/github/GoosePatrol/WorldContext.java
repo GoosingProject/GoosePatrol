@@ -14,4 +14,6 @@ public interface WorldContext {
     void addActiveItem(Item item);
 
     void removeActiveitem(Item item);
+    /* increase the energy by specified amount */
+    void addPlayerEnergy(float amount);
 }

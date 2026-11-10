@@ -11,7 +11,11 @@ import java.util.List;
 public class GameWorld implements WorldContext {
     private List<Item> activeItems = new ArrayList<>();
     private final List<Item> toRemove = new ArrayList<>();
-
+    /* call after energy bar is created in main */
+    private EnergyBar energyBar;
+        public void setEnergyBar(EnergyBar energyBar) {
+        this.energyBar = energyBar;
+    }
     @Override
     public void scareGeese(Vector2 centre, float radius) {
         // TODO - have geese run away from item
@@ -33,7 +37,10 @@ public class GameWorld implements WorldContext {
             toRemove.add(item);
         }
     }
-
+    @Override 
+    public void addPlayerEnergy(float amount){
+        energyBar.setEnergyBar(energyBar.getPlayerEnergy()+amount);
+    }
     public void update(float deltaTime) {
         for (Item item : activeItems) {
             item.update(deltaTime, this);
