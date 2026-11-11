@@ -25,5 +25,13 @@ public class Bus {
         this.offscreenLeft = new Vector2(position.x - OFFSCREEN_OFFSET, position.y);
     }
 
+    public void spawn(){
+        if (state!=BusState.INACTIVE){
+            return;
+        }
+        position.set(offscreenLeft);
+        state = BusState.ARRIVING;
+    }
+
 
 }
