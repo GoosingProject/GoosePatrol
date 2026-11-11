@@ -77,7 +77,7 @@ public class Bus {
     }
 
     public boolean collisionCheck(Vector2 pos){
-        return Math.abs(pos.x - position.x) <= WIDTH /2f+10f && Math.abs(pos.y-position.y) <= HEIGHT + 10f;
+        return Math.abs(pos.x - position.x) <= WIDTH /2f && Math.abs(pos.y-position.y) <= HEIGHT + 5f;
     }
 
     public void render(SpriteBatch batch){
