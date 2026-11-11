@@ -1,7 +1,6 @@
 package io.github.GoosePatrol;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -10,20 +9,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.Screen;
 
 
 /**
  * Manages the Scene2D layout for the ingame energy bar HUD for the player.
  */
-public class EnergyBar extends ApplicationAdapter {
+public class EnergyBar implements Screen {
         private Skin skin;
         private Stage stage;
         private ProgressBar energyBar;
         private float maxPlayerEnergy = 100f;
         private float currentPlayerEnergy = 100f;
 
-    @Override 
-    public void create() {
+    
+    public EnergyBar() {
         skin = new Skin(Gdx.files.internal("metal-ui.json"));
 
         stage = new Stage(new ScreenViewport());
@@ -44,8 +44,8 @@ public class EnergyBar extends ApplicationAdapter {
         
     }
     @Override
-    public void render () {
-        stage.act(Gdx.graphics.getDeltaTime());
+    public void render(float delta) {
+        stage.act(delta);
         stage.draw();
     }
     
@@ -58,6 +58,26 @@ public class EnergyBar extends ApplicationAdapter {
     public void dispose () {
         skin.dispose();
         stage.dispose();
+    }
+
+       @Override 
+    public void show() {
+
+    }
+
+    @Override 
+    public void pause() {
+
+    }
+
+    @Override 
+    public void resume() {
+
+    }
+
+    @Override 
+    public void hide() {
+
     }
 
     /**

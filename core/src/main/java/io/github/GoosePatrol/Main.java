@@ -33,6 +33,7 @@ public class Main extends ApplicationAdapter {
     private boolean showMenu = true;
     // contains the logic value to tell the game to render the main menu
     private MainMenu mainMenu;
+    private EnergyBar energyBar;
 
     private Player player;
     private CameraLogic camera;
@@ -56,7 +57,6 @@ public class Main extends ApplicationAdapter {
     private Texture itemBoxTexture;
 
     private ItemDeployHandler deployHandler;
-    private EnergyBar energyBar;
     private PlayTimer playTimer;
 
     private BinSpawner binSpawner;
@@ -64,7 +64,7 @@ public class Main extends ApplicationAdapter {
   @Override
   public void create() {
     audio = new Audio();
-    mainMenu = new MainMenu(audio);
+    mainMenu = new MainMenu(audio);    
 
         batch = new SpriteBatch();
 
@@ -93,7 +93,6 @@ public class Main extends ApplicationAdapter {
     itemBoxTexture = new Texture("ItemBox.png");
 
     energyBar = new EnergyBar();
-    energyBar.create();
     world.setEnergyBar(energyBar);
 
     playTimer = new PlayTimer();
@@ -174,7 +173,7 @@ public class Main extends ApplicationAdapter {
         batch.end();
 
         inventoryHud.render();
-        energyBar.render();
+        energyBar.render(Gdx.graphics.getDeltaTime());
         playTimer.render();
         // check for game loss
         if(!paused && (playTimer.isGameEnd() || energyBar.getPlayerEnergy() <= 0)){
