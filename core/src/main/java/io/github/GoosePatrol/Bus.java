@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Vector2;
 public class Bus {
     private Vector2 position = new Vector2();
     private Vector2 offscreenRight = new Vector2();
-    private Vector2 offscreenLeft = new Vector2();
     private Vector2 waitPosition = new Vector2();
     private Vector2 spawnPosition = new Vector2();
     private static float WIDTH = 100f;
@@ -35,7 +34,7 @@ public class Bus {
         if (state!=BusState.INACTIVE){
             return;
         }
-        position.set(offscreenLeft);
+        position.set(new Vector2(OFFSCREEN_OFFSET,waitPosition.y));
         state = BusState.ARRIVING;
     }
 
