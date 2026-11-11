@@ -33,5 +33,14 @@ public class Bus {
         state = BusState.ARRIVING;
     }
 
+    public void update(Vector2 playerPosition, float deltaTime){
+        float step = 300f *deltaTime;
+        if (state == BusState.ARRIVING){
 
+        }else if(state == BusState.WAITING){
+
+        }else if(state == BusState.DEPARTING){
+
+        }
+    }
 }
