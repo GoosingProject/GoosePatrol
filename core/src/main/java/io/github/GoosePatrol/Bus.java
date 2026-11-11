@@ -11,9 +11,14 @@ public class Bus {
     private static float WIDTH = 50f;
     private static float HEIGHT = 20f;
     private Texture busTexture;
+    private float mapWidth;
+
+    public enum BusState {INACTIVE,ARRIVING,WAITING,DEPARTING,FINISHED}
+    private BusState state = BusState.INACTIVE;
     public Bus(Vector2 position, Texture busTexture){
         this.position = position;
         this.busTexture = busTexture;
     }
+
 
 }
