@@ -49,4 +49,9 @@ public class Ticket {
             batch.draw(texture, 20f, 20f);
         }
     }
+
+    public void reset(){
+        spawned = false;
+        collected = false;
+    }
 }
