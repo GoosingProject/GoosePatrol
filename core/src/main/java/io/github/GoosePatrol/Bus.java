@@ -22,6 +22,13 @@ public class Bus {
     public enum BusState {INACTIVE,ARRIVING,WAITING,DEPARTING,FINISHED}
     private BusState state = BusState.INACTIVE;
     private boolean win = false;
+    /**
+     * constructor fo the Bus class
+     * @param spawnPosition the position the bus will spawn
+     * @param waitPosition the position the bus will wait for the player
+     * @param busTexture the bus texture
+     * @param mapWidth the width of the map
+     */
     public Bus(Vector2 spawnPosition, Vector2 waitPosition, Texture busTexture,float mapWidth){
         this.spawnPosition = spawnPosition;
         this.waitPosition = waitPosition;
@@ -29,7 +36,7 @@ public class Bus {
         this.busTexture = busTexture;
         this.offscreenRight = new Vector2(mapWidth + OFFSCREEN_OFFSET, waitPosition.y);
     }
-
+    /** call once ticket has been collected */
     public void spawn(){
         if (state!=BusState.INACTIVE){
             return;
@@ -37,7 +44,11 @@ public class Bus {
         position.set(new Vector2(OFFSCREEN_OFFSET,waitPosition.y));
         state = BusState.ARRIVING;
     }
-
+    /**
+     * call every frame
+     * @param playerPosition the player position vector
+     * @param deltaTime time since last frame
+     */
     public void update(Vector2 playerPosition, float deltaTime){
         float step = 300f *deltaTime;
         if (state == BusState.ARRIVING){
@@ -74,17 +85,25 @@ public class Bus {
         position.add(diff.nor().scl(step));
         return false;
     }
-
+    /**
+     * check if player is colliding with bus
+     * @param pos player position vector
+     * @return true if player is touching bus
+     */
     public boolean collisionCheck(Vector2 pos){
         return Math.abs(pos.x - position.x) <= WIDTH /2f && Math.abs(pos.y-position.y) <= HEIGHT + 5f;
     }
-
+    /**
+     * render bus in the world
+     * @param batch the spriteBatch 
+     */
     public void render(SpriteBatch batch){
         if (state == BusState.INACTIVE){
             return;
         }
         batch.draw(busTexture,position.x-WIDTH/2f,position.y-HEIGHT/2f,WIDTH,HEIGHT);
     }
+    // getters
     public BusState getState(){
         return state;
     }
@@ -100,14 +119,16 @@ public class Bus {
     public Vector2 getPosition(){
         return position; 
     }
-
+    /**
+     * reset position and state
+     */
     public void reset(){
         state = BusState.INACTIVE;
         boarded = false;
         win = false;
         position = spawnPosition;
     }
-
+    /** dispose bus texture */
     public void dispose(){
         busTexture.dispose();
     }
