@@ -54,4 +54,11 @@ public class Ticket {
         spawned = false;
         collected = false;
     }
+
+    public boolean isSpawned(){
+        return spawned;
+    }
+    public boolean isCollected(){
+        return collected;
+    }
 }
