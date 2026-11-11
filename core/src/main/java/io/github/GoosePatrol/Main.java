@@ -61,6 +61,10 @@ public class Main extends ApplicationAdapter {
 
     private BinSpawner binSpawner;
     private Texture binTexture;
+
+    private Ticket busTicket;
+    private Texture ticketTexture;
+    private int dispersed = 0;
   @Override
   public void create() {
     audio = new Audio();
@@ -106,6 +110,8 @@ public class Main extends ApplicationAdapter {
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
     boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture),map, mapW, mapH);
     deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player,binSpawner);
+    ticketTexture = new Texture("Ticket.png");
+    busTicket = new Ticket(ticketTexture);
   }
 
 
@@ -164,12 +170,18 @@ public class Main extends ApplicationAdapter {
               inventoryHud.refresh();
             }
             playTimer.update(Gdx.graphics.getDeltaTime());
+
+            if (dispersed >= 20 &&!busTicket.isSpawned()&&!busTicket.isCollected()){
+                busTicket.spawn();
+            }
+            busTicket.update(player.getPlayerPosition());
         }
 
         batch.begin();
         binSpawner.render(batch);
         player.draw(batch);
         boxSpawner.render(batch);
+        busTicket.renderWorld(batch);
         world.render(batch);
         countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f,audio);
         batch.end();
@@ -177,6 +189,7 @@ public class Main extends ApplicationAdapter {
         inventoryHud.render();
         energyBar.render();
         playTimer.render();
+        
         // check for game loss
         if(!paused && (playTimer.isGameEnd() || energyBar.getPlayerEnergy() <= 0)){
             enterLossState();
