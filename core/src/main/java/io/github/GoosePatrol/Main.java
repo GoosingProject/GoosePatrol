@@ -66,7 +66,7 @@ public class Main extends ApplicationAdapter {
 
     private Ticket busTicket;
     private Texture ticketTexture;
-    private int dispersed = 40;
+    private int dispersed = 0;
 
     private Bus bus;
     private Texture busTexture;
