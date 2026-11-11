@@ -31,18 +31,14 @@ public class Goose extends MovementEntity {
     private Vector2 targetPosition;
     private NavigationTiledMapLayer navLayer;
     private AStarGridFinder<GridCell> finder = new AStarGridFinder<GridCell>(GridCell.class);
-    private List<GridCell> patrolPath;
-    private List<GridCell> attractPath;
-    private List<GridCell> scarePath;
-    private int patrolPathIndex = 0;
-    private int attractPathIndex = 0;
-    private int scarePathIndex = 0;
+    private List<GridCell> path;
+    private int pathIndex = 0;
     private float degreeOffset;
     private float itemEffectTimer = ITEM_EFFECT_TIME;
 
     // Width of world in tiles
     private int worldTileWidth;
-    // Height of world in tiles
+    // Height of world in tilesz
     private int worldTileHeight;
 
     public Goose(float x, float y, NavigationTiledMapLayer navLayer, int worldTileWidth, int worldTileHeight) {
@@ -103,10 +99,10 @@ public class Goose extends MovementEntity {
                 targetPosition = calculateChaseTargetPosition(playerPosition);
                 break;
             case ATTRACT:
-                targetPosition = calculateAttractTargetPosition();
+                targetPosition = calculatePathTargetPosition();
                 break;
             case SCARE:
-                targetPosition = calculateScareTargetPosition();
+                targetPosition = calculatePathTargetPosition();
                 break;
         }
 
@@ -135,55 +131,21 @@ public class Goose extends MovementEntity {
             Vector2 targetTile = coordinateToTile(target);
             GridCell cell = navLayer.getCell((int) targetTile.x, (int) targetTile.y);
             if (cell != null && cell.isWalkable()) {
-                List<GridCell> path = finder.findPath(
+                List<GridCell> newPath = finder.findPath(
                     (int) currentTile.x,
                     (int) currentTile.y,
                     (int) targetTile.x,
                     (int) targetTile.y, navLayer);
 
-                if (path != null && path.size() > 0) {
-                    scarePath = new ArrayList<>(path);
+                if (newPath != null && newPath.size() > 0) {
+                    path = new ArrayList<>(newPath);
+                    pathIndex = 0;
                 }
 
-                scarePathIndex = 0;
                 return;
             }
         }
     }
-
-    /**
-     * Calculate next target position for goose when in scare state
-     * @return Next target position
-     */
-    private Vector2 calculateScareTargetPosition() {
-        if (scarePath == null) {
-            return targetPosition;
-        }
-
-        if (scarePathIndex >= scarePath.size()) {
-            return targetPosition;
-        }
-
-        Vector2 currentTile = coordinateToTile(position);
-        Vector2 currentTileTarget = new Vector2(
-            scarePath.get(scarePathIndex).x,
-            scarePath.get(scarePathIndex).y
-        );
-
-        if (currentTile.dst(currentTileTarget) < 2) {
-            scarePathIndex += 1;
-            if (scarePathIndex == scarePath.size()) {
-                return targetPosition;
-            }
-        }
-
-        Vector2 target = new Vector2(
-            scarePath.get(scarePathIndex).x * 16 + 8,
-            scarePath.get(scarePathIndex).y * 16 + 8);
-
-        return target;
-    }
-
 
     /**
      * Set goose to attract state if wihtin radius
@@ -197,48 +159,47 @@ public class Goose extends MovementEntity {
         Vector2 currentTile = coordinateToTile(position);
         Vector2 targetTile = coordinateToTile(centre);
 
-        List<GridCell> path = finder.findPath(
+        List<GridCell> newPath = finder.findPath(
             (int) currentTile.x,
             (int) currentTile.y,
             (int) targetTile.x,
             (int) targetTile.y, navLayer);
 
-        if (path != null && path.size() > 0) {
-            attractPath = new ArrayList<>(path);
+        if (newPath != null && newPath.size() > 0) {
+            path = new ArrayList<>(newPath);
+            pathIndex = 0;
         }
-
-        attractPathIndex = 0;
     }
 
     /**
-     * Calculate next target position for goose when in attract state
+     * Calculate next target position for goose when following path
      * @return Next target position
      */
-    private Vector2 calculateAttractTargetPosition() {
-        if (attractPath == null) {
+    private Vector2 calculatePathTargetPosition() {
+        if (path == null) {
             return targetPosition;
         }
 
-        if (attractPathIndex >= attractPath.size()) {
+        if (pathIndex >= path.size()) {
             return targetPosition;
         }
 
         Vector2 currentTile = coordinateToTile(position);
         Vector2 currentTileTarget = new Vector2(
-            attractPath.get(attractPathIndex).x,
-            attractPath.get(attractPathIndex).y
+            path.get(pathIndex).x,
+            path.get(pathIndex).y
         );
 
         if (currentTile.dst(currentTileTarget) < 2) {
-            attractPathIndex += 1;
-            if (attractPathIndex == attractPath.size()) {
+            pathIndex += 1;
+            if (pathIndex == path.size()) {
                 return targetPosition;
             }
         }
 
         Vector2 target = new Vector2(
-            attractPath.get(attractPathIndex).x * 16 + 8,
-            attractPath.get(attractPathIndex).y * 16 + 8);
+            path.get(pathIndex).x * 16 + 8,
+            path.get(pathIndex).y * 16 + 8);
 
         return target;
     }
@@ -270,7 +231,7 @@ public class Goose extends MovementEntity {
     private Vector2 calculatePatrolTargetPosition() {
         Vector2 currentTile = coordinateToTile(position);
 
-        if (patrolPath == null || patrolPathIndex >= patrolPath.size()) {
+        if (path == null || pathIndex >= path.size()) {
             int attempts = 0;
             do {
                 attempts += 1;
@@ -288,7 +249,7 @@ public class Goose extends MovementEntity {
                 if (randomTarget.x < 0 || randomTarget.x >= worldTileWidth ||
                     randomTarget.y < 0 || randomTarget.y >= worldTileHeight)
                 {
-                    patrolPath = null;
+                    path = null;
                     continue;
                 }
 
@@ -301,32 +262,32 @@ public class Goose extends MovementEntity {
                 );
 
                 if (newPath == null || newPath.size() == 0) {
-                    patrolPath = null;
+                    path = null;
                     continue;
                 }
 
-                patrolPath = new ArrayList<>(newPath);
+                path = new ArrayList<>(newPath);
 
-            } while (patrolPath == null || patrolPath.size() == 0);
+            } while (path == null || path.size() == 0);
 
-            patrolPathIndex = 0;
+            pathIndex = 0;
         }
 
         Vector2 currentTileTarget = new Vector2(
-            patrolPath.get(patrolPathIndex).x,
-            patrolPath.get(patrolPathIndex).y
+            path.get(pathIndex).x,
+            path.get(pathIndex).y
         );
 
         if (currentTile.dst(currentTileTarget) < 2) {
-            patrolPathIndex += 1;
-            if (patrolPathIndex == patrolPath.size()) {
+            pathIndex += 1;
+            if (pathIndex == path.size()) {
                 return targetPosition;
             }
         }
 
         Vector2 target = new Vector2(
-            patrolPath.get(patrolPathIndex).x * 16 + 8,
-            patrolPath.get(patrolPathIndex).y * 16 + 8);
+            path.get(pathIndex).x * 16 + 8,
+            path.get(pathIndex).y * 16 + 8);
 
         return target;
     }
