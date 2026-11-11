@@ -10,6 +10,8 @@ public class Bus {
     private Vector2 position = new Vector2();
     private Vector2 offscreenRight = new Vector2();
     private Vector2 offscreenLeft = new Vector2();
+    private Vector2 waitPosition = new Vector2();
+    private Vector2 spawnPosition = new Vector2();
     private static float WIDTH = 50f;
     private static float HEIGHT = 20f;
     private Texture busTexture;
@@ -18,11 +20,12 @@ public class Bus {
 
     public enum BusState {INACTIVE,ARRIVING,WAITING,DEPARTING,FINISHED}
     private BusState state = BusState.INACTIVE;
-    public Bus(Vector2 position, Texture busTexture){
-        this.position = position;
+    public Bus(Vector2 spawnPosition, Vector2 waitPosition, Texture busTexture){
+        this.spawnPosition = spawnPosition;
+        this.waitPosition = waitPosition;
+        this.position = spawnPosition;
         this.busTexture = busTexture;
         this.offscreenRight = new Vector2(position.x + OFFSCREEN_OFFSET, position.y);
-        this.offscreenLeft = new Vector2(position.x - OFFSCREEN_OFFSET, position.y);
     }
 
     public void spawn(){
@@ -33,10 +36,13 @@ public class Bus {
         state = BusState.ARRIVING;
     }
 
-    public void update(Vector2 playerPosition, float deltaTime){
+    public void update(Vector2 waitPosition, float deltaTime){
         float step = 300f *deltaTime;
         if (state == BusState.ARRIVING){
-
+            // bus has reached wait position
+            if(moveToward(waitPosition, step)){
+                state = BusState.WAITING;
+            }
         }else if(state == BusState.WAITING){
 
         }else if(state == BusState.DEPARTING){
