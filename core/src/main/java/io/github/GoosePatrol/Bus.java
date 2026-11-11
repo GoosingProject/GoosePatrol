@@ -8,17 +8,21 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Bus {
     private Vector2 position = new Vector2();
+    private Vector2 offscreenRight = new Vector2();
+    private Vector2 offscreenLeft = new Vector2();
     private static float WIDTH = 50f;
     private static float HEIGHT = 20f;
     private Texture busTexture;
-    private float mapWidth;
+    // how far the bus has to travel to be off screen
+    private static float OFFSCREEN_OFFSET = 250f;
 
     public enum BusState {INACTIVE,ARRIVING,WAITING,DEPARTING,FINISHED}
     private BusState state = BusState.INACTIVE;
-    public Bus(Vector2 position, Texture busTexture, float mapWidth){
+    public Bus(Vector2 position, Texture busTexture){
         this.position = position;
         this.busTexture = busTexture;
-        this.mapWidth = mapWidth;
+        this.offscreenRight = new Vector2(position.x + OFFSCREEN_OFFSET, position.y);
+        this.offscreenLeft = new Vector2(position.x - OFFSCREEN_OFFSET, position.y);
     }
 
 
