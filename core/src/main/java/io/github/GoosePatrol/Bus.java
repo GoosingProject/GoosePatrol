@@ -101,4 +101,15 @@ public class Bus {
     public Vector2 getPosition(){
         return position; 
     }
+
+    public void reset(){
+        state = BusState.INACTIVE;
+        boarded = false;
+        win = false;
+        position = spawnPosition;
+    }
+
+    public void dispose(){
+        busTexture.dispose();
+    }
 }
