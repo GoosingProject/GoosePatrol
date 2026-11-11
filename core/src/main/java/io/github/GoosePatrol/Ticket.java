@@ -15,7 +15,8 @@ public class Ticket {
     private boolean spawned = false;
     private  boolean collected = false;
 
-    private static float SIZE = 32f;
+    private static float WIDTH = 16f;
+    private static float HEIGHT = 8f;
     /**
      * constructor for the ticket class.
      * @param texture the ticket sprite texture.
@@ -50,7 +51,7 @@ public class Ticket {
      */
     public void renderWorld(SpriteBatch batch){
         if (spawned&&!collected){
-            batch.draw(texture,position.x - SIZE, position.y -SIZE,SIZE,SIZE);
+            batch.draw(texture,position.x - WIDTH, position.y - HEIGHT,WIDTH,HEIGHT);
         }
     }
     /**
@@ -59,7 +60,7 @@ public class Ticket {
      */
     public void renderHud(SpriteBatch batch) {
         if (collected) {
-            batch.draw(texture, 20f, 20f , SIZE*5, SIZE*5);
+            batch.draw(texture, 20f, 20f , WIDTH*5, HEIGHT*5);
         }
     }
     /**
