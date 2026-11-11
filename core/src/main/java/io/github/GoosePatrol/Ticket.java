@@ -61,4 +61,7 @@ public class Ticket {
     public boolean isCollected(){
         return collected;
     }
+    public void dispose(){
+        texture.dispose();
+    }
 }
