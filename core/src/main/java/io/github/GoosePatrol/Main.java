@@ -34,6 +34,7 @@ public class Main extends ApplicationAdapter {
     // contains the logic value to tell the game to render the main menu
     private MainMenu mainMenu;
     private EnergyBar energyBar;
+    private float sleepTimer = 0f;
 
     private Player player;
     private CameraLogic camera;
@@ -176,8 +177,19 @@ public class Main extends ApplicationAdapter {
         energyBar.render(Gdx.graphics.getDeltaTime());
         playTimer.render();
         // check for game loss
-        if(!paused && (playTimer.isGameEnd() || energyBar.getPlayerEnergy() <= 0)){
+        if(!paused && (playTimer.isGameEnd())){
             enterLossState();
+        }
+       else if (!paused && energyBar.getPlayerEnergy() <= 0 ){
+            player.setAction(PlayerAction.SLEEP);
+            sleepTimer += Gdx.graphics.getDeltaTime();
+
+            if (sleepTimer >= 3.0f) {
+                sleepTimer = 0f;
+                enterLossState();
+            }
+
+
         }
         else if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             showMenu = !showMenu;
