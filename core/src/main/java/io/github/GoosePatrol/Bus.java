@@ -17,6 +17,7 @@ public class Bus {
     private Texture busTexture;
     // how far the bus has to travel to be off screen
     private static float OFFSCREEN_OFFSET = 250f;
+    private boolean boarded = false;
 
     public enum BusState {INACTIVE,ARRIVING,WAITING,DEPARTING,FINISHED}
     private BusState state = BusState.INACTIVE;
@@ -37,7 +38,7 @@ public class Bus {
         state = BusState.ARRIVING;
     }
 
-    public void update(Vector2 waitPosition, float deltaTime){
+    public void update(Vector2 playerPosition, float deltaTime){
         float step = 300f *deltaTime;
         if (state == BusState.ARRIVING){
             // bus has reached wait position
@@ -45,6 +46,10 @@ public class Bus {
                 state = BusState.WAITING;
             }
         }else if(state == BusState.WAITING){
+            if (collisionCheck(playerPosition)){
+                boarded = true;
+                state = BusState.DEPARTING;
+            }
 
         }else if(state == BusState.DEPARTING){
             if (moveToward(offscreenRight, step)){
