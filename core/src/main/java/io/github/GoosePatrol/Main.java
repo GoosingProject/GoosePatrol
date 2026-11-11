@@ -1,10 +1,8 @@
 package io.github.GoosePatrol;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -19,12 +17,11 @@ import io.github.GoosePatrol.ItemCode.ItemRoller;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-
-import java.util.Objects;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
@@ -58,6 +55,9 @@ public class Main extends ApplicationAdapter {
     private Texture itemBoxTexture;
 
     private ItemDeployHandler deployHandler;
+
+    private GooseSpawner gooseSpawner;
+
     private EnergyBar energyBar;
     private PlayTimer playTimer;
 
@@ -89,7 +89,7 @@ public class Main extends ApplicationAdapter {
 
 
         audio.playMusic("menu");
-   
+
     countdown = new PlayCountdown();
     // pass to scarecrow objects on creation
     //  item spawning will be moved to a inventory class in futre updates
@@ -116,6 +116,7 @@ public class Main extends ApplicationAdapter {
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
     boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture),map, mapW, mapH);
     deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player,binSpawner);
+    gooseSpawner = new GooseSpawner((TiledMapTileLayer) map.getLayers().get("Collision"), 60, 60, 5);
     ticketTexture = new Texture("Ticket.png");
     busTicket = new Ticket(ticketTexture);
     busTexture = new Texture("sprites/Bus/bus_0.png");
@@ -180,6 +181,7 @@ public class Main extends ApplicationAdapter {
             audio.playMusic("ambient");
             boolean invChanged = boxSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition(), inventory, itemRoller);
             deployHandler.update();
+            gooseSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition());
             if (invChanged){
               inventoryHud.refresh();
             }
@@ -204,6 +206,7 @@ public class Main extends ApplicationAdapter {
         boxSpawner.render(batch);
         busTicket.renderWorld(batch);
         bus.render(batch);
+        gooseSpawner.render(batch);
         world.render(batch);
         countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f,audio);
         batch.end();

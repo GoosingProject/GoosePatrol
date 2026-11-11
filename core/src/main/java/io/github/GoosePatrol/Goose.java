@@ -30,7 +30,7 @@ public class Goose extends MovementEntity {
     private Vector2 targetPosition;
     private NavigationTiledMapLayer navLayer;
     private AStarGridFinder<GridCell> finder = new AStarGridFinder<GridCell>(GridCell.class);
-    private List<GridCell> patrolPath = new ArrayList<>();
+    private List<GridCell> patrolPath;
     private int patrolPathIndex = 0;
     private float degreeOffset;
 
@@ -56,6 +56,7 @@ public class Goose extends MovementEntity {
         this.worldTileHeight = worldTileHeight;
         loadAnimations();
         initialiseSprite();
+        getSprite().setPosition(x, y);
     }
 
     /** Load animations and populate animation map */
@@ -176,11 +177,11 @@ public class Goose extends MovementEntity {
             (int) playerTile.x,
             (int) playerTile.y, navLayer);
 
-        if (path == null || path.size() == 0) {
+        if (path == null || path.size() <= 1) {
             return targetPosition.cpy();
         }
 
-        return new Vector2(path.get(0).x * 16, path.get(0).y * 16);
+        return new Vector2(path.get(0).x * 16 + 8, path.get(0).y * 16 + 8);
     }
 
     /**
@@ -190,38 +191,63 @@ public class Goose extends MovementEntity {
     private Vector2 calculatePatrolTargetPosition() {
         Vector2 currentTile = coordinateToTile(position);
 
-        if (patrolPathIndex >= patrolPath.size() - 1) {
+        if (patrolPath == null || patrolPathIndex >= patrolPath.size()) {
+            int attempts = 0;
             do {
-                double randomAngle = Math.random() * 2 * Math.PI;
+                attempts += 1;
+                if (attempts > 20) {
+                    return targetPosition;
+                }
+
+                double randomAngle = MathUtils.random() * 2 * Math.PI;
+                double randomDistance = MathUtils.random() * 10;
                 Vector2 randomTarget = new Vector2(
-                    Math.round(currentTile.x + 15 * Math.cos(randomAngle)),
-                    Math.round(currentTile.y + 15 * Math.sin(randomAngle))
+                    Math.round(currentTile.x + randomDistance * Math.cos(randomAngle)),
+                    Math.round(currentTile.y + randomDistance * Math.sin(randomAngle))
                 );
 
                 if (randomTarget.x < 0 || randomTarget.x >= worldTileWidth ||
                     randomTarget.y < 0 || randomTarget.y >= worldTileHeight)
                 {
+                    patrolPath = null;
                     continue;
                 }
 
-                patrolPath = finder.findPath(
+                List<GridCell> newPath = finder.findPath(
                     (int) currentTile.x,
                     (int) currentTile.y,
                     (int) randomTarget.x,
-                    (int) randomTarget.y, navLayer);
+                    (int) randomTarget.y,
+                    navLayer
+                );
+
+                if (newPath == null || newPath.size() == 0) {
+                    patrolPath = null;
+                    continue;
+                }
+
+                patrolPath = new ArrayList<>(newPath);
 
             } while (patrolPath == null || patrolPath.size() == 0);
 
             patrolPathIndex = 0;
         }
 
-        if (currentTile.x == patrolPath.get(patrolPathIndex).x && currentTile.y == patrolPath.get(patrolPathIndex).y) {
+        Vector2 currentTileTarget = new Vector2(
+            patrolPath.get(patrolPathIndex).x,
+            patrolPath.get(patrolPathIndex).y
+        );
+
+        if (currentTile.dst(currentTileTarget) < 2) {
             patrolPathIndex += 1;
+            if (patrolPathIndex == patrolPath.size()) {
+                return targetPosition;
+            }
         }
 
         Vector2 target = new Vector2(
-            patrolPath.get(patrolPathIndex).x * 16,
-            patrolPath.get(patrolPathIndex).y * 16);
+            patrolPath.get(patrolPathIndex).x * 16 + 8,
+            patrolPath.get(patrolPathIndex).y * 16 + 8);
 
         return target;
     }
@@ -277,7 +303,7 @@ public class Goose extends MovementEntity {
      * @return Tile position
      */
     private Vector2 coordinateToTile(Vector2 coordinate) {
-        return new Vector2(Math.round(coordinate.x / 16), Math.round(coordinate.y / 16));
+        return new Vector2((int) Math.floor(coordinate.x / 16), (int) Math.floor(coordinate.y / 16));
     }
     /**
      * make the goose run away from the scare device
