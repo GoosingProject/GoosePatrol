@@ -60,6 +60,7 @@ public class Player extends MovementEntity {
             Map<SpriteDirection, Animation<TextureRegion>> directionMap = new HashMap<>();
 
             for (SpriteDirection direction : SpriteDirection.values()) {
+                
                 Animation<TextureRegion> animation =
                     new Animation<TextureRegion>(
                         0.25f,
@@ -168,11 +169,17 @@ public class Player extends MovementEntity {
 
     @Override
     protected Animation<TextureRegion> getCurrentAnimation() {
+        if (action == PlayerAction.SLEEP) {
+            return animations.get(PlayerAction.SLEEP).get(SpriteDirection.FORWARD);
+        }
         return animations.get(action).get(directionFacing());
     }
 
     @Override
     protected boolean shouldFlipX() {
+        if (action == PlayerAction.SLEEP) {
+            return false;
+        }
         return !(degreeOffset >= -90 && degreeOffset <= 90);
     }
 
