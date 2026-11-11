@@ -23,12 +23,12 @@ public class Bus {
     public enum BusState {INACTIVE,ARRIVING,WAITING,DEPARTING,FINISHED}
     private BusState state = BusState.INACTIVE;
     private boolean win = false;
-    public Bus(Vector2 spawnPosition, Vector2 waitPosition, Texture busTexture){
+    public Bus(Vector2 spawnPosition, Vector2 waitPosition, Texture busTexture,float mapWidth){
         this.spawnPosition = spawnPosition;
         this.waitPosition = waitPosition;
         this.position = spawnPosition;
         this.busTexture = busTexture;
-        this.offscreenRight = new Vector2(position.x + OFFSCREEN_OFFSET, position.y);
+        this.offscreenRight = new Vector2(mapWidth + OFFSCREEN_OFFSET, waitPosition.y);
     }
 
     public void spawn(){
