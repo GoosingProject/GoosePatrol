@@ -181,14 +181,16 @@ public class Main extends ApplicationAdapter {
         if(!paused && (playTimer.isGameEnd())){
             enterLossState();
         }
-       else if (!paused && energyBar.getPlayerEnergy() <= 0 ){
-            player.setAction(PlayerAction.SLEEP);
-            sleepTimer += Gdx.graphics.getDeltaTime();
+       else if (!paused && energyBar.getPlayerEnergy() <= 0 ) {
+        if (sleepTimer == 0f) {
+            player.setAction(PlayerAction.FALLING_ASLEEP);
+        }
+        sleepTimer += Gdx.graphics.getDeltaTime();
 
-            if (sleepTimer >= 3.0f) {
-                sleepTimer = 0f;
-                enterLossState();
-            }
+        if(sleepTimer >= 3.0f) {
+            sleepTimer = 0f;
+            enterLossState();
+        }
 
         }
         else if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {

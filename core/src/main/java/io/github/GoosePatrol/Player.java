@@ -181,6 +181,9 @@ public class Player extends MovementEntity {
             }
             return fallAsleepAnim;
         }
+        if (action == PlayerAction.SLEEP) {
+            return animations.get(PlayerAction.SLEEP).get(SpriteDirection.FORWARD);
+        }
         return animations.get(action).get(directionFacing());
     }
 
@@ -196,6 +199,7 @@ public class Player extends MovementEntity {
         playerPosition.set(0f,0f);
         getSprite().setPosition(playerPosition.x-16f,playerPosition.y - 16f);
         action = PlayerAction.IDLE;
+        sleepAnimTimer = 0f;
     }
 
     public void setAction(PlayerAction newAction){
