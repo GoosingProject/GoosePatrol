@@ -38,7 +38,7 @@ public class Goose extends MovementEntity {
 
     // Width of world in tiles
     private int worldTileWidth;
-    // Height of world in tilesz
+    // Height of world in tiles
     private int worldTileHeight;
 
     public Goose(float x, float y, NavigationTiledMapLayer navLayer, int worldTileWidth, int worldTileHeight) {
