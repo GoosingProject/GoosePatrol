@@ -80,7 +80,7 @@ public class Player extends MovementEntity {
      */
     public void updateMovement() {
         // Prevents movement when player is in a sleep state
-        if (this.action == PlayerAction.SLEEP) {
+        if (this.action == PlayerAction.SLEEP || this.action == PlayerAction.FALLING_ASLEEP) {
             return;
         }
 
@@ -167,17 +167,26 @@ public class Player extends MovementEntity {
         return playerPosition;
     }
 
+    private float sleepAnimTimer = 0f;
+
     @Override
     protected Animation<TextureRegion> getCurrentAnimation() {
-        if (action == PlayerAction.SLEEP) {
-            return animations.get(PlayerAction.SLEEP).get(SpriteDirection.FORWARD);
+        if (action == PlayerAction.FALLING_ASLEEP) {
+            sleepAnimTimer += Gdx.graphics.getDeltaTime();
+            Animation<TextureRegion> fallAsleepAnim = animations.get(PlayerAction.FALLING_ASLEEP).get(SpriteDirection.FORWARD);
+
+            if (fallAsleepAnim.isAnimationFinished(sleepAnimTimer)) {
+                action = PlayerAction.SLEEP;
+                return animations.get(PlayerAction.SLEEP).get(SpriteDirection.FORWARD);
+            }
+            return fallAsleepAnim;
         }
         return animations.get(action).get(directionFacing());
     }
 
     @Override
     protected boolean shouldFlipX() {
-        if (action == PlayerAction.SLEEP) {
+        if (action == PlayerAction.SLEEP || action == PlayerAction.FALLING_ASLEEP) {
             return false;
         }
         return !(degreeOffset >= -90 && degreeOffset <= 90);
