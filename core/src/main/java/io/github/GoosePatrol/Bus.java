@@ -13,8 +13,8 @@ public class Bus {
     private Vector2 offscreenLeft = new Vector2();
     private Vector2 waitPosition = new Vector2();
     private Vector2 spawnPosition = new Vector2();
-    private static float WIDTH = 50f;
-    private static float HEIGHT = 20f;
+    private static float WIDTH = 100f;
+    private static float HEIGHT = 40f;
     private Texture busTexture;
     // how far the bus has to travel to be off screen
     private static float OFFSCREEN_OFFSET = 250f;
@@ -77,7 +77,7 @@ public class Bus {
     }
 
     public boolean collisionCheck(Vector2 pos){
-        return Math.abs(pos.x - position.x) <= WIDTH /2f+30f && Math.abs(pos.y-position.y) <= HEIGHT + 30f;
+        return Math.abs(pos.x - position.x) <= WIDTH /2f+10f && Math.abs(pos.y-position.y) <= HEIGHT + 10f;
     }
 
     public void render(SpriteBatch batch){
