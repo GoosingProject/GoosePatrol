@@ -21,6 +21,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Matrix4;
 
 import java.util.Objects;
 
@@ -64,7 +65,7 @@ public class Main extends ApplicationAdapter {
 
     private Ticket busTicket;
     private Texture ticketTexture;
-    private int dispersed = 0;
+    private int dispersed = 40;
   @Override
   public void create() {
     audio = new Audio();
@@ -190,7 +191,7 @@ public class Main extends ApplicationAdapter {
         energyBar.render();
         playTimer.render();
         if(busTicket.isCollected()){
-            batch.setProjectionMatrix(camera.getCamera().combined);
+            batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
             batch.begin();
             busTicket.renderHud(batch);
             batch.end();
@@ -215,6 +216,8 @@ public class Main extends ApplicationAdapter {
         breadTexture.dispose();
         energyBar.dispose();
         playTimer.dispose();
+        busTicket.dispose();
+        ticketTexture.dispose();
     }
     /**
      * call when timer runs out or player runs out of energy
@@ -235,6 +238,8 @@ public class Main extends ApplicationAdapter {
         inventoryHud.refresh();
         energyBar.setEnergyBar(100f);
         playTimer.reset();
+        dispersed = 0;
+        busTicket.reset();
     }
 }
 
