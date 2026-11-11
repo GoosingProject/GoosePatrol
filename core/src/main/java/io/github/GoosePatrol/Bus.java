@@ -20,6 +20,7 @@ public class Bus {
 
     public enum BusState {INACTIVE,ARRIVING,WAITING,DEPARTING,FINISHED}
     private BusState state = BusState.INACTIVE;
+    private boolean win = false;
     public Bus(Vector2 spawnPosition, Vector2 waitPosition, Texture busTexture){
         this.spawnPosition = spawnPosition;
         this.waitPosition = waitPosition;
@@ -46,7 +47,10 @@ public class Bus {
         }else if(state == BusState.WAITING){
 
         }else if(state == BusState.DEPARTING){
-
+            if (moveToward(offscreenRight, step)){
+                state = BusState.FINISHED;
+                win = true;
+            }
         }
     }
     /**
