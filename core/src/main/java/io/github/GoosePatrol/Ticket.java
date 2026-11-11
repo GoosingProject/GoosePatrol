@@ -12,6 +12,7 @@ public class Ticket {
     private boolean spawned = false;
     private  boolean collected = false;
 
+    private static float SIZE = 32f;
     public Ticket(Texture texture){
         this.texture = texture;
         this.position = new Vector2(888f,424f);
@@ -36,8 +37,7 @@ public class Ticket {
      */
     public void renderWorld(SpriteBatch batch){
         if (spawned&&!collected){
-            batch.draw(texture,position.x- texture.getWidth() / 2f, 
-                position.y - texture.getHeight() / 2f);
+            batch.draw(texture,position.x - SIZE, position.y -SIZE,SIZE,SIZE);
         }
     }
     /**
@@ -46,7 +46,7 @@ public class Ticket {
      */
     public void renderHud(SpriteBatch batch) {
         if (collected) {
-            batch.draw(texture, 20f, 20f);
+            batch.draw(texture, 20f, 20f , SIZE*5, SIZE*5);
         }
     }
 
