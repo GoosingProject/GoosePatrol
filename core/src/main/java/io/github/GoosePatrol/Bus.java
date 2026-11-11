@@ -43,4 +43,20 @@ public class Bus {
 
         }
     }
+    /**
+     * move the bus towards a target
+     * @param target the target location
+     * @param step the maximum number of units per second
+     * @return true if bus has reached target
+     */
+    private boolean moveToward(Vector2 target,float step){
+        Vector2 diff = target.cpy().sub(position);
+        float dist = diff.len();
+        if ( dist <= step){
+            position.set(target);
+            return true;
+        }
+        position.add(diff.nor().scl(step));
+        return false;
+    }
 }
