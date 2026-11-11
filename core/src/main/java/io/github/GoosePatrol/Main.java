@@ -189,7 +189,12 @@ public class Main extends ApplicationAdapter {
         inventoryHud.render();
         energyBar.render();
         playTimer.render();
-        
+        if(busTicket.isCollected()){
+            batch.setProjectionMatrix(camera.getCamera().combined);
+            batch.begin();
+            busTicket.renderHud(batch);
+            batch.end();
+        }
         // check for game loss
         if(!paused && (playTimer.isGameEnd() || energyBar.getPlayerEnergy() <= 0)){
             enterLossState();
