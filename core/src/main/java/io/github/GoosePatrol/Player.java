@@ -170,4 +170,10 @@ public class Player extends MovementEntity {
     protected boolean shouldFlipX() {
         return !(degreeOffset >= -90 && degreeOffset <= 90);
     }
+
+    public void resetPos(){
+        playerPosition.set(0f,0f);
+        getSprite().setPosition(playerPosition.x-16f,playerPosition.y - 16f);
+        action = PlayerAction.IDLE;
+    }
 }

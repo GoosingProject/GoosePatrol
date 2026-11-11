@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import io.github.GoosePatrol.ItemCode.BinSpawner;
 import io.github.GoosePatrol.ItemCode.Inventory;
 import io.github.GoosePatrol.ItemCode.InventoryHud;
 import io.github.GoosePatrol.ItemCode.ItemBoxSpawner;
@@ -54,6 +55,13 @@ public class Main extends ApplicationAdapter {
     private ItemDeployHandler deployHandler;
 
     private GooseSpawner gooseSpawner;
+
+    private EnergyBar energyBar;
+    private PlayTimer playTimer;
+
+    private BinSpawner binSpawner;
+    private Texture binTexture;
+
   @Override
   public void create() {
     audio = new Audio();
@@ -85,11 +93,19 @@ public class Main extends ApplicationAdapter {
     itemRoller = new ItemRoller(scareTexture,breadTexture);
     itemBoxTexture = new Texture("ItemBox.png");
 
+    energyBar = new EnergyBar();
+    energyBar.create();
+    world.setEnergyBar(energyBar);
+
+    playTimer = new PlayTimer();
+    playTimer.create();
+    binTexture = new Texture("trash.png");
+    binSpawner = new BinSpawner(WalkableTiles.findWalkableTiles(map), binTexture);
     MapProperties prop = map.getProperties();
     float mapW = prop.get("width",Integer.class)*prop.get("tilewidth",Integer.class);
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
-    boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture), mapW, mapH);
-    deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player);
+    boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture), map, mapW, mapH);
+    deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player, binSpawner);
     gooseSpawner = new GooseSpawner((TiledMapTileLayer) map.getLayers().get("Collision"), 60, 60, 5);
   }
 
@@ -103,6 +119,8 @@ public class Main extends ApplicationAdapter {
       mainMenu.resize(width, height);
     }
     inventoryHud.resize(width, height);
+    energyBar.resize(width, height);
+    playTimer.resize(width, height);
   }
 
     @Override
@@ -147,27 +165,61 @@ public class Main extends ApplicationAdapter {
             if (invChanged){
               inventoryHud.refresh();
             }
+            playTimer.update(Gdx.graphics.getDeltaTime());
         }
 
         batch.begin();
+        binSpawner.render(batch);
         player.draw(batch);
         boxSpawner.render(batch);
         gooseSpawner.render(batch);
         world.render(batch);
         countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f,audio);
         batch.end();
+
         inventoryHud.render();
-        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+        energyBar.render();
+        playTimer.render();
+        // check for game loss
+        if(!paused && (playTimer.isGameEnd() || energyBar.getPlayerEnergy() <= 0)){
+            enterLossState();
+        }
+        else if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             showMenu = !showMenu;
         }
     }
 
     @Override
     public void dispose() {
+        binSpawner.dispose();
         batch.dispose();
         map.dispose();
         renderer.dispose();
         scareTexture.dispose();
         audio.dispose();
+        breadTexture.dispose();
+        energyBar.dispose();
+        playTimer.dispose();
+    }
+    /**
+     * call when timer runs out or player runs out of energy
+     */
+    private void enterLossState(){
+        resetGameState();
+        showMenu = true;
+    }
+    /**
+     * call all reset helpers to re-start game
+     */
+    private void resetGameState(){
+        player.resetPos();
+        camera.snapToPositon(player.getPlayerPosition());
+        world.clear();
+        boxSpawner.reset();
+        inventory.clear();
+        inventoryHud.refresh();
+        energyBar.setEnergyBar(100f);
+        playTimer.reset();
     }
 }
+

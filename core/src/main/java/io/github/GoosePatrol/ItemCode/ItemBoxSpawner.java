@@ -5,8 +5,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
+import io.github.GoosePatrol.WalkableTiles;
+
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * class for spawning item boxes and handling updates to them
@@ -19,18 +24,25 @@ public class ItemBoxSpawner {
     private float spawnTimer = 1f;
     private static float SPAWN_INTERVAL = 5f;
     private List<ItemBox> boxes = new ArrayList<>();
+    private TiledMap map;
+    private List<Vector2> spawnPositions = new ArrayList<>();
+    private Random random = new Random();
+    private WalkableTiles walkable;
 
     /**
      * constructer for the ItemBoxSpawner class
      *
      * @param texture ItemBoxTexture
+     * @param map     the Tiled map object
      * @param width   map width
      * @param height  map height
      */
-    public ItemBoxSpawner(TextureRegion texture, float width, float height) {
+    public ItemBoxSpawner(TextureRegion texture, TiledMap map, float width, float height) {
         this.texture = texture;
+        this.map = map;
         this.mapWidth = width;
         this.mapHeight = height;
+        this.spawnPositions = walkable.findWalkableTiles(map);
     }
 
     /**
@@ -47,7 +59,7 @@ public class ItemBoxSpawner {
             // rolls random x and y co-ordinates
             float x = MathUtils.random(40f, mapWidth - 40f);
             float y = MathUtils.random(40f, mapHeight - 40f);
-            boxes.add(new ItemBox(new Vector2(x, y), texture));
+            boxes.add(new ItemBox(pickSpawnPositon(), texture));
         }
         for (ItemBox box : boxes) {
             box.update(deltaTime);
@@ -65,6 +77,14 @@ public class ItemBoxSpawner {
     }
 
     /**
+     * chose random viable position from list of valid positions
+     * @return the vector position
+     */
+    private Vector2 pickSpawnPositon(){
+        return new Vector2(spawnPositions.get(random.nextInt(spawnPositions.size())));
+    }
+
+    /**
      * pass render calls to all boxes in world
      */
     public void render(SpriteBatch batch) {
@@ -79,4 +99,10 @@ public class ItemBoxSpawner {
     public void clear() {
         boxes.clear();
     }
+    /** remove all boxes and restart spawn timer */
+    public void reset(){
+        boxes.clear();
+        spawnTimer = SPAWN_INTERVAL;
+    }
+
 }

@@ -47,7 +47,15 @@ public class CameraLogic {
         clampCamera();
         camera.update();
     }
-
+    /**
+     * snaps the camera to position instead of lerps inteded for game reset
+     * @param cameraPosition A vector containing the position to move the camera to
+     */
+    public void snapToPositon(Vector2 cameraPosition){
+        camera.position.set(cameraPosition.x,cameraPosition.y,0f);
+        clampCamera();
+        camera.update();
+    }
     /**
      * Updates the scale of the viewport intended to be called in the resize method() of main.
      *
