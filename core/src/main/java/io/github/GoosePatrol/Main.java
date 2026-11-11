@@ -223,6 +223,9 @@ public class Main extends ApplicationAdapter {
         else if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             showMenu = !showMenu;
         }
+        if (bus.isWin()){
+            enterWinState();
+        }
     }
 
     @Override
@@ -238,6 +241,7 @@ public class Main extends ApplicationAdapter {
         playTimer.dispose();
         busTicket.dispose();
         ticketTexture.dispose();
+        bus.dispose();
     }
     /**
      * call when timer runs out or player runs out of energy
@@ -246,6 +250,14 @@ public class Main extends ApplicationAdapter {
         resetGameState();
         showMenu = true;
     }
+    /**
+     * call when player gets on bus and drives away.
+     */
+     private void enterWinState(){
+        resetGameState();
+        showMenu = true;
+    }
+
     /**
      * call all reset helpers to re-start game
      */
@@ -260,6 +272,7 @@ public class Main extends ApplicationAdapter {
         playTimer.reset();
         dispersed = 0;
         busTicket.reset();
+        bus.reset();
     }
 }
 
