@@ -64,4 +64,7 @@ public class Ticket {
     public void dispose(){
         texture.dispose();
     }
+    public Vector2 getPosition(){
+        return position;
+    }
 }
