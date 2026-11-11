@@ -23,7 +23,7 @@ public enum PlayerAction {
     /**
      * Corresponds to the sleep animation.
      */
-    SLEEP("sleeping_loop");
+    SLEEP("sleeping");
 
     /**
      * Allows the code to pass through the label of the enum to be parsed into an animation
