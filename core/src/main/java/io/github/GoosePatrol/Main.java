@@ -118,7 +118,7 @@ public class Main extends ApplicationAdapter {
     deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player,binSpawner);
     ticketTexture = new Texture("Ticket.png");
     busTicket = new Ticket(ticketTexture);
-    busTexture = new Texture("sprites/Bus/bus_0");
+    busTexture = new Texture("sprites/Bus/bus_0.png");
     bus = new Bus(new Vector2(8,1432), new Vector2(1096,1432), busTexture, mapW);
   }
 
