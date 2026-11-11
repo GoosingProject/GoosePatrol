@@ -69,4 +69,8 @@ public class Bus {
         position.add(diff.nor().scl(step));
         return false;
     }
+
+    public boolean collisionCheck(Vector2 pos){
+        return Math.abs(pos.x - position.x) <= WIDTH /2f+30f && Math.abs(pos.y-position.y) <= HEIGHT + 30f;
+    }
 }
