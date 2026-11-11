@@ -78,6 +78,11 @@ public class Player extends MovementEntity {
      * time to maintain frame independence and sets the moving bool to help handle animations.
      */
     public void updateMovement() {
+        // Prevents movement when player is in a sleep state
+        if (this.action == PlayerAction.SLEEP) {
+            return;
+        }
+
         // Initialises a zeroed Vector2 to track movement magnitude vector
         Vector2 playerMovementMagnitude = new Vector2(0, 0);
 
@@ -175,5 +180,9 @@ public class Player extends MovementEntity {
         playerPosition.set(0f,0f);
         getSprite().setPosition(playerPosition.x-16f,playerPosition.y - 16f);
         action = PlayerAction.IDLE;
+    }
+
+    public void setAction(PlayerAction newAction){
+        this.action = newAction;
     }
 }
