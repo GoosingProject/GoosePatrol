@@ -86,4 +86,19 @@ public class Bus {
         }
         batch.draw(busTexture,position.x-WIDTH/2f,position.y-HEIGHT/2f,WIDTH,HEIGHT);
     }
+    public BusState getState(){
+        return state;
+    }
+    public boolean isPlayerBoarded(){
+        return boarded;
+    }
+    public boolean isWin(){
+        return win;
+    }
+    public boolean isActive(){
+        return state != BusState.INACTIVE && state != BusState.FINISHED;
+    }
+    public Vector2 getPosition(){
+        return position; 
+    }
 }
