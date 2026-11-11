@@ -1,6 +1,7 @@
 package io.github.GoosePatrol;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -77,5 +78,12 @@ public class Bus {
 
     public boolean collisionCheck(Vector2 pos){
         return Math.abs(pos.x - position.x) <= WIDTH /2f+30f && Math.abs(pos.y-position.y) <= HEIGHT + 30f;
+    }
+
+    public void render(SpriteBatch batch){
+        if (state == BusState.INACTIVE){
+            return;
+        }
+        batch.draw(busTexture,position.x-WIDTH/2f,position.y-HEIGHT/2f,WIDTH,HEIGHT);
     }
 }
