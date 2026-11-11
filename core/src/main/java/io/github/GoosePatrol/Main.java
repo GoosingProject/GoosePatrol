@@ -22,6 +22,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.Objects;
 
@@ -66,6 +67,10 @@ public class Main extends ApplicationAdapter {
     private Ticket busTicket;
     private Texture ticketTexture;
     private int dispersed = 40;
+
+    private Bus bus;
+    private Texture busTexture;
+
   @Override
   public void create() {
     audio = new Audio();
@@ -113,6 +118,8 @@ public class Main extends ApplicationAdapter {
     deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player,binSpawner);
     ticketTexture = new Texture("Ticket.png");
     busTicket = new Ticket(ticketTexture);
+    busTexture = new Texture("sprites/Bus/bus_0");
+    bus = new Bus(new Vector2(8,1432), new Vector2(1096,1432), busTexture, mapW);
   }
 
 
@@ -157,12 +164,18 @@ public class Main extends ApplicationAdapter {
 
         // clamp camera to ensure it cannot show outside of the background
         batch.setProjectionMatrix(camera.getCamera().combined);
-        camera.updatePosition(player.getPlayerPosition());
+        if(bus.isPlayerBoarded()){
+            camera.updatePosition(bus.getPosition());
+        }else{
+            camera.updatePosition(player.getPlayerPosition());
+        }
         renderer.setView(camera.getCamera());
         renderer.render();
 
         if (!paused) {
-            player.updateMovement();
+            if (!bus.isPlayerBoarded()){
+                player.updateMovement();
+            }
             world.update(player.getPlayerPosition(),Gdx.graphics.getDeltaTime());
             audio.playMusic("ambient");
             boolean invChanged = boxSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition(), inventory, itemRoller);
@@ -176,11 +189,18 @@ public class Main extends ApplicationAdapter {
                 busTicket.spawn();
             }
             busTicket.update(player.getPlayerPosition());
+            if (busTicket.isCollected()&&bus.getState()==Bus.BusState.INACTIVE){
+                bus.spawn();
+            }
+            bus.update(player.getPlayerPosition(),Gdx.graphics.getDeltaTime());
         }
 
         batch.begin();
         binSpawner.render(batch);
-        player.draw(batch);
+        // dont draw player if they have gone on the bus
+        if (!bus.isPlayerBoarded()){
+            player.draw(batch);
+        }
         boxSpawner.render(batch);
         busTicket.renderWorld(batch);
         world.render(batch);
