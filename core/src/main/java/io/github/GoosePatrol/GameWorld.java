@@ -11,6 +11,12 @@ import java.util.List;
 public class GameWorld implements WorldContext {
     private List<Item> activeItems = new ArrayList<>();
     private final List<Item> toRemove = new ArrayList<>();
+    private GooseSpawner gooseSpawner;
+
+    public GameWorld(GooseSpawner gooseSpawner) {
+        this.gooseSpawner = gooseSpawner;
+    }
+
     /* call after energy bar is created in main */
     private EnergyBar energyBar;
         public void setEnergyBar(EnergyBar energyBar) {
@@ -23,7 +29,9 @@ public class GameWorld implements WorldContext {
 
     @Override
     public void attractGeese(Vector2 centre, float radius) {
-        // TODO - have geese pathfind towards deployed postion
+        for (Goose goose : gooseSpawner.getGeese()) {
+            goose.attract(centre, radius);
+        }
     }
 
     @Override
@@ -37,7 +45,7 @@ public class GameWorld implements WorldContext {
             toRemove.add(item);
         }
     }
-    @Override 
+    @Override
     public void addPlayerEnergy(float amount){
         energyBar.setEnergyBar(energyBar.getPlayerEnergy()+amount);
     }

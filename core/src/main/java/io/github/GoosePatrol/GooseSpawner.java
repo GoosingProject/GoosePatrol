@@ -84,4 +84,8 @@ public class GooseSpawner {
 
     return new NavigationTiledMapLayer(cells);
   }
+
+  public List<Goose> getGeese() {
+    return geese;
+  }
 }

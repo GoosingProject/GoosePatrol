@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Goose extends MovementEntity {
     private static final float SPEED = 50;
     private static final float PLAYER_DETECT_RADIUS = 50;
+    private static final float ITEM_EFFECT_TIME = 5f;
 
     private TextureAtlas textureAtlas = new TextureAtlas("sprites.atlas");
     private GooseAction action = GooseAction.PATROL;
@@ -31,8 +32,11 @@ public class Goose extends MovementEntity {
     private NavigationTiledMapLayer navLayer;
     private AStarGridFinder<GridCell> finder = new AStarGridFinder<GridCell>(GridCell.class);
     private List<GridCell> patrolPath;
+    private List<GridCell> attractPath;
     private int patrolPathIndex = 0;
+    private int attractPathIndex = 0;
     private float degreeOffset;
+    private float itemEffectTimer = ITEM_EFFECT_TIME;
 
     // Width of world in tiles
     private int worldTileWidth;
@@ -81,10 +85,24 @@ public class Goose extends MovementEntity {
             action = GooseAction.CHASE;
         }
 
-        if (action == GooseAction.PATROL) {
-            targetPosition = calculatePatrolTargetPosition();
-        } else if (action == GooseAction.CHASE) {
-            targetPosition = calculateChaseTargetPosition(playerPosition);
+        if (action == GooseAction.ATTRACT) {
+            itemEffectTimer -= deltaTime;
+            if (itemEffectTimer <= 0f) {
+                itemEffectTimer = ITEM_EFFECT_TIME;
+                action = GooseAction.PATROL;
+            }
+        }
+
+        switch (action) {
+            case PATROL:
+                targetPosition = calculatePatrolTargetPosition();
+                break;
+            case CHASE:
+                targetPosition = calculateChaseTargetPosition(playerPosition);
+                break;
+            case ATTRACT:
+                targetPosition = calculateAttractTargetPosition();
+                break;
         }
 
         Vector2 direction = targetPosition.cpy().sub(position);
@@ -94,6 +112,64 @@ public class Goose extends MovementEntity {
             position.add(velocity);
             getSprite().setPosition(position.x, position.y);
         }
+    }
+
+    /**
+     * Set goose to attract state if wihtin radius
+     */
+    public void attract(Vector2 centre, float radius) {
+        if (position.dst(centre) > radius) {
+            return;
+        }
+
+        action = GooseAction.ATTRACT;
+        Vector2 currentTile = coordinateToTile(position);
+        Vector2 targetTile = coordinateToTile(centre);
+
+        List<GridCell> path = finder.findPath(
+            (int) currentTile.x,
+            (int) currentTile.y,
+            (int) targetTile.x,
+            (int) targetTile.y, navLayer);
+
+        if (path != null && path.size() > 0) {
+            attractPath = new ArrayList<>(path);
+        }
+
+        attractPathIndex = 0;
+    }
+
+    /**
+     * Calculate next target position for goose when in attract state
+     * @return Next target position
+     */
+    private Vector2 calculateAttractTargetPosition() {
+        if (attractPath == null) {
+            return targetPosition;
+        }
+
+        if (attractPathIndex >= attractPath.size()) {
+            return targetPosition;
+        }
+
+        Vector2 currentTile = coordinateToTile(position);
+        Vector2 currentTileTarget = new Vector2(
+            attractPath.get(attractPathIndex).x,
+            attractPath.get(attractPathIndex).y
+        );
+
+        if (currentTile.dst(currentTileTarget) < 2) {
+            attractPathIndex += 1;
+            if (attractPathIndex == attractPath.size()) {
+                return targetPosition;
+            }
+        }
+
+        Vector2 target = new Vector2(
+            attractPath.get(attractPathIndex).x * 16 + 8,
+            attractPath.get(attractPathIndex).y * 16 + 8);
+
+        return target;
     }
 
     /**
