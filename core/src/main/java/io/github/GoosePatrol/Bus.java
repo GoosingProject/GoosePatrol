@@ -15,9 +15,10 @@ public class Bus {
 
     public enum BusState {INACTIVE,ARRIVING,WAITING,DEPARTING,FINISHED}
     private BusState state = BusState.INACTIVE;
-    public Bus(Vector2 position, Texture busTexture){
+    public Bus(Vector2 position, Texture busTexture, float mapWidth){
         this.position = position;
         this.busTexture = busTexture;
+        this.mapWidth = mapWidth;
     }
 
 
