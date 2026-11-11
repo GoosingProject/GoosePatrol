@@ -20,7 +20,7 @@ public class EnergyBar implements Screen {
         private Stage stage;
         private ProgressBar energyBar;
         private float maxPlayerEnergy = 100f;
-        private float currentPlayerEnergy = 100f;
+        private float currentPlayerEnergy = 10f;
 
     
     public EnergyBar() {

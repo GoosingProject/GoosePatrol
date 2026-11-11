@@ -162,6 +162,7 @@ public class Main extends ApplicationAdapter {
             if (invChanged){
               inventoryHud.refresh();
             }
+            energyBar.setEnergyBar(energyBar.getPlayerEnergy() - 5f * Gdx.graphics.getDeltaTime());
             playTimer.update(Gdx.graphics.getDeltaTime());
         }
 
@@ -188,7 +189,6 @@ public class Main extends ApplicationAdapter {
                 sleepTimer = 0f;
                 enterLossState();
             }
-
 
         }
         else if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
