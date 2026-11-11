@@ -33,8 +33,10 @@ public class Goose extends MovementEntity {
     private AStarGridFinder<GridCell> finder = new AStarGridFinder<GridCell>(GridCell.class);
     private List<GridCell> patrolPath;
     private List<GridCell> attractPath;
+    private List<GridCell> scarePath;
     private int patrolPathIndex = 0;
     private int attractPathIndex = 0;
+    private int scarePathIndex = 0;
     private float degreeOffset;
     private float itemEffectTimer = ITEM_EFFECT_TIME;
 
@@ -85,7 +87,7 @@ public class Goose extends MovementEntity {
             action = GooseAction.CHASE;
         }
 
-        if (action == GooseAction.ATTRACT) {
+        if (action == GooseAction.ATTRACT || action == GooseAction.SCARE) {
             itemEffectTimer -= deltaTime;
             if (itemEffectTimer <= 0f) {
                 itemEffectTimer = ITEM_EFFECT_TIME;
@@ -103,6 +105,9 @@ public class Goose extends MovementEntity {
             case ATTRACT:
                 targetPosition = calculateAttractTargetPosition();
                 break;
+            case SCARE:
+                targetPosition = calculateScareTargetPosition();
+                break;
         }
 
         Vector2 direction = targetPosition.cpy().sub(position);
@@ -113,6 +118,72 @@ public class Goose extends MovementEntity {
             getSprite().setPosition(position.x, position.y);
         }
     }
+
+    /**
+     * Set goose to scare state if wihtin radius
+     */
+    public void scare(Vector2 centre, float radius) {
+        if (position.dst(centre) > radius) {
+            return;
+        }
+
+        action = GooseAction.SCARE;
+        Vector2 currentTile = coordinateToTile(position);
+        Vector2 direction = position.cpy().sub(centre).nor();
+        for (int distance = 15; distance > 0; distance--) {
+            Vector2 target = position.cpy().add(direction.cpy().scl(distance * 16));
+            Vector2 targetTile = coordinateToTile(target);
+            GridCell cell = navLayer.getCell((int) targetTile.x, (int) targetTile.y);
+            if (cell != null && cell.isWalkable()) {
+                List<GridCell> path = finder.findPath(
+                    (int) currentTile.x,
+                    (int) currentTile.y,
+                    (int) targetTile.x,
+                    (int) targetTile.y, navLayer);
+
+                if (path != null && path.size() > 0) {
+                    scarePath = new ArrayList<>(path);
+                }
+
+                scarePathIndex = 0;
+                return;
+            }
+        }
+    }
+
+    /**
+     * Calculate next target position for goose when in scare state
+     * @return Next target position
+     */
+    private Vector2 calculateScareTargetPosition() {
+        if (scarePath == null) {
+            return targetPosition;
+        }
+
+        if (scarePathIndex >= scarePath.size()) {
+            return targetPosition;
+        }
+
+        Vector2 currentTile = coordinateToTile(position);
+        Vector2 currentTileTarget = new Vector2(
+            scarePath.get(scarePathIndex).x,
+            scarePath.get(scarePathIndex).y
+        );
+
+        if (currentTile.dst(currentTileTarget) < 2) {
+            scarePathIndex += 1;
+            if (scarePathIndex == scarePath.size()) {
+                return targetPosition;
+            }
+        }
+
+        Vector2 target = new Vector2(
+            scarePath.get(scarePathIndex).x * 16 + 8,
+            scarePath.get(scarePathIndex).y * 16 + 8);
+
+        return target;
+    }
+
 
     /**
      * Set goose to attract state if wihtin radius

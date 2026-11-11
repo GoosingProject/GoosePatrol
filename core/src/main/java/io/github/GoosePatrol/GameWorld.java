@@ -24,7 +24,9 @@ public class GameWorld implements WorldContext {
     }
     @Override
     public void scareGeese(Vector2 centre, float radius) {
-        // TODO - have geese run away from item
+        for (Goose goose : gooseSpawner.getGeese()) {
+            goose.scare(centre, radius);
+        }
     }
 
     @Override
