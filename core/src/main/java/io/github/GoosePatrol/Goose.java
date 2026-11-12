@@ -81,8 +81,10 @@ public class Goose extends MovementEntity {
     /**
      * Update goose's state and position every frame
      * @param playerPosition Vector2 of player's position
+     * @param deltaTime time since last frame
+     * @return true if goose attacked this frame
      */
-    public void update(Vector2 playerPosition, float deltaTime) {
+    public boolean update(Vector2 playerPosition, float deltaTime) {
         if (action == GooseAction.PATROL &&
             playerPosition.cpy().sub(position).len() <= PLAYER_DETECT_RADIUS)
         {
@@ -119,6 +121,17 @@ public class Goose extends MovementEntity {
             position.add(velocity);
             getSprite().setPosition(position.x, position.y);
         }
+        if (attackCooldownTimer > 0f){
+            attackCooldownTimer -= deltaTime;
+        }
+        boolean attacked = false;
+
+        if(action == GooseAction.CHASE && position.dst(playerPosition)<=ATTACK_RADIUS&&attackCooldownTimer<=0f){
+            attackCooldownTimer = ATTACK_COOLDOWN;
+            attacked = true;
+        }
+
+        return attacked;
     }
 
     /**
