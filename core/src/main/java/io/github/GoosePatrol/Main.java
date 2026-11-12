@@ -32,6 +32,8 @@ public class Main extends ApplicationAdapter {
     private boolean showMenu = true;
     // contains the logic value to tell the game to render the main menu
     private MainMenu mainMenu;
+    private EnergyBar energyBar;
+    private float sleepTimer = 0f;
 
     private Player player;
     private CameraLogic camera;
@@ -56,11 +58,8 @@ public class Main extends ApplicationAdapter {
 
     private ItemDeployHandler deployHandler;
 
-    private GooseSpawner gooseSpawner;
-
-    private EnergyBar energyBar;
     private PlayTimer playTimer;
-
+    private GooseSpawner gooseSpawner;
     private BinSpawner binSpawner;
     private Texture binTexture;
 
@@ -74,7 +73,7 @@ public class Main extends ApplicationAdapter {
   @Override
   public void create() {
     audio = new Audio();
-    mainMenu = new MainMenu(audio);
+    mainMenu = new MainMenu(audio);    
 
         batch = new SpriteBatch();
 
@@ -85,7 +84,9 @@ public class Main extends ApplicationAdapter {
 
         renderer = new OrthogonalTiledMapRenderer(map, 1f);
 
-        world = new GameWorld();
+        gooseSpawner = new GooseSpawner((TiledMapTileLayer) map.getLayers().get("Collision"), 60, 60, 25);
+
+        world = new GameWorld(gooseSpawner);
 
 
         audio.playMusic("menu");
@@ -104,7 +105,6 @@ public class Main extends ApplicationAdapter {
     itemBoxTexture = new Texture("ItemBox.png");
 
     energyBar = new EnergyBar();
-    energyBar.create();
     world.setEnergyBar(energyBar);
 
     playTimer = new PlayTimer();
@@ -212,7 +212,7 @@ public class Main extends ApplicationAdapter {
         batch.end();
 
         inventoryHud.render();
-        energyBar.render();
+        energyBar.render(Gdx.graphics.getDeltaTime());
         playTimer.render();
         if(busTicket.isCollected()){
             batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
@@ -221,8 +221,20 @@ public class Main extends ApplicationAdapter {
             batch.end();
         }
         // check for game loss
-        if(!paused && (playTimer.isGameEnd() || energyBar.getPlayerEnergy() <= 0)){
+        if(!paused && (playTimer.isGameEnd())){
             enterLossState();
+        }
+       else if (!paused && energyBar.getPlayerEnergy() <= 0 ) {
+        if (sleepTimer == 0f) {
+            player.setAction(PlayerAction.FALLING_ASLEEP);
+        }
+        sleepTimer += Gdx.graphics.getDeltaTime();
+
+        if(sleepTimer >= 3.0f) {
+            sleepTimer = 0f;
+            enterLossState(); // prevents the loss state from triggering before the animation finishes playing
+        }
+
         }
         else if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             showMenu = !showMenu;

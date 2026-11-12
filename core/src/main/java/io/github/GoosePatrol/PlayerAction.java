@@ -19,7 +19,17 @@ public enum PlayerAction {
     /**
      * Corresponds to an interact animation.
      */
-    INTERACT("interact");
+    INTERACT("interact"),
+    /**
+     * Corresponds to the start sleep animation.
+     */
+    FALLING_ASLEEP("sleeping"),
+    /**
+     * Corresposnds to the end loop of the sleep animation.
+     */
+    SLEEP("sleeping_loop");
+
+
 
     /**
      * Allows the code to pass through the label of the enum to be parsed into an animation

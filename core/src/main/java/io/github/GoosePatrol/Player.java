@@ -72,6 +72,7 @@ public class Player extends MovementEntity {
             Map<SpriteDirection, Animation<TextureRegion>> directionMap = new HashMap<>();
 
             for (SpriteDirection direction : SpriteDirection.values()) {
+                
                 Animation<TextureRegion> animation =
                     new Animation<TextureRegion>(
                         0.25f,
@@ -90,6 +91,11 @@ public class Player extends MovementEntity {
      * time to maintain frame independence and sets the moving bool to help handle animations.
      */
     public void updateMovement() {
+        // Prevents movement when player is in a sleep state
+        if (this.action == PlayerAction.SLEEP || this.action == PlayerAction.FALLING_ASLEEP) {
+            return;
+        }
+
         // Initialises a zeroed Vector2 to track movement magnitude vector
         Vector2 playerMovementMagnitude = new Vector2(0, 0);
 
@@ -184,13 +190,31 @@ public class Player extends MovementEntity {
         return playerPosition;
     }
 
+    private float sleepAnimTimer = 0f;
+
     @Override
     protected Animation<TextureRegion> getCurrentAnimation() {
+        if (action == PlayerAction.FALLING_ASLEEP) {
+            sleepAnimTimer += Gdx.graphics.getDeltaTime();
+            Animation<TextureRegion> fallAsleepAnim = animations.get(PlayerAction.FALLING_ASLEEP).get(SpriteDirection.FORWARD);
+
+            if (fallAsleepAnim.isAnimationFinished(sleepAnimTimer)) {
+                action = PlayerAction.SLEEP;
+                return animations.get(PlayerAction.SLEEP).get(SpriteDirection.FORWARD);
+            }
+            return fallAsleepAnim;
+        }
+        if (action == PlayerAction.SLEEP) {
+            return animations.get(PlayerAction.SLEEP).get(SpriteDirection.FORWARD);
+        }
         return animations.get(action).get(directionFacing());
     }
 
     @Override
     protected boolean shouldFlipX() {
+        if (action == PlayerAction.SLEEP || action == PlayerAction.FALLING_ASLEEP) {
+            return false; // prevents the sprite from flipping horizontally when playing the sleep animation
+        }
         return !(degreeOffset >= -90 && degreeOffset <= 90);
     }
 
@@ -198,6 +222,14 @@ public class Player extends MovementEntity {
         playerPosition.set(1080,1300);
         getSprite().setPosition(playerPosition.x-16f,playerPosition.y - 16f);
         action = PlayerAction.IDLE;
+        sleepAnimTimer = 0f;
+    }
+    /**
+     * A setter to set the player's current action/animation state
+     * @param newAction The PlayerAction to be assigned to the player.
+     */
+    public void setAction(PlayerAction newAction){
+        this.action = newAction;
     }
     /**
      * checks if a proposed movement is allowed
