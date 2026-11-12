@@ -57,4 +57,21 @@ public class Vignette {
         pm.dispose();
         return t;
     }
+    /**
+     * Draws the vignette streched across the current viewport.
+     * @param batch the SpriteBatch to draw with.
+     * @param energy the players current energy
+     */
+    public void render(SpriteBatch batch,float energy){
+        if(energy >= LOW_ENERGY_THRESHOLD){
+            return;
+        }
+        // increases towards 0 energy
+        float intensity = 1f - (energy/LOW_ENERGY_THRESHOLD);
+        intensity = Math.max(0f, Math.min(1f,intensity));
+
+        batch.setColor(1f,1f,1f,intensity*MAX_ALPHA);
+        batch.draw(region, 0f, 0f,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        batch.setColor(1f,1f,1f,1f);
+    }
 }
