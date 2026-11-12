@@ -7,19 +7,25 @@ import io.github.GoosePatrol.ItemCode.Item;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * keeps track of items and geese in the world
+ * GameWorld
+ */
 public class GameWorld implements WorldContext {
     private List<Item> activeItems = new ArrayList<>();
     private final List<Item> toRemove = new ArrayList<>();
     private GooseSpawner gooseSpawner;
-
+    /**
+     * constructor for the GameWorld class
+     * @param gooseSpawner the goose spawner object
+     */
     public GameWorld(GooseSpawner gooseSpawner) {
         this.gooseSpawner = gooseSpawner;
     }
 
     /* call after energy bar is created in main */
     private EnergyBar energyBar;
-        public void setEnergyBar(EnergyBar energyBar) {
+    public void setEnergyBar(EnergyBar energyBar) {
         this.energyBar = energyBar;
     }
     @Override
@@ -51,6 +57,10 @@ public class GameWorld implements WorldContext {
     public void addPlayerEnergy(float amount){
         energyBar.setEnergyBar(energyBar.getPlayerEnergy()+amount);
     }
+    /**
+     * pass update calls to items
+     * @param deltaTime time since last frame
+     */
     public void update(float deltaTime) {
         for (Item item : activeItems) {
             item.update(deltaTime, this);
@@ -65,7 +75,10 @@ public class GameWorld implements WorldContext {
             toRemove.clear();
         }
     }
-
+    /**
+     * pass render calls to items
+     * @param batch the spriteBatch to draw the items
+     */
     public void render(SpriteBatch batch) {
         for (Item item : activeItems) {
             item.render(batch);
