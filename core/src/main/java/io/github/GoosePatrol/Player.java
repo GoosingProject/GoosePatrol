@@ -229,4 +229,13 @@ public class Player extends MovementEntity {
         invincibilityTimer = INVINCIBILITY_DURATION;
         return true;
     }
+    /** lower the invinciblity timer, call every frame */
+    public void updateInvincibility(float deltaTime){
+        if(invincibilityTimer>0f){
+            invincibilityTimer-=deltaTime;
+            if(invincibilityTimer<0f){
+                invincibilityTimer = 0f;
+            }
+        }
+    }
 }
