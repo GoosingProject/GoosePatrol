@@ -205,6 +205,7 @@ public class Player extends MovementEntity {
         getSprite().setPosition(playerPosition.x-16f,playerPosition.y - 16f);
         action = PlayerAction.IDLE;
         sleepAnimTimer = 0f;
+        invincibilityTimer = 0f;
     }
     /**
      * A setter to set the player's current action/animation state
