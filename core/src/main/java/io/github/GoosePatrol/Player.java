@@ -190,7 +190,7 @@ public class Player extends MovementEntity {
     @Override
     protected boolean shouldFlipX() {
         if (action == PlayerAction.SLEEP || action == PlayerAction.FALLING_ASLEEP) {
-            return false;
+            return false; // prevents the sprite from flipping horizontally when playing the sleep animation
         }
         return !(degreeOffset >= -90 && degreeOffset <= 90);
     }
@@ -201,7 +201,10 @@ public class Player extends MovementEntity {
         action = PlayerAction.IDLE;
         sleepAnimTimer = 0f;
     }
-
+    /**
+     * A setter to set the player's current action/animation state
+     * @param newAction The PlayerAction to be assigned to the player.
+     */
     public void setAction(PlayerAction newAction){
         this.action = newAction;
     }

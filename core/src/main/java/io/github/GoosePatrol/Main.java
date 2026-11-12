@@ -189,7 +189,7 @@ public class Main extends ApplicationAdapter {
 
         if(sleepTimer >= 3.0f) {
             sleepTimer = 0f;
-            enterLossState();
+            enterLossState(); // prevents the loss state from triggering before the animation finishes playing
         }
 
         }
