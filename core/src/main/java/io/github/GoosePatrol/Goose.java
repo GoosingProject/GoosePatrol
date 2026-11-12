@@ -24,6 +24,12 @@ public class Goose extends MovementEntity {
     private static final float PLAYER_DETECT_RADIUS = 50;
     private static final float ITEM_EFFECT_TIME = 5f;
 
+    public static final float ATTACK_DAMAGE = 10f;
+    private static final float ATTACK_RADIUS = 32f;
+    private static final float ATTACK_COOLDOWN = 1.5f;
+
+    private float attackCooldownTimer = 0f;
+
     private TextureAtlas textureAtlas = new TextureAtlas("sprites.atlas");
     private GooseAction action = GooseAction.PATROL;
     private Map<GooseAction, Map<SpriteDirection, Animation<TextureRegion>>> animations = new HashMap<>();
