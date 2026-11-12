@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -237,5 +238,18 @@ public class Player extends MovementEntity {
                 invincibilityTimer = 0f;
             }
         }
+    }
+    @Override public void draw(SpriteBatch batch){
+        boolean fading = isInvincible() && isFlashOff();
+        if(fading){
+            batch.setColor(1f,1f,1f,0.3f);
+        }
+        super.draw(batch);
+        if(fading){
+            batch.setColor(1f,1f,1f,1f);
+        }
+    }
+    private boolean isFlashOff(){
+        return (invincibilityTimer/FLASH_INTERVAL)%2==0;
     }
 }
