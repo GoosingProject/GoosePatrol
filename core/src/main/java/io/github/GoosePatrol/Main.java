@@ -1,6 +1,7 @@
 package io.github.GoosePatrol;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -61,6 +62,9 @@ public class Main extends ApplicationAdapter {
     private BinSpawner binSpawner;
     private Texture binTexture;
 
+    private Vignette vignette;
+    private OrthographicCamera screenCamera;
+
   @Override
   public void create() {
     audio = new Audio();
@@ -95,6 +99,10 @@ public class Main extends ApplicationAdapter {
     itemBoxTexture = new Texture("ItemBox.png");
 
     energyBar = new EnergyBar();
+    screenCamera = new OrthographicCamera();
+    screenCamera.setToOrtho(false,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+    screenCamera.update();
+    vignette = new Vignette();
     world.setEnergyBar(energyBar);
 
     playTimer = new PlayTimer();
@@ -113,7 +121,8 @@ public class Main extends ApplicationAdapter {
     @Override
     public void resize(int width, int height) {
         camera.updateScale(width, height);
-
+        screenCamera.setToOrtho(false,width,height);
+        screenCamera.update();
     if (showMenu || paused) {
       mainMenu.resize(width, height);
     }
@@ -180,6 +189,11 @@ public class Main extends ApplicationAdapter {
         countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f,audio);
         batch.end();
 
+        batch.setProjectionMatrix(screenCamera.combined);
+        batch.begin();
+        vignette.render(batch,energyBar.getPlayerEnergy());
+        batch.end();
+
         inventoryHud.render();
         energyBar.render(Gdx.graphics.getDeltaTime());
         playTimer.render();
@@ -215,6 +229,7 @@ public class Main extends ApplicationAdapter {
         breadTexture.dispose();
         energyBar.dispose();
         playTimer.dispose();
+        vignette.dispose();
     }
     /**
      * call when timer runs out or player runs out of energy
