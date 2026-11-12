@@ -5,7 +5,10 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.GoosePatrol.Player;
 import io.github.GoosePatrol.WorldContext;
 
-
+/**
+ * class describing a scare item that scares geese away from its position.
+ * ScareItem
+ */
 public class ScareItem extends Item {
     private static float LIFETIME = 5f;
     private static float RADIUS = 150f;
@@ -13,6 +16,10 @@ public class ScareItem extends Item {
 
     private float pulseTimer = 0f;
 
+    /**
+     * constructer for the ScareItem class.
+     * @param sprite the scare item sprite
+     */
     public ScareItem(TextureRegion sprite) {
         super("Scarecrow", LIFETIME, sprite);
         this.width = texture.getRegionWidth();
