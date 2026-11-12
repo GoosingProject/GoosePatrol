@@ -38,6 +38,10 @@ public class Player extends MovementEntity {
 
     private OrthographicCamera camera;
 
+    private static float INVINCIBILITY_DURATION = 1.5f;
+    private static float FLASH_INTERVAL = 0.1f;
+    private float invincibilityTimer = 0f;
+
     /**
      * Constructor method to instantiate a player which takes the orthographic camera object and sets
      * the camera parameter to the camera attribute to later calculate degree offset (can be moved to
