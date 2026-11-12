@@ -25,7 +25,7 @@ public class Goose extends MovementEntity {
     private static final float ITEM_EFFECT_TIME = 5f;
 
     public static final float ATTACK_DAMAGE = 10f;
-    private static final float ATTACK_RADIUS = 32f;
+    private static final float ATTACK_RADIUS = 20f;
     private static final float ATTACK_COOLDOWN = 1.5f;
 
     private float attackCooldownTimer = 0f;
