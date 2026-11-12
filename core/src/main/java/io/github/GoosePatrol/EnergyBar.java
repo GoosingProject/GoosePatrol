@@ -22,7 +22,7 @@ public class EnergyBar implements Screen {
         private float maxPlayerEnergy = 100f;
         private float currentPlayerEnergy = 10f;
 
-    
+    /** constructer for the EnergyBar class */
     public EnergyBar() {
         skin = new Skin(Gdx.files.internal("metal-ui.json"));
 
