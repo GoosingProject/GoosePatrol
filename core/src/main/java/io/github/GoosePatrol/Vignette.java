@@ -74,4 +74,7 @@ public class Vignette {
         batch.draw(region, 0f, 0f,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         batch.setColor(1f,1f,1f,1f);
     }
+    public void dispose(){
+        texture.dispose();
+    }
 }
