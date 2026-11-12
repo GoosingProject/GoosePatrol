@@ -32,7 +32,11 @@ public class Inventory {
         slots[index] = null;
         return item;
     }
-
+    /**
+     * 
+     * @param index the index of the item
+     * @return  the item object in that slot
+     */
     public Item get(int index) {
         return slots[index];
     }
