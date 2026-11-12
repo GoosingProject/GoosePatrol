@@ -28,8 +28,4 @@ public class FoodItem extends Item {
     protected void updateActive(WorldContext world, float deltaTime) {
         world.attractGeese(position, RADIUS);
     }
-    @Override 
-    protected void onExpire(WorldContext world){
-        world.releaseAttract(position, RADIUS);
-    }
 }

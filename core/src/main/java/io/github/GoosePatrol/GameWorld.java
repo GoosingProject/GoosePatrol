@@ -63,9 +63,6 @@ public class GameWorld implements WorldContext {
             activeItems.removeAll(toRemove);
             toRemove.clear();
         }
-        for(Goose goose:geese){
-            goose.update(playerPosition, deltaTime);
-        }
     }
 
     public void render(SpriteBatch batch) {
