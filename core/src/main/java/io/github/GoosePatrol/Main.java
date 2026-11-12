@@ -1,10 +1,8 @@
 package io.github.GoosePatrol;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -19,10 +17,9 @@ import io.github.GoosePatrol.ItemCode.ItemRoller;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-
-import java.util.Objects;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
@@ -58,10 +55,12 @@ public class Main extends ApplicationAdapter {
     private Texture itemBoxTexture;
 
     private ItemDeployHandler deployHandler;
-    private PlayTimer playTimer;
 
+    private PlayTimer playTimer;
+    private GooseSpawner gooseSpawner;
     private BinSpawner binSpawner;
     private Texture binTexture;
+
   @Override
   public void create() {
     audio = new Audio();
@@ -75,11 +74,13 @@ public class Main extends ApplicationAdapter {
 
         renderer = new OrthogonalTiledMapRenderer(map, 1f);
 
-        world = new GameWorld();
+        gooseSpawner = new GooseSpawner((TiledMapTileLayer) map.getLayers().get("Collision"), 60, 60, 25);
+
+        world = new GameWorld(gooseSpawner);
 
 
         audio.playMusic("menu");
-   
+
     countdown = new PlayCountdown();
     // pass to scarecrow objects on creation
     //  item spawning will be moved to a inventory class in futre updates
@@ -103,8 +104,8 @@ public class Main extends ApplicationAdapter {
     MapProperties prop = map.getProperties();
     float mapW = prop.get("width",Integer.class)*prop.get("tilewidth",Integer.class);
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
-    boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture),map, mapW, mapH);
-    deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player,binSpawner);
+    boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture), map, mapW, mapH);
+    deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player, binSpawner);
   }
 
 
@@ -159,6 +160,7 @@ public class Main extends ApplicationAdapter {
             audio.playMusic("ambient");
             boolean invChanged = boxSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition(), inventory, itemRoller);
             deployHandler.update();
+            gooseSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition());
             if (invChanged){
               inventoryHud.refresh();
             }
@@ -169,6 +171,7 @@ public class Main extends ApplicationAdapter {
         binSpawner.render(batch);
         player.draw(batch);
         boxSpawner.render(batch);
+        gooseSpawner.render(batch);
         world.render(batch);
         countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f,audio);
         batch.end();

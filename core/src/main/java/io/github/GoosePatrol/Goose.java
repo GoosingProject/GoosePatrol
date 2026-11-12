@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Goose extends MovementEntity {
     private static final float SPEED = 50;
     private static final float PLAYER_DETECT_RADIUS = 50;
+    private static final float ITEM_EFFECT_TIME = 5f;
 
     private TextureAtlas textureAtlas = new TextureAtlas("sprites.atlas");
     private GooseAction action = GooseAction.PATROL;
@@ -30,9 +31,10 @@ public class Goose extends MovementEntity {
     private Vector2 targetPosition;
     private NavigationTiledMapLayer navLayer;
     private AStarGridFinder<GridCell> finder = new AStarGridFinder<GridCell>(GridCell.class);
-    private List<GridCell> patrolPath = new ArrayList<>();
-    private int patrolPathIndex = 0;
+    private List<GridCell> path;
+    private int pathIndex = 0;
     private float degreeOffset;
+    private float itemEffectTimer = ITEM_EFFECT_TIME;
 
     // Width of world in tiles
     private int worldTileWidth;
@@ -48,6 +50,7 @@ public class Goose extends MovementEntity {
         this.worldTileHeight = worldTileHeight;
         loadAnimations();
         initialiseSprite();
+        getSprite().setPosition(x, y);
     }
 
     /** Load animations and populate animation map */
@@ -80,10 +83,27 @@ public class Goose extends MovementEntity {
             action = GooseAction.CHASE;
         }
 
-        if (action == GooseAction.PATROL) {
-            targetPosition = calculatePatrolTargetPosition();
-        } else if (action == GooseAction.CHASE) {
-            targetPosition = calculateChaseTargetPosition(playerPosition);
+        if (action == GooseAction.ATTRACT || action == GooseAction.SCARE) {
+            itemEffectTimer -= deltaTime;
+            if (itemEffectTimer <= 0f) {
+                itemEffectTimer = ITEM_EFFECT_TIME;
+                action = GooseAction.PATROL;
+            }
+        }
+
+        switch (action) {
+            case PATROL:
+                targetPosition = calculatePatrolTargetPosition();
+                break;
+            case CHASE:
+                targetPosition = calculateChaseTargetPosition(playerPosition);
+                break;
+            case ATTRACT:
+                targetPosition = calculatePathTargetPosition();
+                break;
+            case SCARE:
+                targetPosition = calculatePathTargetPosition();
+                break;
         }
 
         Vector2 direction = targetPosition.cpy().sub(position);
@@ -93,6 +113,95 @@ public class Goose extends MovementEntity {
             position.add(velocity);
             getSprite().setPosition(position.x, position.y);
         }
+    }
+
+    /**
+     * Set goose to scare state if wihtin radius
+     */
+    public void scare(Vector2 centre, float radius) {
+        if (position.dst(centre) > radius) {
+            return;
+        }
+
+        action = GooseAction.SCARE;
+        Vector2 currentTile = coordinateToTile(position);
+        Vector2 direction = position.cpy().sub(centre).nor();
+        for (int distance = 15; distance > 0; distance--) {
+            Vector2 target = position.cpy().add(direction.cpy().scl(distance * 16));
+            Vector2 targetTile = coordinateToTile(target);
+            GridCell cell = navLayer.getCell((int) targetTile.x, (int) targetTile.y);
+            if (cell != null && cell.isWalkable()) {
+                List<GridCell> newPath = finder.findPath(
+                    (int) currentTile.x,
+                    (int) currentTile.y,
+                    (int) targetTile.x,
+                    (int) targetTile.y, navLayer);
+
+                if (newPath != null && newPath.size() > 0) {
+                    path = new ArrayList<>(newPath);
+                    pathIndex = 0;
+                }
+
+                return;
+            }
+        }
+    }
+
+    /**
+     * Set goose to attract state if wihtin radius
+     */
+    public void attract(Vector2 centre, float radius) {
+        if (position.dst(centre) > radius) {
+            return;
+        }
+
+        action = GooseAction.ATTRACT;
+        Vector2 currentTile = coordinateToTile(position);
+        Vector2 targetTile = coordinateToTile(centre);
+
+        List<GridCell> newPath = finder.findPath(
+            (int) currentTile.x,
+            (int) currentTile.y,
+            (int) targetTile.x,
+            (int) targetTile.y, navLayer);
+
+        if (newPath != null && newPath.size() > 0) {
+            path = new ArrayList<>(newPath);
+            pathIndex = 0;
+        }
+    }
+
+    /**
+     * Calculate next target position for goose when following path
+     * @return Next target position
+     */
+    private Vector2 calculatePathTargetPosition() {
+        if (path == null) {
+            return targetPosition;
+        }
+
+        if (pathIndex >= path.size()) {
+            return targetPosition;
+        }
+
+        Vector2 currentTile = coordinateToTile(position);
+        Vector2 currentTileTarget = new Vector2(
+            path.get(pathIndex).x,
+            path.get(pathIndex).y
+        );
+
+        if (currentTile.dst(currentTileTarget) < 2) {
+            pathIndex += 1;
+            if (pathIndex == path.size()) {
+                return targetPosition;
+            }
+        }
+
+        Vector2 target = new Vector2(
+            path.get(pathIndex).x * 16 + 8,
+            path.get(pathIndex).y * 16 + 8);
+
+        return target;
     }
 
     /**
@@ -108,11 +217,11 @@ public class Goose extends MovementEntity {
             (int) playerTile.x,
             (int) playerTile.y, navLayer);
 
-        if (path == null || path.size() == 0) {
+        if (path == null || path.size() <= 1) {
             return targetPosition.cpy();
         }
 
-        return new Vector2(path.get(0).x * 16, path.get(0).y * 16);
+        return new Vector2(path.get(0).x * 16 + 8, path.get(0).y * 16 + 8);
     }
 
     /**
@@ -122,38 +231,63 @@ public class Goose extends MovementEntity {
     private Vector2 calculatePatrolTargetPosition() {
         Vector2 currentTile = coordinateToTile(position);
 
-        if (patrolPathIndex >= patrolPath.size() - 1) {
+        if (path == null || pathIndex >= path.size()) {
+            int attempts = 0;
             do {
-                double randomAngle = Math.random() * 2 * Math.PI;
+                attempts += 1;
+                if (attempts > 20) {
+                    return targetPosition;
+                }
+
+                double randomAngle = MathUtils.random() * 2 * Math.PI;
+                double randomDistance = MathUtils.random() * 10;
                 Vector2 randomTarget = new Vector2(
-                    Math.round(currentTile.x + 15 * Math.cos(randomAngle)),
-                    Math.round(currentTile.y + 15 * Math.sin(randomAngle))
+                    Math.round(currentTile.x + randomDistance * Math.cos(randomAngle)),
+                    Math.round(currentTile.y + randomDistance * Math.sin(randomAngle))
                 );
 
                 if (randomTarget.x < 0 || randomTarget.x >= worldTileWidth ||
                     randomTarget.y < 0 || randomTarget.y >= worldTileHeight)
                 {
+                    path = null;
                     continue;
                 }
 
-                patrolPath = finder.findPath(
+                List<GridCell> newPath = finder.findPath(
                     (int) currentTile.x,
                     (int) currentTile.y,
                     (int) randomTarget.x,
-                    (int) randomTarget.y, navLayer);
+                    (int) randomTarget.y,
+                    navLayer
+                );
 
-            } while (patrolPath == null || patrolPath.size() == 0);
+                if (newPath == null || newPath.size() == 0) {
+                    path = null;
+                    continue;
+                }
 
-            patrolPathIndex = 0;
+                path = new ArrayList<>(newPath);
+
+            } while (path == null || path.size() == 0);
+
+            pathIndex = 0;
         }
 
-        if (currentTile.x == patrolPath.get(patrolPathIndex).x && currentTile.y == patrolPath.get(patrolPathIndex).y) {
-            patrolPathIndex += 1;
+        Vector2 currentTileTarget = new Vector2(
+            path.get(pathIndex).x,
+            path.get(pathIndex).y
+        );
+
+        if (currentTile.dst(currentTileTarget) < 2) {
+            pathIndex += 1;
+            if (pathIndex == path.size()) {
+                return targetPosition;
+            }
         }
 
         Vector2 target = new Vector2(
-            patrolPath.get(patrolPathIndex).x * 16,
-            patrolPath.get(patrolPathIndex).y * 16);
+            path.get(pathIndex).x * 16 + 8,
+            path.get(pathIndex).y * 16 + 8);
 
         return target;
     }
@@ -209,6 +343,6 @@ public class Goose extends MovementEntity {
      * @return Tile position
      */
     private Vector2 coordinateToTile(Vector2 coordinate) {
-        return new Vector2(Math.round(coordinate.x / 16), Math.round(coordinate.y / 16));
+        return new Vector2((int) Math.floor(coordinate.x / 16), (int) Math.floor(coordinate.y / 16));
     }
 }
