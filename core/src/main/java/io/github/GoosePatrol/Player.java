@@ -212,4 +212,21 @@ public class Player extends MovementEntity {
     public void setAction(PlayerAction newAction){
         this.action = newAction;
     }
+    /**
+     * @return true if the player is currently invincible
+     */
+    public boolean isInvincible(){
+        return invincibilityTimer > 0f;
+    }
+    /**
+     * attempt to damage player
+     * @return true if player gets damage
+     */
+    public boolean takeDamage(){
+        if(isInvincible()){
+            return false;
+        }
+        invincibilityTimer = INVINCIBILITY_DURATION;
+        return true;
+    }
 }
