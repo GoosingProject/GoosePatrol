@@ -38,7 +38,10 @@ public abstract class MovementEntity {
         sprite.setRegion(textureRegion);
         sprite.draw(batch);
     }
-
+    /**
+     * 
+     * @return the sprite of the movement entity.
+     */
     protected Sprite getSprite() {
         return sprite;
     }
