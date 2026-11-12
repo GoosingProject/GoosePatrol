@@ -160,7 +160,11 @@ public class Main extends ApplicationAdapter {
             audio.playMusic("ambient");
             boolean invChanged = boxSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition(), inventory, itemRoller);
             deployHandler.update();
-            gooseSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition());
+            boolean gooseAttacked = gooseSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition());
+            player.updateInvincibility(Gdx.graphics.getDeltaTime());
+            if(gooseAttacked&&player.takeDamage()){
+                world.addPlayerEnergy(-Goose.ATTACK_DAMAGE);
+            }
             if (invChanged){
               inventoryHud.refresh();
             }
