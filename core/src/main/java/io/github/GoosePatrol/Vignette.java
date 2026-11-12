@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * Vignette
  */
 public class Vignette {
-    private static float LOW_ENERGY_THRESHOLD = 20f;
+    private static float LOW_ENERGY_THRESHOLD = 40f;
     private static float MAX_ALPHA = 0.85f;
     private static int TEXTURE_SIZE = 256;
     private Texture texture;
