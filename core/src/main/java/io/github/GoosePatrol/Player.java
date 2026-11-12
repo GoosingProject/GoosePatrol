@@ -243,14 +243,14 @@ public class Player extends MovementEntity {
     @Override public void draw(SpriteBatch batch){
         boolean fading = isInvincible() && isFlashOff();
         if(fading){
-            batch.setColor(1f,1f,1f,0.3f);
+            getSprite().setAlpha(0.3f);
         }
         super.draw(batch);
         if(fading){
-            batch.setColor(1f,1f,1f,1f);
+            getSprite().setAlpha(1f);
         }
     }
     private boolean isFlashOff(){
-        return (invincibilityTimer/FLASH_INTERVAL)%2==0;
+        return ((int)(invincibilityTimer/FLASH_INTERVAL))%2==0;
     }
 }
