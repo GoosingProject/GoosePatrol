@@ -36,7 +36,6 @@ public class GameWorld implements WorldContext {
             goose.attract(centre, radius);
         }
     }
-
     @Override
     public void addActiveItem(Item item) {
         activeItems.add(item);
