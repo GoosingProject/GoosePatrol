@@ -24,7 +24,7 @@ public class WalkableTiles {
                 boolean blocked = (cell !=null )&&(cell.getTile() !=null);
                 if(!blocked){
                     float worldX = col*tileW+tileW /2f;
-                    float worldY = (rows - 1 - row) * tileH + tileH / 2f;
+                    float worldY = row * tileH + tileH / 2f;
                     walkable.add(new Vector2(worldX,worldY));
                 }
             }
