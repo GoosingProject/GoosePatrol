@@ -24,6 +24,12 @@ public class Goose extends MovementEntity {
     private static final float PLAYER_DETECT_RADIUS = 50;
     private static final float ITEM_EFFECT_TIME = 5f;
 
+    public static final float ATTACK_DAMAGE = 10f;
+    private static final float ATTACK_RADIUS = 20f;
+    private static final float ATTACK_COOLDOWN = 1.5f;
+
+    private float attackCooldownTimer = 0f;
+
     private TextureAtlas textureAtlas = new TextureAtlas("sprites.atlas");
     private GooseAction action = GooseAction.PATROL;
     private Map<GooseAction, Map<SpriteDirection, Animation<TextureRegion>>> animations = new HashMap<>();
@@ -40,6 +46,14 @@ public class Goose extends MovementEntity {
     private int worldTileWidth;
     // Height of world in tiles
     private int worldTileHeight;
+
+    private boolean fleeing = false;
+    private Vector2 fleeSource;
+    private  float fleeRadius;
+
+    private boolean attracted = false;
+    private Vector2 attractTarget = null;
+
 
     public Goose(float x, float y, NavigationTiledMapLayer navLayer, int worldTileWidth, int worldTileHeight) {
         super();
@@ -72,11 +86,17 @@ public class Goose extends MovementEntity {
         }
     }
 
+    public void swarm() {
+        action = GooseAction.CHASE;
+    }
+
     /**
      * Update goose's state and position every frame
      * @param playerPosition Vector2 of player's position
+     * @param deltaTime time since last frame
+     * @return true if goose attacked this frame
      */
-    public void update(Vector2 playerPosition, float deltaTime) {
+    public boolean update(Vector2 playerPosition, float deltaTime) {
         if (action == GooseAction.PATROL &&
             playerPosition.cpy().sub(position).len() <= PLAYER_DETECT_RADIUS)
         {
@@ -113,6 +133,17 @@ public class Goose extends MovementEntity {
             position.add(velocity);
             getSprite().setPosition(position.x, position.y);
         }
+        if (attackCooldownTimer > 0f){
+            attackCooldownTimer -= deltaTime;
+        }
+        boolean attacked = false;
+
+        if(action == GooseAction.CHASE && position.dst(playerPosition)<=ATTACK_RADIUS&&attackCooldownTimer<=0f){
+            attackCooldownTimer = ATTACK_COOLDOWN;
+            attacked = true;
+        }
+
+        return attacked;
     }
 
     /**
@@ -344,5 +375,50 @@ public class Goose extends MovementEntity {
      */
     private Vector2 coordinateToTile(Vector2 coordinate) {
         return new Vector2((int) Math.floor(coordinate.x / 16), (int) Math.floor(coordinate.y / 16));
+    }
+    /**
+     * make the goose run away from the scare device
+     * @param source the centre of the scare radius
+     * @param radius the radius of effect
+     */
+    public void startFleeing(Vector2 source, float radius){
+        if (position.dst2(source)>radius*radius){
+            return;
+        }
+        fleeSource = source.cpy();
+        fleeRadius = radius;
+        fleeing = true;
+        attracted = false; // scare state overrides flee
+    }
+    /**
+     * makes the goose attracted to the food item
+     * @param target the positioin of the food item
+     * @param radius the radius of effect
+     */
+    public void startAttracting(Vector2 target,float radius){
+        if(fleeing){
+            return;
+        }
+        if(position.dst2(target)>radius*radius){
+            return;
+        }
+        attractTarget = target.cpy();
+        attracted = true;
+    }
+ /**
+  * stop being attracted to target
+  * @param target the target vector to stop being attaracted to
+  */
+    public void stopAttracting(Vector2 target){
+        if(attractTarget != null && attractTarget.epsilonEquals(target,1f)){
+            attracted = false;
+            attractTarget = null;
+        }
+    }
+    /**
+     * @return the world position of this goose
+     */
+    public Vector2 getPosition(){
+        return position;
     }
 }

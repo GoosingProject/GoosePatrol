@@ -15,6 +15,7 @@ public class GameWorld implements WorldContext {
     private List<Item> activeItems = new ArrayList<>();
     private final List<Item> toRemove = new ArrayList<>();
     private GooseSpawner gooseSpawner;
+    private EventManager eventManager = new EventManager();
     /**
      * constructor for the GameWorld class
      * @param gooseSpawner the goose spawner object
@@ -41,7 +42,6 @@ public class GameWorld implements WorldContext {
             goose.attract(centre, radius);
         }
     }
-
     @Override
     public void addActiveItem(Item item) {
         activeItems.add(item);
@@ -61,7 +61,9 @@ public class GameWorld implements WorldContext {
      * pass update calls to items
      * @param deltaTime time since last frame
      */
-    public void update(float deltaTime) {
+    public void update(float deltaTime, Vector2 playerPosition) {
+        eventManager.update(deltaTime, gooseSpawner.getGeese(), playerPosition);
+
         for (Item item : activeItems) {
             item.update(deltaTime, this);
         }
@@ -88,5 +90,9 @@ public class GameWorld implements WorldContext {
     public void clear(){
         activeItems.clear();
         toRemove.clear();
+    }
+
+    public EventManager getEventManager() {
+        return eventManager;
     }
 }
