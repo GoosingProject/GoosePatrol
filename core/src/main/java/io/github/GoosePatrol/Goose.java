@@ -41,6 +41,14 @@ public class Goose extends MovementEntity {
     // Height of world in tiles
     private int worldTileHeight;
 
+    private boolean fleeing = false;
+    private Vector2 fleeSource;
+    private  float fleeRadius;
+
+    private boolean attracted = false;
+    private Vector2 attractTarget = null;
+
+
     public Goose(float x, float y, NavigationTiledMapLayer navLayer, int worldTileWidth, int worldTileHeight) {
         super();
         position = new Vector2(x, y);
@@ -344,5 +352,50 @@ public class Goose extends MovementEntity {
      */
     private Vector2 coordinateToTile(Vector2 coordinate) {
         return new Vector2((int) Math.floor(coordinate.x / 16), (int) Math.floor(coordinate.y / 16));
+    }
+    /**
+     * make the goose run away from the scare device
+     * @param source the centre of the scare radius
+     * @param radius the radius of effect
+     */
+    public void startFleeing(Vector2 source, float radius){
+        if (position.dst2(source)>radius*radius){
+            return;
+        }
+        fleeSource = source.cpy();
+        fleeRadius = radius;
+        fleeing = true;
+        attracted = false; // scare state overrides flee
+    }
+    /**
+     * makes the goose attracted to the food item
+     * @param target the positioin of the food item
+     * @param radius the radius of effect
+     */
+    public void startAttracting(Vector2 target,float radius){
+        if(fleeing){
+            return;
+        }
+        if(position.dst2(target)>radius*radius){
+            return;
+        }
+        attractTarget = target.cpy();
+        attracted = true;
+    }
+ /**
+  * stop being attracted to target
+  * @param target the target vector to stop being attaracted to
+  */
+    public void stopAttracting(Vector2 target){
+        if(attractTarget != null && attractTarget.epsilonEquals(target,1f)){
+            attracted = false;
+            attractTarget = null;
+        }
+    }
+    /**
+     * @return the world position of this goose
+     */
+    public Vector2 getPosition(){
+        return position;
     }
 }

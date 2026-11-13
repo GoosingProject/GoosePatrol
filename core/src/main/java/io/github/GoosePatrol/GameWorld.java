@@ -35,7 +35,6 @@ public class GameWorld implements WorldContext {
             goose.attract(centre, radius);
         }
     }
-
     @Override
     public void addActiveItem(Item item) {
         activeItems.add(item);
@@ -51,7 +50,7 @@ public class GameWorld implements WorldContext {
     public void addPlayerEnergy(float amount){
         energyBar.setEnergyBar(energyBar.getPlayerEnergy()+amount);
     }
-    public void update(float deltaTime) {
+    public void update(Vector2 playerPosition,float deltaTime) {
         for (Item item : activeItems) {
             item.update(deltaTime, this);
         }

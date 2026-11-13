@@ -20,6 +20,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
@@ -61,6 +63,13 @@ public class Main extends ApplicationAdapter {
     private BinSpawner binSpawner;
     private Texture binTexture;
 
+    private Ticket busTicket;
+    private Texture ticketTexture;
+    private int dispersed = 0;
+
+    private Bus bus;
+    private Texture busTexture;
+
   @Override
   public void create() {
     audio = new Audio();
@@ -70,7 +79,8 @@ public class Main extends ApplicationAdapter {
 
         map = new TmxMapLoader().load("map/Map.tmx");
         camera = new CameraLogic(160, 90, map);
-        player = new Player(camera.getCamera());
+        player = new Player(camera.getCamera(),map);
+        camera.snapToPositon(player.getPlayerPosition());
 
         renderer = new OrthogonalTiledMapRenderer(map, 1f);
 
@@ -104,8 +114,13 @@ public class Main extends ApplicationAdapter {
     MapProperties prop = map.getProperties();
     float mapW = prop.get("width",Integer.class)*prop.get("tilewidth",Integer.class);
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
-    boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture), map, mapW, mapH);
-    deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player, binSpawner);
+    boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture),map, mapW, mapH);
+    deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player,binSpawner);
+    gooseSpawner = new GooseSpawner((TiledMapTileLayer) map.getLayers().get("Collision"), 60, 60, 5);
+    ticketTexture = new Texture("Ticket.png");
+    busTicket = new Ticket(ticketTexture);
+    busTexture = new Texture("sprites/Bus/bus_0.png");
+    bus = new Bus(new Vector2(8,1432), new Vector2(1096,1432), busTexture, mapW);
   }
 
 
@@ -150,13 +165,19 @@ public class Main extends ApplicationAdapter {
 
         // clamp camera to ensure it cannot show outside of the background
         batch.setProjectionMatrix(camera.getCamera().combined);
-        camera.updatePosition(player.getPlayerPosition());
+        if(bus.isPlayerBoarded()){
+            camera.updatePosition(bus.getPosition());
+        }else{
+            camera.updatePosition(player.getPlayerPosition());
+        }
         renderer.setView(camera.getCamera());
         renderer.render();
 
         if (!paused) {
-            player.updateMovement();
-            world.update(Gdx.graphics.getDeltaTime());
+            if (!bus.isPlayerBoarded()){
+                player.updateMovement();
+            }
+            world.update(player.getPlayerPosition(),Gdx.graphics.getDeltaTime());
             audio.playMusic("ambient");
             boolean invChanged = boxSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition(), inventory, itemRoller);
             deployHandler.update();
@@ -165,12 +186,26 @@ public class Main extends ApplicationAdapter {
               inventoryHud.refresh();
             }
             playTimer.update(Gdx.graphics.getDeltaTime());
+
+            if (dispersed >= 20 &&!busTicket.isSpawned()&&!busTicket.isCollected()){
+                busTicket.spawn();
+            }
+            busTicket.update(player.getPlayerPosition());
+            if (busTicket.isCollected()&&bus.getState()==Bus.BusState.INACTIVE){
+                bus.spawn();
+            }
+            bus.update(player.getPlayerPosition(),Gdx.graphics.getDeltaTime());
         }
 
         batch.begin();
         binSpawner.render(batch);
-        player.draw(batch);
+        // dont draw player if they have gone on the bus
+        if (!bus.isPlayerBoarded()){
+            player.draw(batch);
+        }
         boxSpawner.render(batch);
+        busTicket.renderWorld(batch);
+        bus.render(batch);
         gooseSpawner.render(batch);
         world.render(batch);
         countdown.draw(batch, camera.getCamera().position.x, camera.getCamera().position.y,0.3f,audio);
@@ -179,6 +214,12 @@ public class Main extends ApplicationAdapter {
         inventoryHud.render();
         energyBar.render(Gdx.graphics.getDeltaTime());
         playTimer.render();
+        if(busTicket.isCollected()){
+            batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+            batch.begin();
+            busTicket.renderHud(batch);
+            batch.end();
+        }
         // check for game loss
         if(!paused && (playTimer.isGameEnd())){
             enterLossState();
@@ -198,6 +239,9 @@ public class Main extends ApplicationAdapter {
         else if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             showMenu = !showMenu;
         }
+        if (bus.isWin()){
+            enterWinState();
+        }
     }
 
     @Override
@@ -211,6 +255,9 @@ public class Main extends ApplicationAdapter {
         breadTexture.dispose();
         energyBar.dispose();
         playTimer.dispose();
+        busTicket.dispose();
+        ticketTexture.dispose();
+        bus.dispose();
     }
     /**
      * call when timer runs out or player runs out of energy
@@ -219,6 +266,14 @@ public class Main extends ApplicationAdapter {
         resetGameState();
         showMenu = true;
     }
+    /**
+     * call when player gets on bus and drives away.
+     */
+     private void enterWinState(){
+        resetGameState();
+        showMenu = true;
+    }
+
     /**
      * call all reset helpers to re-start game
      */
@@ -231,6 +286,9 @@ public class Main extends ApplicationAdapter {
         inventoryHud.refresh();
         energyBar.setEnergyBar(100f);
         playTimer.reset();
+        dispersed = 0;
+        busTicket.reset();
+        bus.reset();
     }
 }
 
