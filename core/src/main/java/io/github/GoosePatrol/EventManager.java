@@ -15,7 +15,7 @@ public class EventManager {
                     longBoiEvent(geese, playerPosition);
                     break;
                 case 1:
-                    // TODO swarm
+                    swarmEvent(geese);
                     break;
             }
         }
@@ -30,6 +30,17 @@ public class EventManager {
         System.out.println("long boi");
         for (Goose goose : geese) {
             goose.scare(playerPosition, Float.MAX_VALUE);
+        }
+    }
+
+    /**
+     * Negative swarm event to make all geese chase player
+     * @param geese List of all geese
+     */
+    private void swarmEvent(List<Goose> geese) {
+        System.out.println("swarm");
+        for (Goose goose : geese) {
+            goose.swarm();
         }
     }
 }
