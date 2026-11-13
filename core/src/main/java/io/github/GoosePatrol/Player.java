@@ -274,7 +274,8 @@ public class Player extends MovementEntity {
     }
     private boolean isFlashOff(){
         return ((int)(invincibilityTimer/FLASH_INTERVAL))%2==0;
-     * checks if a proposed movement is allowed
+    }
+    /**  checks if a proposed movement is allowed
      * @param x the x position of the possible move.
      * @param y the y position of the possible move.
      * @return true if the move is valid
