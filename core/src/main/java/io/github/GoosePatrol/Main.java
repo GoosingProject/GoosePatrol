@@ -64,7 +64,7 @@ public class Main extends ApplicationAdapter {
   @Override
   public void create() {
     audio = new Audio();
-    mainMenu = new MainMenu(audio);    
+    mainMenu = new MainMenu(audio);
 
         batch = new SpriteBatch();
 
@@ -156,7 +156,7 @@ public class Main extends ApplicationAdapter {
 
         if (!paused) {
             player.updateMovement();
-            world.update(Gdx.graphics.getDeltaTime());
+            world.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition());
             audio.playMusic("ambient");
             boolean invChanged = boxSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition(), inventory, itemRoller);
             deployHandler.update();
