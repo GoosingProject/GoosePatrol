@@ -1,4 +1,4 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.GeeseCode;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,12 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.PlayerCode;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+
+import io.github.GoosePatrol.HelperClasses.MovementEntity;
+import io.github.GoosePatrol.HelperClasses.SpriteDirection;
+
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

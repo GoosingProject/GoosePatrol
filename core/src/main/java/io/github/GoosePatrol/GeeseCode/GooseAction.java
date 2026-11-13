@@ -1,4 +1,4 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.GeeseCode;
 
 public enum GooseAction {
     PATROL("walk"),

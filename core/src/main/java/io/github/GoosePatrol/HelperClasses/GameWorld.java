@@ -1,9 +1,13 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.HelperClasses;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import io.github.GoosePatrol.GeeseCode.EventManager;
+import io.github.GoosePatrol.GeeseCode.Goose;
+import io.github.GoosePatrol.GeeseCode.GooseSpawner;
 import io.github.GoosePatrol.ItemCode.Item;
+import io.github.GoosePatrol.UiElements.EnergyBar;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.GeeseCode;
 
 import java.util.List;
 
@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import io.github.GoosePatrol.GeeseCode.Goose;
 
 public class EventManager {
     private final float POPUP_TIME = 2f;
