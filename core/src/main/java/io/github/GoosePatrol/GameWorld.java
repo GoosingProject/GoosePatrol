@@ -79,4 +79,8 @@ public class GameWorld implements WorldContext {
         activeItems.clear();
         toRemove.clear();
     }
+
+    public EventManager getEventManager() {
+        return eventManager;
+    }
 }

@@ -120,6 +120,7 @@ public class Main extends ApplicationAdapter {
     inventoryHud.resize(width, height);
     energyBar.resize(width, height);
     playTimer.resize(width, height);
+    world.getEventManager().resize(width, height);
   }
 
     @Override
@@ -179,6 +180,7 @@ public class Main extends ApplicationAdapter {
         inventoryHud.render();
         energyBar.render(Gdx.graphics.getDeltaTime());
         playTimer.render();
+        world.getEventManager().render();
         // check for game loss
         if(!paused && (playTimer.isGameEnd())){
             enterLossState();
