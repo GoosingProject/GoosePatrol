@@ -34,17 +34,25 @@ public class GooseSpawner {
             spawnNewGoose();
         }
     }
-
-    public void update(float deltaTime, Vector2 playerPosition) {
+    /**
+     * pass update calls to all geese in world
+     * @param deltaTime time since last frame
+     * @param playerPosition position vector of the player
+     * @return true if any goose attacked this frame
+     */
+    public boolean update(float deltaTime, Vector2 playerPosition) {
         spawnTimer -= deltaTime;
         if (spawnTimer <= 0f) {
             spawnTimer = SPAWN_INTERVAL;
             spawnNewGoose();
         }
-
+        boolean attacked = false;
         for (Goose goose : geese) {
-            goose.update(playerPosition, deltaTime);
+            if(goose.update(playerPosition, deltaTime)){
+                attacked = true;
+            }
         }
+        return attacked;
     }
 
     public void render(SpriteBatch batch) {

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapImageLayer;
@@ -42,6 +43,9 @@ public class Player extends MovementEntity {
 
     private OrthographicCamera camera;
 
+    private static float INVINCIBILITY_DURATION = 1.5f;
+    private static float FLASH_INTERVAL = 0.1f;
+    private float invincibilityTimer = 0f;
     private TiledMapTileLayer collisionLayer;
 
     private static float HITBOX_W = 14f;
@@ -223,6 +227,7 @@ public class Player extends MovementEntity {
         getSprite().setPosition(playerPosition.x-16f,playerPosition.y - 16f);
         action = PlayerAction.IDLE;
         sleepAnimTimer = 0f;
+        invincibilityTimer = 0f;
     }
     /**
      * A setter to set the player's current action/animation state
@@ -232,7 +237,45 @@ public class Player extends MovementEntity {
         this.action = newAction;
     }
     /**
-     * checks if a proposed movement is allowed
+     * @return true if the player is currently invincible
+     */
+    public boolean isInvincible(){
+        return invincibilityTimer > 0f;
+    }
+    /**
+     * attempt to damage player
+     * @return true if player gets damage
+     */
+    public boolean takeDamage(){
+        if(isInvincible()){
+            return false;
+        }
+        invincibilityTimer = INVINCIBILITY_DURATION;
+        return true;
+    }
+    /** lower the invinciblity timer, call every frame */
+    public void updateInvincibility(float deltaTime){
+        if(invincibilityTimer>0f){
+            invincibilityTimer-=deltaTime;
+            if(invincibilityTimer<0f){
+                invincibilityTimer = 0f;
+            }
+        }
+    }
+    @Override public void draw(SpriteBatch batch){
+        boolean fading = isInvincible() && isFlashOff();
+        if(fading){
+            getSprite().setAlpha(0.3f);
+        }
+        super.draw(batch);
+        if(fading){
+            getSprite().setAlpha(1f);
+        }
+    }
+    private boolean isFlashOff(){
+        return ((int)(invincibilityTimer/FLASH_INTERVAL))%2==0;
+    }
+    /**  checks if a proposed movement is allowed
      * @param x the x position of the possible move.
      * @param y the y position of the possible move.
      * @return true if the move is valid
