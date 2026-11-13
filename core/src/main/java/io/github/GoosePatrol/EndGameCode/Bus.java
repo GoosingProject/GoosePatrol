@@ -1,4 +1,4 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.EndGameCode;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

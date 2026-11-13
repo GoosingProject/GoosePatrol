@@ -1,4 +1,4 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.HelperClasses;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -38,7 +38,10 @@ public abstract class MovementEntity {
         sprite.setRegion(textureRegion);
         sprite.draw(batch);
     }
-
+    /**
+     * 
+     * @return the sprite of the movement entity.
+     */
     protected Sprite getSprite() {
         return sprite;
     }

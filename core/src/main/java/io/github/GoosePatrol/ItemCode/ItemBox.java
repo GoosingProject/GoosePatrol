@@ -22,6 +22,8 @@ public class ItemBox {
 
     /**
      * constructor for the ItemBox class
+     * @param position the world positon of the box
+     * @param texture the sprite of the item box
      */
     public ItemBox(Vector2 position, TextureRegion texture) {
         this.position.set(position);
@@ -29,7 +31,8 @@ public class ItemBox {
     }
 
     /**
-     * to be called every frame
+     * to be called every frame.
+     * @param deltaTime time since last frame.
      */
     public void update(float deltaTime) {
         if (!expired) {
@@ -60,7 +63,10 @@ public class ItemBox {
     public boolean isExpired() {
         return expired || collected;
     }
-
+    /**
+     * 
+     * @return the item box position.
+     */
     public Vector2 getPositon() {
         return position;
     }

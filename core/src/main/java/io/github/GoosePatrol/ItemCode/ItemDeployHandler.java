@@ -5,8 +5,9 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import io.github.GoosePatrol.GameWorld;
-import io.github.GoosePatrol.Player;
+
+import io.github.GoosePatrol.HelperClasses.GameWorld;
+import io.github.GoosePatrol.PlayerCode.Player;
 
 /**
  * reads numberKey presses and deploys item to mouse position

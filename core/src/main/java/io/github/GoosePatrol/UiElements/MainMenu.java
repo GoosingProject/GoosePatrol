@@ -1,4 +1,4 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.UiElements;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -31,7 +31,10 @@ public class MainMenu implements Screen {
      * Initialises the play state to false.
      */
     public boolean playGameTriggered = false;
-
+    /**
+     * constructor for the MainMenu class.
+     * @param aud the audio object that will play in main menu.
+     */
     public MainMenu(Audio aud) {
         this.audio = aud;
         skin = new Skin(Gdx.files.internal("metal-ui.json"));

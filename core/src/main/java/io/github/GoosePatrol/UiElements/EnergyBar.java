@@ -1,4 +1,4 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.UiElements;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -22,7 +22,7 @@ public class EnergyBar implements Screen {
         private float maxPlayerEnergy = 100f;
         private float currentPlayerEnergy = 100f;
 
-    
+    /** constructer for the EnergyBar class */
     public EnergyBar() {
         skin = new Skin(Gdx.files.internal("metal-ui.json"));
 

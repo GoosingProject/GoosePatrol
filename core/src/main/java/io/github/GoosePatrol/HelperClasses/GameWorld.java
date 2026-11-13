@@ -1,26 +1,36 @@
-package io.github.GoosePatrol;
+package io.github.GoosePatrol.HelperClasses;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import io.github.GoosePatrol.GeeseCode.EventManager;
+import io.github.GoosePatrol.GeeseCode.Goose;
+import io.github.GoosePatrol.GeeseCode.GooseSpawner;
 import io.github.GoosePatrol.ItemCode.Item;
+import io.github.GoosePatrol.UiElements.EnergyBar;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * keeps track of items and geese in the world
+ * GameWorld
+ */
 public class GameWorld implements WorldContext {
     private List<Item> activeItems = new ArrayList<>();
     private final List<Item> toRemove = new ArrayList<>();
     private GooseSpawner gooseSpawner;
     private EventManager eventManager = new EventManager();
-
+    /**
+     * constructor for the GameWorld class
+     * @param gooseSpawner the goose spawner object
+     */
     public GameWorld(GooseSpawner gooseSpawner) {
         this.gooseSpawner = gooseSpawner;
     }
 
     /* call after energy bar is created in main */
     private EnergyBar energyBar;
-        public void setEnergyBar(EnergyBar energyBar) {
+    public void setEnergyBar(EnergyBar energyBar) {
         this.energyBar = energyBar;
     }
     @Override
@@ -51,6 +61,10 @@ public class GameWorld implements WorldContext {
     public void addPlayerEnergy(float amount){
         energyBar.setEnergyBar(energyBar.getPlayerEnergy()+amount);
     }
+    /**
+     * pass update calls to items
+     * @param deltaTime time since last frame
+     */
     public void update(float deltaTime, Vector2 playerPosition) {
         eventManager.update(deltaTime, gooseSpawner.getGeese(), playerPosition);
 
@@ -67,7 +81,10 @@ public class GameWorld implements WorldContext {
             toRemove.clear();
         }
     }
-
+    /**
+     * pass render calls to items
+     * @param batch the spriteBatch to draw the items
+     */
     public void render(SpriteBatch batch) {
         for (Item item : activeItems) {
             item.render(batch);

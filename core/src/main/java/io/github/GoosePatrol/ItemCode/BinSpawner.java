@@ -9,8 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import io.github.GoosePatrol.Bin;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,11 +25,20 @@ public class BinSpawner {
     private Random random = new Random();
     private Texture binTexture;
     private Texture aoeTexture;
+    /**
+     * constructer for the BinSpawner class.
+     * @param walkableTiles a list of tiles not on the collision layer of the map.
+     * @param binTexture the bin texture.
+     */
     public BinSpawner(List<Vector2> walkableTiles,Texture binTexture){
         this.binTexture = binTexture;
         this.aoeTexture = createAoeTexture();
         pickSpots(walkableTiles, binTexture, aoeTexture);
     }
+    /**
+     * creates a circle texture to show the bins aoe.
+     * @return the bin texture.
+     */
     private static Texture createAoeTexture() {
         int size = 128;
         int thickness = 4;
@@ -49,6 +56,12 @@ public class BinSpawner {
         pm.dispose();
         return t;
     }
+    /**
+     * picks out valid random spots from the list of walkable tiles
+     * @param walkable list of walkable tiles
+     * @param binTexture the texture of the bin
+     * @param ringTexture the texture of the bins AOE
+     */
     private void pickSpots(List<Vector2> walkable, Texture binTexture, Texture ringTexture){
         List<Vector2> chosen = new ArrayList<>();
         int attempts = 0;
@@ -69,7 +82,7 @@ public class BinSpawner {
             attempts++;
         }
     }
-        /** @return true if the position is inside any bin's discard circle. */
+    /** @return true if the position is inside any bin's discard circle. */
     public boolean isInAnyBin(Vector2 position) {
         for (Bin bin : bins) {
             if (bin.contains(position)) {
@@ -78,7 +91,11 @@ public class BinSpawner {
         }
         return false;
     }
-        public void render(SpriteBatch batch) {
+    /**
+     * pass render calls to all bins in the world
+     * @param batch the SpriteBatch to render the bins
+     */
+    public void render(SpriteBatch batch) {
         for (Bin bin : bins) {
             bin.render(batch);
         }

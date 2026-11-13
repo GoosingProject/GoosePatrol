@@ -1,8 +1,10 @@
 package io.github.GoosePatrol.ItemCode;
 
 import com.badlogic.gdx.math.Vector2;
-import io.github.GoosePatrol.Player;
-import io.github.GoosePatrol.WorldContext;
+
+import io.github.GoosePatrol.HelperClasses.WorldContext;
+import io.github.GoosePatrol.PlayerCode.Player;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -81,14 +83,21 @@ public abstract class Item {
     }
 
     /**
-     * to be called by the inventory class when an item is selected
-     */
+     * to be called upon player using item.
+     * @param player    the player object using the item.
+     * @param itemPosition  the position vector of the item.
+     * @param world     the worldcontex object that tracks this item.
+    */
     public abstract void use(Player player, Vector2 itemPosition, WorldContext world);
-
+    /**
+     * @return true if this item is active
+     */
     public boolean isActive() {
         return state == State.ACTIVE;
     }
-
+    /**
+     * @return the name of the item
+     */
     public String getName() {
         return itemName;
     }
@@ -104,7 +113,9 @@ public abstract class Item {
      */
     protected void updateActive(WorldContext world, float deltaTime) {
     }
-
+    /**
+     * @return the remaining time the item will exist.
+     */
     public float getRemaining() {
         return remainingLife;
     }
