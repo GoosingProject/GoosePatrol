@@ -87,7 +87,7 @@ public class Main extends ApplicationAdapter {
 
         renderer = new OrthogonalTiledMapRenderer(map, 1f);
 
-        gooseSpawner = new GooseSpawner((TiledMapTileLayer) map.getLayers().get("Collision"), 60, 60, 25);
+        gooseSpawner = new GooseSpawner((TiledMapTileLayer) map.getLayers().get("Collision"), 60, 60, 15);
 
         world = new GameWorld(gooseSpawner);
 
@@ -123,7 +123,6 @@ public class Main extends ApplicationAdapter {
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
     boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture),map, mapW, mapH);
     deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player,binSpawner);
-    gooseSpawner = new GooseSpawner((TiledMapTileLayer) map.getLayers().get("Collision"), 60, 60, 5);
     ticketTexture = new Texture("Ticket.png");
     busTicket = new Ticket(ticketTexture);
     busTexture = new Texture("sprites/Bus/bus_0.png");
