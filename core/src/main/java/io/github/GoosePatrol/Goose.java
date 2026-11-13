@@ -86,6 +86,10 @@ public class Goose extends MovementEntity {
         }
     }
 
+    public void swarm() {
+        action = GooseAction.CHASE;
+    }
+
     /**
      * Update goose's state and position every frame
      * @param playerPosition Vector2 of player's position

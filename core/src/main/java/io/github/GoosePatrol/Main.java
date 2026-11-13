@@ -76,7 +76,7 @@ public class Main extends ApplicationAdapter {
   @Override
   public void create() {
     audio = new Audio();
-    mainMenu = new MainMenu(audio);    
+    mainMenu = new MainMenu(audio);
 
         batch = new SpriteBatch();
 
@@ -87,7 +87,7 @@ public class Main extends ApplicationAdapter {
 
         renderer = new OrthogonalTiledMapRenderer(map, 1f);
 
-        gooseSpawner = new GooseSpawner((TiledMapTileLayer) map.getLayers().get("Collision"), 60, 60, 25);
+        gooseSpawner = new GooseSpawner((TiledMapTileLayer) map.getLayers().get("Collision"), 60, 60, 15);
 
         world = new GameWorld(gooseSpawner);
 
@@ -123,7 +123,6 @@ public class Main extends ApplicationAdapter {
     float mapH = prop.get("height",Integer.class)*prop.get("tilewidth",Integer.class);
     boxSpawner = new ItemBoxSpawner(new TextureRegion(itemBoxTexture),map, mapW, mapH);
     deployHandler = new ItemDeployHandler(camera.getCamera(), inventory, world, inventoryHud, player,binSpawner);
-    gooseSpawner = new GooseSpawner((TiledMapTileLayer) map.getLayers().get("Collision"), 60, 60, 5);
     ticketTexture = new Texture("Ticket.png");
     busTicket = new Ticket(ticketTexture);
     busTexture = new Texture("sprites/Bus/bus_0.png");
@@ -143,6 +142,7 @@ public class Main extends ApplicationAdapter {
     inventoryHud.resize(width, height);
     energyBar.resize(width, height);
     playTimer.resize(width, height);
+    world.getEventManager().resize(width, height);
   }
 
     @Override
@@ -182,10 +182,11 @@ public class Main extends ApplicationAdapter {
         renderer.render();
 
         if (!paused) {
+
             if (!bus.isPlayerBoarded()){
                 player.updateMovement();
             }
-            world.update(player.getPlayerPosition(),Gdx.graphics.getDeltaTime());
+            world.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition());
             audio.playMusic("ambient");
             boolean invChanged = boxSpawner.update(Gdx.graphics.getDeltaTime(), player.getPlayerPosition(), inventory, itemRoller);
             deployHandler.update();
@@ -231,6 +232,7 @@ public class Main extends ApplicationAdapter {
         inventoryHud.render();
         energyBar.render(Gdx.graphics.getDeltaTime());
         playTimer.render();
+        world.getEventManager().render();
         if(busTicket.isCollected()){
             batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
             batch.begin();

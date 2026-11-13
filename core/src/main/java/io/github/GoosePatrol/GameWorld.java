@@ -12,6 +12,7 @@ public class GameWorld implements WorldContext {
     private List<Item> activeItems = new ArrayList<>();
     private final List<Item> toRemove = new ArrayList<>();
     private GooseSpawner gooseSpawner;
+    private EventManager eventManager = new EventManager();
 
     public GameWorld(GooseSpawner gooseSpawner) {
         this.gooseSpawner = gooseSpawner;
@@ -50,7 +51,9 @@ public class GameWorld implements WorldContext {
     public void addPlayerEnergy(float amount){
         energyBar.setEnergyBar(energyBar.getPlayerEnergy()+amount);
     }
-    public void update(Vector2 playerPosition,float deltaTime) {
+    public void update(float deltaTime, Vector2 playerPosition) {
+        eventManager.update(deltaTime, gooseSpawner.getGeese(), playerPosition);
+
         for (Item item : activeItems) {
             item.update(deltaTime, this);
         }
@@ -74,5 +77,9 @@ public class GameWorld implements WorldContext {
     public void clear(){
         activeItems.clear();
         toRemove.clear();
+    }
+
+    public EventManager getEventManager() {
+        return eventManager;
     }
 }
