@@ -6,6 +6,7 @@ package io.github.GoosePatrol.ItemCode;
 public class Inventory {
     public static int SLOT_COUNT = 10;
     private final Item[] slots = new Item[SLOT_COUNT];
+    private int itemsUsed = 0;
 
     /**
      * adds item to first avlible slot in the inventory
@@ -45,5 +46,16 @@ public class Inventory {
         for (int i = 0; i < SLOT_COUNT; i++) {
             slots[i] = null;
         }
+        itemsUsed = 0;
+    }
+
+    public void recordItemUsed(){
+        itemsUsed++;
+    }
+    /**
+     * @return the number of items that have been used this game
+     */
+    public int getItemsUsed(){
+        return itemsUsed;
     }
 }
