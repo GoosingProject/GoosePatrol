@@ -15,7 +15,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  * PlayTimer
  */
 public class PlayTimer {
-    private float timeRemaining = 300f;
+    private static float TOTAL_TIME = 300f;
+    private float timeRemaining = TOTAL_TIME;
     private boolean gameEnd = false;
     private Skin skin;
     private Stage stage;
@@ -60,7 +61,7 @@ public class PlayTimer {
      * reset time remaining to 5 mins
      */
     public void reset(){
-        timeRemaining = 300f;
+        timeRemaining = TOTAL_TIME;
         gameEnd = false;
         updateLabel();
     }
@@ -91,5 +92,12 @@ public class PlayTimer {
     public void dispose(){
         skin.dispose();
         stage.dispose();
+    }
+    /**
+     * @param timeElapsed the time that should pass for this check to return true
+     * @return true once the time that has passed is longer than timeElapsed
+     */
+    public boolean hasElapsed(float timeElapsed){
+        return (TOTAL_TIME-timeRemaining)>=timeElapsed;
     }
 }
