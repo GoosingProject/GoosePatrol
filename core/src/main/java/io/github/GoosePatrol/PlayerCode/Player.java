@@ -225,6 +225,13 @@ public class Player extends MovementEntity {
         if (action == PlayerAction.SLEEP) {
             return animations.get(PlayerAction.SLEEP).get(SpriteDirection.FORWARD);
         }
+        if (action == PlayerAction.FEED){
+            feedAnimTimer += Gdx.graphics.getDeltaTime();
+            Animation<TextureRegion> feedAnim = animations.get(PlayerAction.FEED).get(directionFacing());
+            if (feedAnim.isAnimationFinished(feedAnimTimer)){
+                return feedAnim;
+            }
+        }
         return animations.get(action).get(directionFacing());
     }
 
@@ -242,6 +249,7 @@ public class Player extends MovementEntity {
         action = PlayerAction.IDLE;
         sleepAnimTimer = 0f;
         invincibilityTimer = 0f;
+        feedAnimTimer = 0f;
     }
     /**
      * A setter to set the player's current action/animation state
