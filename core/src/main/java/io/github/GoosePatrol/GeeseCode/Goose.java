@@ -129,6 +129,7 @@ public class Goose extends MovementEntity {
                 break;
         }
 
+        // Apply movement based on targetPosition
         Vector2 direction = targetPosition.cpy().sub(position);
         float distance = direction.len();
         if (distance >= 0.5) {
@@ -136,6 +137,7 @@ public class Goose extends MovementEntity {
             position.add(velocity);
             getSprite().setPosition(position.x, position.y);
         }
+
         if (attackCooldownTimer > 0f){
             attackCooldownTimer -= deltaTime;
         }
@@ -158,12 +160,17 @@ public class Goose extends MovementEntity {
         }
 
         action = GooseAction.SCARE;
+
+        // Find a walkable tile in the direction away from the player,
+        // checking from further away first
         Vector2 currentTile = coordinateToTile(position);
         Vector2 direction = position.cpy().sub(centre).nor();
         for (int distance = 15; distance > 0; distance--) {
             Vector2 target = position.cpy().add(direction.cpy().scl(distance * 16));
             Vector2 targetTile = coordinateToTile(target);
             GridCell cell = navLayer.getCell((int) targetTile.x, (int) targetTile.y);
+
+            // Once walkable tile is found, calculate the path and return
             if (cell != null && cell.isWalkable()) {
                 List<GridCell> newPath = finder.findPath(
                     (int) currentTile.x,
@@ -214,6 +221,7 @@ public class Goose extends MovementEntity {
             return targetPosition;
         }
 
+        // If at end of path, return previous target position
         if (pathIndex >= path.size()) {
             return targetPosition;
         }
@@ -224,6 +232,7 @@ public class Goose extends MovementEntity {
             path.get(pathIndex).y
         );
 
+        // Once target tile is reached, advance to next tile in the path
         if (currentTile.dst(currentTileTarget) < 2) {
             pathIndex += 1;
             if (pathIndex == path.size()) {
@@ -265,6 +274,8 @@ public class Goose extends MovementEntity {
     private Vector2 calculatePatrolTargetPosition() {
         Vector2 currentTile = coordinateToTile(position);
 
+        // If path is finished or there is no path, select a random
+        // walkable tile up to 10 tiles away and calculate a path to it
         if (path == null || pathIndex >= path.size()) {
             int attempts = 0;
             do {
@@ -312,6 +323,7 @@ public class Goose extends MovementEntity {
             path.get(pathIndex).y
         );
 
+        // Once target tile is reached, advance to next tile in the path
         if (currentTile.dst(currentTileTarget) < 2) {
             pathIndex += 1;
             if (pathIndex == path.size()) {

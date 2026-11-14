@@ -10,12 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import io.github.GoosePatrol.GeeseCode.Goose;
-
 public class EventManager {
     private final float POPUP_TIME = 2f;
 
+    // Chance of an event happening each second
     private float eventChance = 0.002f;
+
     private Skin skin;
     private Stage stage;
     private Label label;
