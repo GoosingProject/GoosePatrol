@@ -24,9 +24,9 @@ public class Audio {
      * Constructs the audio and sound hashmaps populating them and setting all the music to loop
      */
     public Audio() {
-        this.music.put("menu", Gdx.audio.newMusic(Gdx.files.internal("sounds/La-Follia.ogg")));
+        this.music.put("menu", Gdx.audio.newMusic(Gdx.files.internal("sounds/La-Follia.mp3")));
         this.music.put("ambient", Gdx.audio.newMusic(Gdx.files.internal("sounds/Rondo_Alla_Turka.ogg")));
-        this.music.put("fight", Gdx.audio.newMusic(Gdx.files.internal("sounds/La-Follia.ogg")));
+        this.music.put("fight", Gdx.audio.newMusic(Gdx.files.internal("sounds/La-Follia.mp3")));
 
         for (Music track : music.values()) {
             track.setLooping(true);
