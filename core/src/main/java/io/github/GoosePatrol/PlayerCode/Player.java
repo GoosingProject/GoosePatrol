@@ -310,4 +310,10 @@ public class Player extends MovementEntity {
         }
         return true;
     }
+    /**
+     * @return the duration of the falling asleep animation
+     */
+    public float getFallingAsleepDuration(){
+        return animations.get(PlayerAction.FALLING_ASLEEP).get(SpriteDirection.FORWARD).getAnimationDuration();
+    }
 }

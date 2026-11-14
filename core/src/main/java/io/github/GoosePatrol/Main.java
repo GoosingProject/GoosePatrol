@@ -254,6 +254,7 @@ public class Main extends ApplicationAdapter {
             busTicket.renderHud(batch);
             batch.end();
         }
+        float sleepEndDelay = player.getFallingAsleepDuration() + 3f;
         // check for game loss
         if(!paused && (playTimer.isGameEnd())){
             enterLossState();
@@ -264,7 +265,7 @@ public class Main extends ApplicationAdapter {
         }
         sleepTimer += Gdx.graphics.getDeltaTime();
 
-        if(sleepTimer >= 3.0f) {
+        if(sleepTimer >= sleepEndDelay) {
             sleepTimer = 0f;
             enterLossState(); // prevents the loss state from triggering before the animation finishes playing
         }
