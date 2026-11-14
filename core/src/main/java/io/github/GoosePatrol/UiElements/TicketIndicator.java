@@ -45,4 +45,7 @@ public class TicketIndicator {
         font.draw(batch,glyphLayout,x,y); // actual text
         font.setColor(Color.WHITE);
     }
+    public void dispose(){
+        font.dispose();
+    }
 }
