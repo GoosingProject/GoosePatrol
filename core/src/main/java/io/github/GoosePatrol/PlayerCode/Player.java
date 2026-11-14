@@ -318,7 +318,9 @@ public class Player extends MovementEntity {
     public float getFallingAsleepDuration(){
         return animations.get(PlayerAction.FALLING_ASLEEP).get(SpriteDirection.FORWARD).getAnimationDuration();
     }
-    
+    /**
+     * start feed animation. Call when an item is used.
+     */
     public void startFeeding(){
         if (action == PlayerAction.SLEEP||action == PlayerAction.FALLING_ASLEEP || action == PlayerAction.FEED){
             return;
