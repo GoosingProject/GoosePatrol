@@ -144,9 +144,17 @@ public class Player extends MovementEntity {
             }
             getSprite().setPosition(playerPosition.x - getSprite().getWidth() / 2f, playerPosition.y - getSprite().getHeight() / 2f);
             action = PlayerAction.WALK;
-        } else {
+        } 
+        // dont overwrite feed animation
+        if (action == PlayerAction.FEED){
+            return;
+        }
+        if(!playerMovementMagnitude.isZero()){
+            action = PlayerAction.WALK;
+        }else{
             action = PlayerAction.IDLE;
         }
+
     }
 
     /**
