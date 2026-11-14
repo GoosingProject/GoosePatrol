@@ -26,6 +26,7 @@ public class InventoryHud extends ApplicationAdapter {
     private Skin skin;
     private Stage stage;
     private Texture backgroundTexture;
+    private Label usedCounterLabel;
 
     /**
      * constructer for the inventory hud class
@@ -49,6 +50,10 @@ public class InventoryHud extends ApplicationAdapter {
         Table root = new Table();
         root.setFillParent(true);
         stage.addActor(root);
+
+        usedCounterLabel = new Label("",skin);
+        root.add(usedCounterLabel).expand().top().right().pad(10);
+        root.row();
 
         Table slotTable = new Table();
         slotTable.setBackground(bg);
@@ -75,6 +80,7 @@ public class InventoryHud extends ApplicationAdapter {
                 slotLabels[i].setText(keyNum + ": " + item.getName());
             }
         }
+        usedCounterLabel.setText("Items used: "+inventory.getItemsUsed());
     }
 
     @Override
