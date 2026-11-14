@@ -55,6 +55,8 @@ public class Player extends MovementEntity {
     private static float HITBOX_W = 14f;
     private static float HITBOX_H = 14f;
 
+    private float feedAnimTimer = 0f;
+
     /**
      * Constructor method to instantiate a player which takes the orthographic camera object and sets
      * the camera parameter to the camera attribute to later calculate degree offset (can be moved to
@@ -315,5 +317,13 @@ public class Player extends MovementEntity {
      */
     public float getFallingAsleepDuration(){
         return animations.get(PlayerAction.FALLING_ASLEEP).get(SpriteDirection.FORWARD).getAnimationDuration();
+    }
+    
+    public void startFeeding(){
+        if (action == PlayerAction.SLEEP||action == PlayerAction.FALLING_ASLEEP || action == PlayerAction.FEED){
+            return;
+        }
+        action = PlayerAction.FEED;
+        feedAnimTimer = 0f;
     }
 }
