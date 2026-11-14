@@ -83,7 +83,6 @@ public class Main extends ApplicationAdapter {
     private OrthographicCamera screenCamera;
     private Ticket busTicket;
     private Texture ticketTexture;
-    private int dispersed = 0;
 
     private Bus bus;
     private Texture busTexture;
@@ -215,7 +214,7 @@ public class Main extends ApplicationAdapter {
             }
             playTimer.update(Gdx.graphics.getDeltaTime());
 
-            if (dispersed >= 20 &&!busTicket.isSpawned()&&!busTicket.isCollected()){
+            if (playTimer.hasElapsed(210f) &&!busTicket.isSpawned()&&!busTicket.isCollected()){
                 busTicket.spawn();
             }
             busTicket.update(player.getPlayerPosition());
@@ -322,7 +321,6 @@ public class Main extends ApplicationAdapter {
         inventoryHud.refresh();
         energyBar.setEnergyBar(100f);
         playTimer.reset();
-        dispersed = 0;
         busTicket.reset();
         bus.reset();
     }
