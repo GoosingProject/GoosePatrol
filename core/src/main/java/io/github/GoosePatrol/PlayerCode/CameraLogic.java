@@ -15,8 +15,8 @@ import com.badlogic.gdx.maps.MapProperties;
  */
 public class CameraLogic {
     // View width and height to maintain the specific aspect ratio (16:9) of the camera.
-    private float viewWidth = 160f;
-    private float viewHeight = 90f;
+    private float viewWidth = 320f;
+    private float viewHeight = 180f;
     private OrthographicCamera camera;
     private TiledMap map;
     private Viewport screenScaler;
