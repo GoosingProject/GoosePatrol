@@ -52,7 +52,8 @@ public class InventoryHud extends ApplicationAdapter {
         stage.addActor(root);
 
         usedCounterLabel = new Label("",skin);
-        root.add(usedCounterLabel).expand().top().right().pad(10);
+        usedCounterLabel.setFontScale(3f);
+        root.add(usedCounterLabel).padTop(90).padRight(10);
         root.row();
 
         Table slotTable = new Table();
