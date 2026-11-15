@@ -28,6 +28,7 @@ import io.github.GoosePatrol.UiElements.EnergyBar;
 import io.github.GoosePatrol.UiElements.MainMenu;
 import io.github.GoosePatrol.UiElements.PlayCountdown;
 import io.github.GoosePatrol.UiElements.PlayTimer;
+import io.github.GoosePatrol.UiElements.TicketIndicator;
 import io.github.GoosePatrol.UiElements.Vignette;
 
 import com.badlogic.gdx.Input.Keys;
@@ -83,11 +84,11 @@ public class Main extends ApplicationAdapter {
     private OrthographicCamera screenCamera;
     private Ticket busTicket;
     private Texture ticketTexture;
-    private int dispersed = 0;
 
     private Bus bus;
     private Texture busTexture;
 
+    private TicketIndicator ticketIndicator;
   @Override
   public void create() {
     audio = new Audio();
@@ -142,6 +143,7 @@ public class Main extends ApplicationAdapter {
     busTicket = new Ticket(ticketTexture);
     busTexture = new Texture("sprites/Bus/bus_0.png");
     bus = new Bus(new Vector2(8,1432), new Vector2(1096,1432), busTexture, mapW);
+    ticketIndicator = new TicketIndicator();
   }
 
 
@@ -215,8 +217,9 @@ public class Main extends ApplicationAdapter {
             }
             playTimer.update(Gdx.graphics.getDeltaTime());
 
-            if (dispersed >= 20 &&!busTicket.isSpawned()&&!busTicket.isCollected()){
+            if (playTimer.hasElapsed(210f) &&!busTicket.isSpawned()&&!busTicket.isCollected()){
                 busTicket.spawn();
+                ticketIndicator.showSpawnLabel();
             }
             busTicket.update(player.getPlayerPosition());
             if (busTicket.isCollected()&&bus.getState()==Bus.BusState.INACTIVE){
@@ -248,12 +251,14 @@ public class Main extends ApplicationAdapter {
         energyBar.render(Gdx.graphics.getDeltaTime());
         playTimer.render();
         world.getEventManager().render();
+        batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        batch.begin();
         if(busTicket.isCollected()){
-            batch.setProjectionMatrix(new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-            batch.begin();
             busTicket.renderHud(batch);
-            batch.end();
         }
+        ticketIndicator.render(batch);
+        batch.end();
+        float sleepEndDelay = player.getFallingAsleepDuration() + 3f;
         // check for game loss
         if(!paused && (playTimer.isGameEnd())){
             enterLossState();
@@ -264,7 +269,7 @@ public class Main extends ApplicationAdapter {
         }
         sleepTimer += Gdx.graphics.getDeltaTime();
 
-        if(sleepTimer >= 3.0f) {
+        if(sleepTimer >= sleepEndDelay) {
             sleepTimer = 0f;
             enterLossState(); // prevents the loss state from triggering before the animation finishes playing
         }
@@ -321,7 +326,6 @@ public class Main extends ApplicationAdapter {
         inventoryHud.refresh();
         energyBar.setEnergyBar(100f);
         playTimer.reset();
-        dispersed = 0;
         busTicket.reset();
         bus.reset();
     }

@@ -55,6 +55,8 @@ public class Player extends MovementEntity {
     private static float HITBOX_W = 14f;
     private static float HITBOX_H = 14f;
 
+    private float feedAnimTimer = 0f;
+
     /**
      * Constructor method to instantiate a player which takes the orthographic camera object and sets
      * the camera parameter to the camera attribute to later calculate degree offset (can be moved to
@@ -142,9 +144,17 @@ public class Player extends MovementEntity {
             }
             getSprite().setPosition(playerPosition.x - getSprite().getWidth() / 2f, playerPosition.y - getSprite().getHeight() / 2f);
             action = PlayerAction.WALK;
-        } else {
+        } 
+        // dont overwrite feed animation
+        if (action == PlayerAction.FEED){
+            return;
+        }
+        if(!playerMovementMagnitude.isZero()){
+            action = PlayerAction.WALK;
+        }else{
             action = PlayerAction.IDLE;
         }
+
     }
 
     /**
@@ -215,6 +225,13 @@ public class Player extends MovementEntity {
         if (action == PlayerAction.SLEEP) {
             return animations.get(PlayerAction.SLEEP).get(SpriteDirection.FORWARD);
         }
+        if (action == PlayerAction.FEED){
+            feedAnimTimer += Gdx.graphics.getDeltaTime();
+            Animation<TextureRegion> feedAnim = animations.get(PlayerAction.FEED).get(directionFacing());
+            if (feedAnim.isAnimationFinished(feedAnimTimer)){
+                return feedAnim;
+            }
+        }
         return animations.get(action).get(directionFacing());
     }
 
@@ -232,6 +249,7 @@ public class Player extends MovementEntity {
         action = PlayerAction.IDLE;
         sleepAnimTimer = 0f;
         invincibilityTimer = 0f;
+        feedAnimTimer = 0f;
     }
     /**
      * A setter to set the player's current action/animation state
@@ -309,5 +327,21 @@ public class Player extends MovementEntity {
             }
         }
         return true;
+    }
+    /**
+     * @return the duration of the falling asleep animation
+     */
+    public float getFallingAsleepDuration(){
+        return animations.get(PlayerAction.FALLING_ASLEEP).get(SpriteDirection.FORWARD).getAnimationDuration();
+    }
+    /**
+     * start feed animation. Call when an item is used.
+     */
+    public void startFeeding(){
+        if (action == PlayerAction.SLEEP||action == PlayerAction.FALLING_ASLEEP || action == PlayerAction.FEED){
+            return;
+        }
+        action = PlayerAction.FEED;
+        feedAnimTimer = 0f;
     }
 }

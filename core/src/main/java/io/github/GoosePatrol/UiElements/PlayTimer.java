@@ -9,13 +9,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 /**
  * a 5 minite timer that counts down until the game ends;
  * PlayTimer
  */
 public class PlayTimer {
-    private float timeRemaining = 300f;
+    private static float TOTAL_TIME = 300f;
+    private float timeRemaining = TOTAL_TIME;
     private boolean gameEnd = false;
     private Skin skin;
     private Stage stage;
@@ -23,7 +25,7 @@ public class PlayTimer {
     /** create the countdown timer as a ui element */
     public void create(){
         skin = new Skin(Gdx.files.internal("metal-ui.json"));
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new FitViewport(1200f,700f));
         Table root = new Table();
         root.setFillParent(true);
         stage.addActor(root);
@@ -60,7 +62,7 @@ public class PlayTimer {
      * reset time remaining to 5 mins
      */
     public void reset(){
-        timeRemaining = 300f;
+        timeRemaining = TOTAL_TIME;
         gameEnd = false;
         updateLabel();
     }
@@ -91,5 +93,12 @@ public class PlayTimer {
     public void dispose(){
         skin.dispose();
         stage.dispose();
+    }
+    /**
+     * @param timeElapsed the time that should pass for this check to return true
+     * @return true once the time that has passed is longer than timeElapsed
+     */
+    public boolean hasElapsed(float timeElapsed){
+        return (TOTAL_TIME-timeRemaining)>=timeElapsed;
     }
 }

@@ -60,6 +60,8 @@ public class ItemDeployHandler {
         usePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(usePos);
         item.use(player, new Vector2(usePos.x, usePos.y), world);
+        player.startFeeding();
+        inventory.recordItemUsed();
         hud.refresh();
     }
 
